@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -194,15 +193,15 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
               onClick={() => handleDayClick(dayNumber)}
               soundType="click"
               animationType="scale"
-              className={`min-w-[80px] h-20 rounded-2xl transition-all duration-500 transform ${
+              className={`min-w-[85px] h-24 rounded-2xl transition-all duration-500 transform ${
                 isNewUnlocked ? 'animate-bounce-gentle scale-105' : ''
               } ${
                 isSelected
-                  ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white shadow-xl scale-105 border-2 border-emerald-300'
+                  ? 'bg-gradient-to-br from-emerald-700 to-teal-700 text-white shadow-xl scale-105 border-2 border-emerald-300'
                   : isCompleted
-                    ? 'bg-gradient-to-br from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg border-2 border-green-300'
+                    ? 'bg-gradient-to-br from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 shadow-lg border-2 border-green-300'
                     : isLocked
-                      ? 'bg-gradient-to-br from-gray-600 to-gray-800 text-white opacity-95 hover:from-gray-500 hover:to-gray-700 border-2 border-gray-400 shadow-lg'
+                      ? 'bg-gradient-to-br from-gray-700 to-gray-900 text-white opacity-95 hover:from-gray-600 hover:to-gray-800 border-2 border-gray-400 shadow-lg'
                       : hasActivities
                         ? 'bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-900 hover:from-emerald-200 hover:to-emerald-300 border-2 border-emerald-300 shadow-md hover:shadow-lg'
                         : 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 border-2 border-gray-300 shadow-sm'
@@ -218,10 +217,10 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
                 }`}>
                   JOUR
                 </div>
-                <div className={`text-3xl font-black mb-1 leading-none ${
-                  isLocked ? 'text-white drop-shadow-md' : 
-                  isSelected ? 'text-white drop-shadow-md' : 
-                  isCompleted ? 'text-white drop-shadow-md' : 
+                <div className={`text-4xl font-black mb-1 leading-none ${
+                  isLocked ? 'text-white drop-shadow-lg' : 
+                  isSelected ? 'text-white drop-shadow-lg' : 
+                  isCompleted ? 'text-white drop-shadow-lg' : 
                   hasActivities ? 'text-emerald-900 drop-shadow-sm' : 'text-gray-600'
                 }`} style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900 }}>
                   {dayNumber}
@@ -368,7 +367,7 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
               Profitez de votre parcours gratuit !
             </p>
           </CardContent>
-        </div>
+        </Card>
       )}
     </div>
   );
