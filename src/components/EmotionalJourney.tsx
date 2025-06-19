@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -178,7 +179,7 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
         </div>
       </div>
 
-      {/* Days navigation with improved styling */}
+      {/* Days navigation with improved number visibility */}
       <div className="flex gap-2 overflow-x-auto pb-2 px-1">
         {days.map((dayNumber) => {
           const isCompleted = isDayCompleted(dayNumber);
@@ -193,41 +194,43 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
               onClick={() => handleDayClick(dayNumber)}
               soundType="click"
               animationType="scale"
-              className={`min-w-[70px] h-16 rounded-xl transition-all duration-500 transform ${
+              className={`min-w-[80px] h-20 rounded-2xl transition-all duration-500 transform ${
                 isNewUnlocked ? 'animate-bounce-gentle scale-105' : ''
               } ${
                 isSelected
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg scale-105'
+                  ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white shadow-xl scale-105 border-2 border-emerald-300'
                   : isCompleted
-                    ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-800 hover:from-green-200 hover:to-green-300 shadow-md'
+                    ? 'bg-gradient-to-br from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg border-2 border-green-300'
                     : isLocked
-                      ? 'bg-gradient-to-r from-gray-700 to-gray-800 text-white opacity-95 hover:from-gray-600 hover:to-gray-700 border-2 border-gray-600 shadow-md'
+                      ? 'bg-gradient-to-br from-gray-600 to-gray-800 text-white opacity-95 hover:from-gray-500 hover:to-gray-700 border-2 border-gray-400 shadow-lg'
                       : hasActivities
-                        ? 'bg-gradient-to-r from-white to-emerald-50 text-emerald-800 hover:from-emerald-50 hover:to-emerald-100 border-2 border-emerald-200 shadow-md hover:shadow-lg'
-                        : 'bg-gradient-to-r from-gray-50 to-gray-100 text-gray-500 border-2 border-gray-200 shadow-sm'
+                        ? 'bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-900 hover:from-emerald-200 hover:to-emerald-300 border-2 border-emerald-300 shadow-md hover:shadow-lg'
+                        : 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 border-2 border-gray-300 shadow-sm'
               }`}
               disabled={isLocked}
             >
               <div className="text-center">
-                <div className={`text-xs font-bold mb-1 ${
-                  isLocked ? 'text-gray-200' : 
-                  isSelected ? 'text-white' : 
-                  isCompleted ? 'text-green-700' : 
-                  hasActivities ? 'text-emerald-700' : 'text-gray-400'
-                }`}>
-                  Jour
-                </div>
-                <div className={`text-2xl font-bold mb-1 ${
-                  isLocked ? 'text-white' : 
-                  isSelected ? 'text-white' : 
-                  isCompleted ? 'text-green-800' : 
+                <div className={`text-xs font-bold mb-1 tracking-wide ${
+                  isLocked ? 'text-gray-100' : 
+                  isSelected ? 'text-emerald-100' : 
+                  isCompleted ? 'text-green-100' : 
                   hasActivities ? 'text-emerald-800' : 'text-gray-500'
                 }`}>
+                  JOUR
+                </div>
+                <div className={`text-3xl font-black mb-1 leading-none ${
+                  isLocked ? 'text-white drop-shadow-md' : 
+                  isSelected ? 'text-white drop-shadow-md' : 
+                  isCompleted ? 'text-white drop-shadow-md' : 
+                  hasActivities ? 'text-emerald-900 drop-shadow-sm' : 'text-gray-600'
+                }`} style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900 }}>
                   {dayNumber}
                 </div>
-                {isCompleted && <CheckCircle className="w-4 h-4 mx-auto text-green-700" />}
-                {isLocked && <Lock className="w-4 h-4 mx-auto text-gray-300" />}
-                {isNewUnlocked && <Sparkles className="w-3 h-3 mx-auto text-emerald-400 animate-twinkle" />}
+                <div className="flex justify-center items-center h-5">
+                  {isCompleted && <CheckCircle className="w-5 h-5 text-green-100 drop-shadow-md" />}
+                  {isLocked && <Lock className="w-5 h-5 text-gray-100 drop-shadow-md" />}
+                  {isNewUnlocked && <Sparkles className="w-4 h-4 text-emerald-200 animate-twinkle drop-shadow-md" />}
+                </div>
               </div>
             </EnhancedButton>
           );
@@ -365,7 +368,7 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
               Profitez de votre parcours gratuit !
             </p>
           </CardContent>
-        </Card>
+        </div>
       )}
     </div>
   );
