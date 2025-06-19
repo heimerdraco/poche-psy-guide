@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,18 @@ const journeyContent = {
   "Épuisement mental": {
     emoji: "🌙",
     color: "from-blue-200 to-purple-200",
+    bgGradient: "from-slate-100 via-blue-50 to-purple-50",
+    textColor: "text-slate-600",
+    cardBg: "bg-white/60 backdrop-blur-sm",
+    animation: "animate-pulse",
+    fontFamily: "'Nunito', sans-serif", // Ronde, lisible
     title: "Zone de Repos",
+    theme: {
+      primary: "bg-gradient-to-r from-blue-200 to-purple-200",
+      secondary: "bg-gradient-to-r from-slate-100 to-blue-100",
+      accent: "text-blue-600",
+      shadow: "shadow-blue-100/50"
+    },
     days: [
       {
         day: 1,
@@ -91,7 +101,18 @@ const journeyContent = {
   "Anxiété / blocage": {
     emoji: "🌸",
     color: "from-green-200 to-blue-200",
+    bgGradient: "from-sky-50 via-green-50 to-blue-50",
+    textColor: "text-slate-700",
+    cardBg: "bg-white/70 backdrop-blur-md",
+    animation: "animate-[pulse_4s_ease-in-out_infinite]",
+    fontFamily: "'Inter', sans-serif", // Fine et stable
     title: "Micro-pas vers demain",
+    theme: {
+      primary: "bg-gradient-to-r from-green-200 to-blue-200",
+      secondary: "bg-gradient-to-r from-sky-100 to-green-100",
+      accent: "text-green-600",
+      shadow: "shadow-green-100/50"
+    },
     days: [
       {
         day: 1,
@@ -168,7 +189,18 @@ const journeyContent = {
   "Tristesse / vide": {
     emoji: "💧",
     color: "from-blue-200 to-indigo-200",
+    bgGradient: "from-rose-50 via-stone-50 to-amber-50",
+    textColor: "text-stone-700",
+    cardBg: "bg-white/50 backdrop-blur-sm",
+    animation: "animate-[fade-in_3s_ease-in-out_infinite_alternate]",
+    fontFamily: "'Dancing Script', cursive", // Manuscrite douce
     title: "Reconnecter doucement",
+    theme: {
+      primary: "bg-gradient-to-r from-rose-200 to-stone-200",
+      secondary: "bg-gradient-to-r from-amber-100 to-rose-100",
+      accent: "text-rose-600",
+      shadow: "shadow-rose-100/50"
+    },
     days: [
       {
         day: 1,
@@ -245,7 +277,18 @@ const journeyContent = {
   "Estime cassée": {
     emoji: "💗",
     color: "from-pink-200 to-rose-200",
+    bgGradient: "from-orange-50 via-pink-50 to-yellow-50",
+    textColor: "text-amber-800",
+    cardBg: "bg-white/60 backdrop-blur-md border border-yellow-100/50",
+    animation: "animate-[glow_2s_ease-in-out_infinite_alternate]",
+    fontFamily: "'Playfair Display', serif", // Élégante, fine mais lisible
     title: "Douceur envers soi",
+    theme: {
+      primary: "bg-gradient-to-r from-orange-200 to-yellow-200",
+      secondary: "bg-gradient-to-r from-pink-100 to-orange-100",
+      accent: "text-amber-600",
+      shadow: "shadow-amber-100/50"
+    },
     days: [
       {
         day: 1,
@@ -322,7 +365,18 @@ const journeyContent = {
   "Confusion intérieure": {
     emoji: "🌀",
     color: "from-purple-200 to-pink-200",
+    bgGradient: "from-teal-50 via-slate-50 to-stone-50",
+    textColor: "text-slate-600",
+    cardBg: "bg-white/40 backdrop-blur-lg border border-teal-100/30",
+    animation: "animate-[spin_8s_linear_infinite] opacity-20",
+    fontFamily: "'JetBrains Mono', monospace", // Mono-espace légère
     title: "Boussole intérieure",
+    theme: {
+      primary: "bg-gradient-to-r from-teal-200 to-slate-200",
+      secondary: "bg-gradient-to-r from-stone-100 to-teal-100",
+      accent: "text-teal-600",
+      shadow: "shadow-teal-100/50"
+    },
     days: [
       {
         day: 1,
@@ -399,7 +453,18 @@ const journeyContent = {
   "Solitude / déconnexion": {
     emoji: "🫂",
     color: "from-gray-200 to-blue-200",
+    bgGradient: "from-amber-50 via-orange-50 to-red-50",
+    textColor: "text-amber-800",
+    cardBg: "bg-white/50 backdrop-blur-sm border border-amber-100/40",
+    animation: "animate-[heartbeat_2s_ease-in-out_infinite]",
+    fontFamily: "'Comfortaa', cursive", // Amicale, légèrement arrondie
     title: "Tu n'es pas seul·e",
+    theme: {
+      primary: "bg-gradient-to-r from-amber-200 to-orange-200",
+      secondary: "bg-gradient-to-r from-red-100 to-amber-100",
+      accent: "text-orange-600",
+      shadow: "shadow-orange-100/50"
+    },
     days: [
       {
         day: 1,
@@ -476,7 +541,18 @@ const journeyContent = {
   "Trauma / événement marquant": {
     emoji: "🛡️",
     color: "from-red-200 to-orange-200",
+    bgGradient: "from-purple-900 via-indigo-800 to-purple-700",
+    textColor: "text-purple-100",
+    cardBg: "bg-purple-900/20 backdrop-blur-xl border border-purple-300/20",
+    animation: "animate-[fade-in_4s_ease-in-out_infinite_alternate]",
+    fontFamily: "'Roboto Slab', serif", // Solide, protectrice, rassurante
     title: "Se reconstruire doucement",
+    theme: {
+      primary: "bg-gradient-to-r from-purple-600 to-indigo-600",
+      secondary: "bg-gradient-to-r from-indigo-300 to-purple-300",
+      accent: "text-purple-300",
+      shadow: "shadow-purple-500/30"
+    },
     days: [
       {
         day: 1,
@@ -563,121 +639,145 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
   const dayContent = getCurrentDayContent();
 
   return (
-    <div className="space-y-6">
-      <div className="text-center mb-6">
-        <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r ${journey.color} mb-4`}>
-          <span className="text-3xl">{journey.emoji}</span>
-          <div className="text-left">
-            <h2 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
-              {profile}
-            </h2>
-            <p className="text-sm text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>
-              {journey.title}
-            </p>
+    <div 
+      className={`min-h-screen bg-gradient-to-br ${journey.bgGradient} relative overflow-hidden`}
+      style={{ fontFamily: journey.fontFamily }}
+    >
+      {/* Background Animation Elements */}
+      <div className={`absolute inset-0 ${journey.animation}`}>
+        {profile === "Confusion intérieure" && (
+          <div className="absolute top-10 left-10 w-2 h-2 bg-teal-300 rounded-full opacity-30"></div>
+        )}
+        {profile === "Confusion intérieure" && (
+          <div className="absolute top-32 right-20 w-1 h-1 bg-slate-400 rounded-full opacity-40"></div>
+        )}
+        {profile === "Solitude / déconnexion" && (
+          <div className="absolute inset-0 bg-gradient-radial from-orange-100/20 to-transparent"></div>
+        )}
+        {profile === "Trauma / événement marquant" && (
+          <div className="absolute inset-0 bg-gradient-to-t from-purple-900/10 to-transparent"></div>
+        )}
+      </div>
+
+      <div className="relative z-10 space-y-6 p-6">
+        <div className="text-center mb-6">
+          <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-full ${journey.theme.primary} mb-4 ${journey.theme.shadow} shadow-xl`}>
+            <span className="text-3xl">{journey.emoji}</span>
+            <div className="text-left">
+              <h2 className={`text-lg font-bold ${journey.textColor}`} style={{ fontFamily: journey.fontFamily }}>
+                {profile}
+              </h2>
+              <p className={`text-sm ${journey.textColor} opacity-80`} style={{ fontFamily: journey.fontFamily }}>
+                {journey.title}
+              </p>
+            </div>
           </div>
+          <p className={`${journey.textColor} opacity-70`} style={{ fontFamily: journey.fontFamily }}>
+            Parcours personnalisé • 10 jours
+          </p>
         </div>
-        <p className="text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>
-          Parcours personnalisé • 10 jours
-        </p>
-      </div>
 
-      {/* Sélection des jours */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        {Array.from({ length: 10 }, (_, i) => i + 1).map((day) => (
-          <Button
-            key={day}
-            variant={currentDay === day ? "default" : "outline"}
-            size="sm"
-            onClick={() => !isLocked(day) && setCurrentDay(day)}
-            disabled={isLocked(day)}
-            className={`min-w-[48px] h-12 rounded-full ${
-              currentDay === day
-                ? `bg-gradient-to-r ${journey.color} text-gray-800`
-                : isLocked(day)
-                ? 'opacity-50 cursor-not-allowed'
-                : 'border-2 border-purple-200 hover:border-purple-300'
-            }`}
-          >
-            {isLocked(day) ? <Lock className="w-4 h-4" /> : day}
-          </Button>
-        ))}
-      </div>
-
-      {isLocked(currentDay) ? (
-        <Card className="border-0 bg-gradient-to-br from-orange-50 to-pink-50 shadow-lg">
-          <CardContent className="p-8 text-center">
-            <Lock className="w-16 h-16 mx-auto mb-4 text-orange-400" />
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
-              Tu veux continuer à prendre soin de toi ? 💜
-            </h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Active ton espace personnel illimité pour accéder aux 7 jours suivants de ton parcours émotionnel.
-            </p>
-            <div className="space-y-3">
-              <Badge className="bg-gradient-to-r from-yellow-200 to-orange-200 text-gray-800 text-lg px-4 py-2">
-                3,99€/mois ou 0,99€/semaine
-              </Badge>
-              <div>
-                <Button className="w-full bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white py-3 rounded-2xl">
-                  💎 Activer Soutien+
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card className={`border-0 bg-gradient-to-br ${journey.color} shadow-lg`}>
-          <CardHeader>
-            <CardTitle className="text-center">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Calendar className="w-5 h-5" />
-                <span className="text-lg font-bold text-gray-800">Jour {dayContent.day}</span>
-              </div>
-              <h3 className="text-xl text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
-                {dayContent.title}
-              </h3>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
-              <h4 className="font-semibold mb-2 flex items-center gap-2 text-gray-800">
-                <Heart className="w-4 h-4 text-red-500" />
-                Message du jour
-              </h4>
-              <p className="text-gray-700 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                {dayContent.message}
-              </p>
-            </div>
-
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
-              <h4 className="font-semibold mb-2 flex items-center gap-2 text-gray-800">
-                <Edit className="w-4 h-4 text-green-500" />
-                Action ou exercice
-              </h4>
-              <p className="text-gray-700" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                {dayContent.action}
-              </p>
-            </div>
-
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
-              <h4 className="font-semibold mb-2 flex items-center gap-2 text-gray-800">
-                <MessageCircle className="w-4 h-4 text-blue-500" />
-                Citation inspirante
-              </h4>
-              <blockquote className="text-gray-700 italic" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                "{dayContent.quote}"
-              </blockquote>
-            </div>
-
-            <Button 
-              className="w-full bg-gradient-to-r from-green-300 to-blue-300 hover:from-green-400 hover:to-blue-400 text-gray-800 py-3 rounded-2xl border-0 shadow-lg"
-              style={{ fontFamily: 'Nunito, sans-serif' }}
+        {/* Sélection des jours */}
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {Array.from({ length: 10 }, (_, i) => i + 1).map((day) => (
+            <Button
+              key={day}
+              variant={currentDay === day ? "default" : "outline"}
+              size="sm"
+              onClick={() => !isLocked(day) && setCurrentDay(day)}
+              disabled={isLocked(day)}
+              className={`min-w-[48px] h-12 rounded-full transition-all duration-300 ${
+                currentDay === day
+                  ? `${journey.theme.primary} ${journey.textColor} shadow-lg`
+                  : isLocked(day)
+                  ? 'opacity-50 cursor-not-allowed bg-gray-200'
+                  : `${journey.cardBg} border-2 ${journey.theme.accent} border-opacity-30 hover:border-opacity-60 ${journey.textColor}`
+              }`}
+              style={{ fontFamily: journey.fontFamily }}
             >
-              🌸 Je reviens demain
+              {isLocked(day) ? <Lock className="w-4 h-4" /> : day}
             </Button>
-          </CardContent>
-        </Card>
-      )}
+          ))}
+        </div>
+
+        {isLocked(currentDay) ? (
+          <Card className={`border-0 ${journey.cardBg} ${journey.theme.shadow} shadow-2xl`}>
+            <CardContent className="p-8 text-center">
+              <Lock className={`w-16 h-16 mx-auto mb-4 ${journey.theme.accent}`} />
+              <h3 className={`text-xl font-semibold mb-4 ${journey.textColor}`} style={{ fontFamily: journey.fontFamily }}>
+                Tu veux continuer à prendre soin de toi ? 💜
+              </h3>
+              <p className={`${journey.textColor} opacity-80 mb-6 leading-relaxed`} style={{ fontFamily: journey.fontFamily }}>
+                Active ton espace personnel illimité pour accéder aux 7 jours suivants de ton parcours émotionnel.
+              </p>
+              <div className="space-y-3">
+                <Badge className={`${journey.theme.secondary} ${journey.textColor} text-lg px-4 py-2`}>
+                  3,99€/mois ou 0,99€/semaine
+                </Badge>
+                <div>
+                  <Button className={`w-full ${journey.theme.primary} hover:opacity-90 text-white py-3 rounded-2xl shadow-lg`}>
+                    💎 Activer Soutien+
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className={`border-0 ${journey.cardBg} ${journey.theme.shadow} shadow-2xl`}>
+            <CardHeader>
+              <CardTitle className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Calendar className={`w-5 h-5 ${journey.theme.accent}`} />
+                  <span className={`text-lg font-bold ${journey.textColor}`} style={{ fontFamily: journey.fontFamily }}>
+                    Jour {dayContent.day}
+                  </span>
+                </div>
+                <h3 className={`text-xl ${journey.textColor}`} style={{ fontFamily: journey.fontFamily }}>
+                  {dayContent.title}
+                </h3>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className={`${journey.cardBg} rounded-2xl p-4 border border-white/20`}>
+                <h4 className={`font-semibold mb-2 flex items-center gap-2 ${journey.textColor}`} style={{ fontFamily: journey.fontFamily }}>
+                  <Heart className="w-4 h-4 text-red-400" />
+                  Message du jour
+                </h4>
+                <p className={`${journey.textColor} opacity-90 leading-relaxed`} style={{ fontFamily: journey.fontFamily }}>
+                  {dayContent.message}
+                </p>
+              </div>
+
+              <div className={`${journey.cardBg} rounded-2xl p-4 border border-white/20`}>
+                <h4 className={`font-semibold mb-2 flex items-center gap-2 ${journey.textColor}`} style={{ fontFamily: journey.fontFamily }}>
+                  <Edit className="w-4 h-4 text-green-400" />
+                  Action ou exercice
+                </h4>
+                <p className={`${journey.textColor} opacity-90`} style={{ fontFamily: journey.fontFamily }}>
+                  {dayContent.action}
+                </p>
+              </div>
+
+              <div className={`${journey.cardBg} rounded-2xl p-4 border border-white/20`}>
+                <h4 className={`font-semibold mb-2 flex items-center gap-2 ${journey.textColor}`} style={{ fontFamily: journey.fontFamily }}>
+                  <MessageCircle className="w-4 h-4 text-blue-400" />
+                  Citation inspirante
+                </h4>
+                <blockquote className={`${journey.textColor} opacity-90 italic`} style={{ fontFamily: journey.fontFamily }}>
+                  "{dayContent.quote}"
+                </blockquote>
+              </div>
+
+              <Button 
+                className={`w-full ${journey.theme.primary} hover:opacity-90 ${journey.textColor} py-3 rounded-2xl border-0 shadow-lg transition-all duration-300`}
+                style={{ fontFamily: journey.fontFamily }}
+              >
+                🌸 Je reviens demain
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
 };
