@@ -1,160 +1,10 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import { supabaseService } from "@/lib/supabase";
-
-interface Question {
-  id: number;
-  text: string;
-  answers: {
-    text: string;
-    points: {
-      sensible?: number;
-      hyperlucide?: number;
-      blesse?: number;
-      colerique?: number;
-      surefficace?: number;
-      vide?: number;
-      refoule?: number;
-    };
-  }[];
-}
-
-const questions: Question[] = [
-  {
-    id: 1,
-    text: "Dans un conflit, votre première réaction est généralement :",
-    answers: [
-      { text: "Je me tais et j'évite la confrontation", points: { sensible: 3 } },
-      { text: "J'analyse tous les angles du problème", points: { hyperlucide: 3 } },
-      { text: "Je me sens trahi(e) si c'est quelqu'un de proche", points: { blesse: 3 } },
-      { text: "Je m'emporte rapidement", points: { colerique: 3 } },
-      { text: "Je gère efficacement mais ça m'épuise", points: { surefficace: 3 } },
-      { text: "Je fais comme si ça ne m'atteignait pas", points: { vide: 2, refoule: 2 } },
-      { text: "Je dédramatise avec de l'humour", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 2,
-    text: "Quand vous vous sentez submergé(e) émotionnellement :",
-    answers: [
-      { text: "Je me replie sur moi-même", points: { sensible: 3 } },
-      { text: "Je sur-analyse ce que je ressens", points: { hyperlucide: 3 } },
-      { text: "Je ressens une profonde solitude", points: { blesse: 2, vide: 2 } },
-      { text: "Je peux exploser de frustration", points: { colerique: 3 } },
-      { text: "Je continue à fonctionner en mode pilote automatique", points: { surefficace: 2, vide: 2 } },
-      { text: "Je ne ressens plus rien", points: { vide: 3 } },
-      { text: "Je fais des blagues pour éviter d'y penser", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 3,
-    text: "Face à vos propres émotions difficiles :",
-    answers: [
-      { text: "J'ai peur qu'elles soient trop intenses pour les autres", points: { sensible: 3 } },
-      { text: "Je les décortique jusqu'à l'épuisement mental", points: { hyperlucide: 3 } },
-      { text: "Je me demande si je mérite qu'on s'en soucie", points: { blesse: 3 } },
-      { text: "Elles se transforment vite en colère", points: { colerique: 3 } },
-      { text: "Je n'ai pas le temps de m'y attarder", points: { surefficace: 3 } },
-      { text: "Je ne sais plus vraiment ce que je ressens", points: { vide: 3 } },
-      { text: "Je préfère ne pas creuser", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 4,
-    text: "Dans vos relations proches :",
-    answers: [
-      { text: "J'ai peur de déranger ou d'être trop", points: { sensible: 3 } },
-      { text: "J'analyse constamment les comportements des autres", points: { hyperlucide: 2 } },
-      { text: "J'ai du mal à faire confiance après avoir été blessé(e)", points: { blesse: 3 } },
-      { text: "Je peux être impulsif(ve) et le regretter après", points: { colerique: 3 } },
-      { text: "Je donne beaucoup mais je m'épuise", points: { surefficace: 2, blesse: 1 } },
-      { text: "J'ai l'impression de jouer un rôle", points: { vide: 3 } },
-      { text: "Je garde mes vraies pensées pour moi", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 5,
-    text: "Votre rapport au perfectionnisme :",
-    answers: [
-      { text: "Je vise la perfection pour éviter les critiques", points: { sensible: 2 } },
-      { text: "Je ne peux pas m'empêcher de tout analyser dans les détails", points: { hyperlucide: 3 } },
-      { text: "Je me donne à fond pour prouver ma valeur", points: { blesse: 2, surefficace: 1 } },
-      { text: "Mon perfectionnisme me rend irritable", points: { colerique: 2, surefficace: 1 } },
-      { text: "C'est devenu épuisant mais je ne peux pas m'arrêter", points: { surefficace: 3 } },
-      { text: "J'ai perdu la motivation d'être parfait(e)", points: { vide: 3 } },
-      { text: "Je fais semblant que ça ne me préoccupe pas", points: { refoule: 2 } }
-    ]
-  },
-  {
-    id: 6,
-    text: "Quand quelqu'un vous fait une critique :",
-    answers: [
-      { text: "Je l'encaisse en silence mais ça me bouleverse", points: { sensible: 3 } },
-      { text: "Je la décortique pendant des heures", points: { hyperlucide: 3 } },
-      { text: "Je me demande si j'ai encore déçu", points: { blesse: 3 } },
-      { text: "Je me défends de manière disproportionnée", points: { colerique: 3 } },
-      { text: "Je l'intègre immédiatement pour m'améliorer", points: { surefficace: 3 } },
-      { text: "Ça ne m'atteint plus vraiment", points: { vide: 3 } },
-      { text: "Je réponds par une boutade", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 7,
-    text: "Par rapport à vos besoins personnels :",
-    answers: [
-      { text: "J'ai du mal à les exprimer clairement", points: { sensible: 3 } },
-      { text: "Je les analyse tellement que j'oublie de les satisfaire", points: { hyperlucide: 2 } },
-      { text: "Je les mets souvent après ceux des autres", points: { blesse: 2, surefficace: 1 } },
-      { text: "Quand ils ne sont pas satisfaits, je m'énerve", points: { colerique: 3 } },
-      { text: "Je n'ai plus le temps de savoir ce dont j'ai besoin", points: { surefficace: 3 } },
-      { text: "Je ne sais plus vraiment ce que je veux", points: { vide: 3 } },
-      { text: "Je fais comme si je n'en avais pas", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 8,
-    text: "Votre façon de gérer le stress :",
-    answers: [
-      { text: "Je l'intériorise et j'espère que ça passe", points: { sensible: 3 } },
-      { text: "Je ressasse tous les scénarios possibles", points: { hyperlucide: 3 } },
-      { text: "Je me sens abandonné(e) face à celui-ci", points: { blesse: 3 } },
-      { text: "Je deviens irritable et impulsif(ve)", points: { colerique: 3 } },
-      { text: "Je redouble d'efforts jusqu'à l'épuisement", points: { surefficace: 3 } },
-      { text: "Je me déconnecte émotionnellement", points: { vide: 3 } },
-      { text: "Je plaisante pour dédramatiser", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 9,
-    text: "Quand vous repensez à votre passé :",
-    answers: [
-      { text: "Je regrette souvent de ne pas avoir osé m'exprimer", points: { sensible: 3 } },
-      { text: "Je l'analyse pour comprendre qui je suis", points: { hyperlucide: 2 } },
-      { text: "Je repense aux moments où j'ai été blessé(e)", points: { blesse: 3 } },
-      { text: "Je regrette certains emportements", points: { colerique: 2 } },
-      { text: "Je réalise que j'ai toujours couru après quelque chose", points: { surefficace: 3 } },
-      { text: "J'ai l'impression d'avoir vécu en pilote automatique", points: { vide: 3 } },
-      { text: "Je préfère regarder vers l'avenir", points: { refoule: 3 } }
-    ]
-  },
-  {
-    id: 10,
-    text: "Ce dont vous avez le plus besoin actuellement :",
-    answers: [
-      { text: "De courage pour exprimer qui je suis vraiment", points: { sensible: 3 } },
-      { text: "De calme mental et de lâcher-prise", points: { hyperlucide: 3 } },
-      { text: "De reconstruire ma confiance en moi et aux autres", points: { blesse: 3 } },
-      { text: "D'apprendre à canaliser mes émotions", points: { colerique: 3 } },
-      { text: "De retrouver un équilibre et du sens", points: { surefficace: 3 } },
-      { text: "De me reconnecter à mes vrais désirs", points: { vide: 3 } },
-      { text: "D'oser être authentique et vulnérable", points: { refoule: 3 } }
-    ]
-  }
-];
 
 interface QuestionnaireModalProps {
   isOpen: boolean;
@@ -162,119 +12,259 @@ interface QuestionnaireModalProps {
   onComplete: (profile: string) => void;
 }
 
+interface Question {
+  question: string;
+  options: {
+    text: string;
+    points: { [key: string]: number };
+  }[];
+}
+
+const questions: Question[] = [
+  {
+    question: "Face à une situation stressante, comment réagissez-vous ?",
+    options: [
+      { text: "Je deviens très émotif(ve) et ai du mal à me calmer.", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Je m'inquiète énormément et anticipe le pire.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Je me mets une pression énorme pour tout contrôler parfaitement.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Je prends du recul et analyse la situation calmement.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Je ressens les émotions des autres et essaie de les aider.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Quelle est votre plus grande peur ?",
+    options: [
+      { text: "Être rejeté(e) ou incompris(e).", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Que quelque chose de terrible arrive à mes proches.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Ne pas être à la hauteur de mes propres attentes.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Être envahi(e) par le bruit et l'agitation du monde extérieur.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Ne pas pouvoir soulager la souffrance des autres.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Dans une conversation, vous avez tendance à...",
+    options: [
+      { text: "Être très expressif(ve) et passionné(e).", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Anticiper les réactions et ajuster mes propos en conséquence.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Préparer mentalement ce que je vais dire pour être clair(e) et précis(e).", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Écouter attentivement et observer les réactions avant de parler.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Ressentir l'état émotionnel de mon interlocuteur et adapter mon discours.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Comment rechargez-vous vos batteries après une longue journée ?",
+    options: [
+      { text: "En exprimant mes émotions à quelqu'un de confiance.", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "En planifiant et organisant ma semaine pour me rassurer.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "En me concentrant sur une tâche précise pour me sentir utile.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "En passant du temps seul(e) dans un endroit calme.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "En aidant ou en écoutant les problèmes des autres.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Qu'est-ce qui vous met le plus mal à l'aise ?",
+    options: [
+      { text: "Les critiques ou les remarques négatives.", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "L'incertitude et le manque de contrôle.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "L'imperfection et le travail bâclé.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Les conversations superficielles et le bavardage inutile.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Être témoin de l'injustice ou de la souffrance.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Quelle est votre plus grande qualité ?",
+    options: [
+      { text: "Ma grande sensibilité et mon intuition.", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Ma capacité à anticiper les problèmes et à trouver des solutions.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Mon sens du détail et mon perfectionnisme.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Ma capacité à écouter et à comprendre les autres.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Mon empathie et ma compassion.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Comment réagissez-vous face à un conflit ?",
+    options: [
+      { text: "Je suis facilement submergé(e) par mes émotions et ai du mal à rester objectif(ve).", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Je m'inquiète des conséquences et essaie d'éviter l'affrontement direct.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Je cherche à analyser la situation de manière logique et à trouver une solution juste.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Je préfère me retirer et observer la situation de loin.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Je ressens les émotions des autres personnes impliquées et essaie de trouver un terrain d'entente.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Quel est votre plus grand défi ?",
+    options: [
+      { text: "Gérer mes émotions et ne pas me laisser submerger.", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Lâcher prise et accepter l'incertitude.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Être moins exigeant(e) envers moi-même et les autres.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "M'ouvrir aux autres et partager mes pensées.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Me protéger de la souffrance des autres sans me couper du monde.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Dans votre temps libre, vous aimez...",
+    options: [
+      { text: "Exprimer ma créativité à travers l'art, la musique ou l'écriture.", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Planifier des activités et organiser mon environnement.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Me consacrer à des projets qui demandent de la précision et de la rigueur.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Lire, réfléchir ou passer du temps dans la nature.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Aider les autres, faire du bénévolat ou écouter leurs histoires.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  },
+  {
+    question: "Quelle est votre vision du bonheur ?",
+    options: [
+      { text: "Vivre des expériences intenses et partager des moments émotionnels forts.", points: { 'Hypersensible Émotionnel': 3 } },
+      { text: "Avoir une vie stable, sécurisée et prévisible.", points: { 'Anxieux Généralisé': 3 } },
+      { text: "Atteindre mes objectifs et me sentir compétent(e) dans ce que je fais.", points: { 'Perfectionniste Stressé': 3 } },
+      { text: "Être en paix avec moi-même et en harmonie avec le monde qui m'entoure.", points: { 'Introverti Réfléchi': 3 } },
+      { text: "Contribuer au bien-être des autres et faire une différence dans le monde.", points: { 'Empathique Absorbant': 3 } }
+    ]
+  }
+];
+
 const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalProps) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [scores, setScores] = useState({
-    sensible: 0,
-    hyperlucide: 0,
-    blesse: 0,
-    colerique: 0,
-    surefficace: 0,
-    vide: 0,
-    refoule: 0
+  const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+  const [scores, setScores] = useState<{ [key: string]: number }>({
+    'Hypersensible Émotionnel': 0,
+    'Anxieux Généralisé': 0,
+    'Perfectionniste Stressé': 0,
+    'Introverti Réfléchi': 0,
+    'Empathique Absorbant': 0
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleAnswer = async (answerIndex: number) => {
-    const question = questions[currentQuestion];
-    const selectedAnswer = question.answers[answerIndex];
-    
-    // Save answer to Supabase
-    await supabaseService.saveQuestionnaireAnswer(
-      question.id,
-      selectedAnswer.text,
-      selectedAnswer.points
-    );
-    
-    // Update local state
-    const newAnswers = { ...answers, [currentQuestion]: selectedAnswer.text };
-    setAnswers(newAnswers);
-    
-    const newScores = { ...scores };
-    Object.entries(selectedAnswer.points).forEach(([key, value]) => {
-      newScores[key as keyof typeof scores] += value || 0;
+  const handleAnswer = (answer: string, points: { [key: string]: number }) => {
+    setAnswers({ ...answers, [currentQuestion]: answer });
+
+    // Mise à jour des scores
+    setScores(prevScores => {
+      let newScores = { ...prevScores };
+      for (const profile in points) {
+        newScores[profile] = (newScores[profile] || 0) + points[profile];
+      }
+      return newScores;
     });
-    setScores(newScores);
+  };
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      // Questionnaire terminé - calculer le profil dominant
-      const maxScore = Math.max(...Object.values(newScores));
-      const dominantProfile = Object.entries(newScores).find(([_, score]) => score === maxScore)?.[0] || 'sensible';
+  const handleComplete = async () => {
+    setLoading(true);
+    
+    try {
+      // Sauvegarder chaque réponse dans Supabase
+      for (const [questionIndex, answer] of Object.entries(answers)) {
+        const question = questions[parseInt(questionIndex)];
+        const selectedOption = question.options.find(opt => opt.text === answer);
+        const points = selectedOption?.points || {};
+        
+        await supabaseService.saveQuestionnaireAnswer(
+          parseInt(questionIndex) + 1,
+          answer,
+          points
+        );
+      }
+
+      // Déterminer le profil dominant
+      const winningProfile = Object.entries(scores).reduce((a, b) => 
+        scores[a[0]] > scores[b[0]] ? a : b
+      )[0];
+
+      // Sauvegarder l'utilisateur avec son profil et date de début d'essai
+      const trialStart = Date.now().toString();
+      await supabaseService.saveUser(winningProfile, trialStart);
       
-      console.log('Scores finaux:', newScores);
-      console.log('Profil dominant:', dominantProfile);
+      // Sauvegarder la progression initiale du parcours
+      await supabaseService.saveJourneyProgress(winningProfile, 1, []);
       
-      // Mapper les profils vers les noms complets
-      const profileMapping = {
-        sensible: 'Le Sensible Silencieux',
-        hyperlucide: 'L\'Hyperlucide',
-        blesse: 'Le Blessé Loyal',
-        colerique: 'Le Colérique Fatigué',
-        surefficace: 'Le Surefficace Usé',
-        vide: 'Le Vide Camouflé',
-        refoule: 'Le Refoulé Rieur'
-      };
-      
-      const fullProfileName = profileMapping[dominantProfile as keyof typeof profileMapping];
-      
-      // Save profile to Supabase and localStorage
-      await supabaseService.saveUser(fullProfileName, new Date().toISOString());
-      localStorage.setItem('arboriaProfile', fullProfileName);
-      localStorage.setItem('trialStart', Date.now().toString());
-      
-      // Complete questionnaire
-      onComplete(fullProfileName);
-      onClose();
+      onComplete(winningProfile);
+    } catch (error) {
+      console.error('Erreur sauvegarde questionnaire:', error);
+      // En cas d'erreur, continuer quand même avec le profil détecté
+      const winningProfile = Object.entries(scores).reduce((a, b) => 
+        scores[a[0]] > scores[b[0]] ? a : b
+      )[0];
+      onComplete(winningProfile);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const progress = ((currentQuestion + 1) / questions.length) * 100;
-
-  if (!isOpen) return null;
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md mx-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-center text-lg font-semibold text-emerald-800">
+          <DialogTitle className="text-center text-2xl font-bold text-emerald-800 mb-4">
             Découverte de votre profil émotionnel
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="w-full bg-emerald-100 rounded-full h-2">
-            <div 
-              className="bg-gradient-to-r from-emerald-400 to-teal-400 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
+        <div className="space-y-6">
+          <div className="text-center">
+            <Progress 
+              value={(currentQuestion / questions.length) * 100} 
+              className="mb-4"
             />
+            <p className="text-sm text-gray-600">
+              Question {currentQuestion + 1} sur {questions.length}
+            </p>
           </div>
-          
-          <Badge variant="outline" className="mx-auto block w-fit border-emerald-400 text-emerald-700">
-            Question {currentQuestion + 1} sur {questions.length}
-          </Badge>
 
-          <Card className="border-0 shadow-lg">
+          <Card className="shadow-lg border-0 bg-gradient-to-br from-emerald-50 to-teal-50">
             <CardContent className="p-6">
-              <h3 className="font-semibold text-emerald-800 mb-4 leading-relaxed">
-                {questions[currentQuestion].text}
+              <h3 className="text-lg font-semibold mb-4 text-center text-emerald-800">
+                {questions[currentQuestion].question}
               </h3>
               
               <div className="space-y-3">
-                {questions[currentQuestion].answers.map((answer, index) => (
+                {questions[currentQuestion].options.map((option, index) => (
                   <Button
                     key={index}
-                    variant="outline"
-                    className="w-full text-left justify-start h-auto p-4 hover:bg-emerald-50 hover:border-emerald-300 transition-colors border-emerald-200"
-                    onClick={() => handleAnswer(index)}
+                    variant={answers[currentQuestion] === option.text ? "default" : "outline"}
+                    className={`w-full text-left justify-start p-4 h-auto whitespace-normal ${
+                      answers[currentQuestion] === option.text
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                        : 'hover:bg-emerald-50 border-emerald-200'
+                    }`}
+                    onClick={() => handleAnswer(option.text, option.points)}
                   >
-                    {answer.text}
+                    {option.text}
                   </Button>
                 ))}
               </div>
             </CardContent>
           </Card>
+
+          <div className="flex justify-between">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
+              disabled={currentQuestion === 0}
+              className="border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+            >
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              Précédent
+            </Button>
+
+            {currentQuestion < questions.length - 1 ? (
+              <Button
+                onClick={() => setCurrentQuestion(currentQuestion + 1)}
+                disabled={!answers[currentQuestion]}
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
+              >
+                Suivant
+                <ChevronRight className="w-4 h-4 ml-2" />
+              </Button>
+            ) : (
+              <Button
+                onClick={handleComplete}
+                disabled={!answers[currentQuestion] || loading}
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
+              >
+                {loading ? 'Analyse en cours...' : 'Découvrir mon profil'}
+              </Button>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>

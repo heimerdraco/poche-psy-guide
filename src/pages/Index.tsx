@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -63,7 +62,7 @@ const Index = () => {
     };
   }, [userProfile]);
 
-  const handleProfileComplete = (profile: string) => {
+  const handleProfileComplete = async (profile: string) => {
     console.log('Profil reçu:', profile);
     
     setUserProfile(profile);
@@ -74,7 +73,6 @@ const Index = () => {
     }
     
     setShowQuestionnaire(false);
-    // Rediriger automatiquement vers le parcours émotionnel après détection du profil
     setCurrentSection('journey');
     
     console.log('Profil défini et redirection vers journey');
@@ -282,6 +280,17 @@ const Index = () => {
               </EnhancedButton>
               
               <EnhancedButton
+                onClick={() => navigate(`/chat/${userProfile}`)}
+                soundType="calm"
+                animationType="scale"
+                className="w-full bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '0.9s' }}
+              >
+                <MessageCircle className="w-6 h-6 mr-2" />
+                💬 Chat Thérapeutique
+              </EnhancedButton>
+              
+              <EnhancedButton
                 onClick={() => setCurrentSection('messages')}
                 soundType="calm"
                 animationType="scale"
@@ -324,14 +333,21 @@ const Index = () => {
               {[
                 { key: 'home', label: '🏠', icon: User },
                 { key: 'journey', label: '🌳', icon: Book },
+                { key: 'chat', label: '💬', icon: MessageCircle, isRoute: true, route: `/chat/${userProfile}` },
                 { key: 'messages', label: '💌', icon: MessageCircle },
                 { key: 'journal', label: '📝', icon: Edit },
-                { key: 'settings', label: '⚙️', icon: User, isRoute: true },
-              ].map(({ key, label, icon: Icon, isRoute }) => (
+                { key: 'settings', label: '⚙️', icon: User, isRoute: true, route: '/settings' },
+              ].map(({ key, label, icon: Icon, isRoute, route }) => (
                 <EnhancedButton
                   key={key}
                   variant={currentSection === key ? "default" : "ghost"}
-                  onClick={() => isRoute ? navigate('/settings') : setCurrentSection(key)}
+                  onClick={() => {
+                    if (isRoute) {
+                      navigate(route || `/${key}`);
+                    } else {
+                      setCurrentSection(key);
+                    }
+                  }}
                   soundType="click"
                   animationType="scale"
                   className={`flex flex-col items-center gap-1 h-12 px-3 rounded-xl transition-all duration-200 ${

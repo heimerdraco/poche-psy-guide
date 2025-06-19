@@ -4,256 +4,190 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Calendar, Heart, Plus } from "lucide-react";
+import { Calendar, Heart, BookOpen, Save, RefreshCw } from "lucide-react";
 import { supabaseService } from "@/lib/supabase";
-
-interface JournalEntry {
-  id: string;
-  date: string;
-  mood: string;
-  content: string;
-  gratitude: string[];
-  reflection: string;
-  day?: number;
-}
+import { useToast } from "@/hooks/use-toast";
+import EnhancedButton from "./EnhancedButton";
 
 const JournalingSection = () => {
-  const [entries, setEntries] = useState<JournalEntry[]>([]);
-  const [currentEntry, setCurrentEntry] = useState<Partial<JournalEntry>>({});
-  const [showNewEntry, setShowNewEntry] = useState(false);
-  const [currentDay, setCurrentDay] = useState(1);
-
-  useEffect(() => {
-    loadEntries();
-  }, []);
-
-  const loadEntries = async () => {
-    try {
-      // Charger depuis Supabase
-      const userData = await supabaseService.getUserData();
-      if (userData.journal && userData.journal.length > 0) {
-        const supabaseEntries = userData.journal.map((entry: any) => ({
-          id: entry.id.toString(),
-          date: entry.created_at.split('T')[0],
-          mood: entry.mood,
-          content: entry.content,
-          gratitude: [],
-          reflection: '',
-          day: entry.day
-        }));
-        setEntries(supabaseEntries);
-        
-        // Calculer le jour actuel
-        const maxDay = Math.max(...userData.journal.map((entry: any) => entry.day));
-        setCurrentDay(maxDay + 1);
-      } else {
-        // Fallback vers localStorage
-        const savedEntries = localStorage.getItem('journalEntries');
-        if (savedEntries) {
-          setEntries(JSON.parse(savedEntries));
-        }
-      }
-    } catch (error) {
-      console.error('Erreur chargement entrées:', error);
-      // Fallback vers localStorage en cas d'erreur
-      const savedEntries = localStorage.getItem('journalEntries');
-      if (savedEntries) {
-        setEntries(JSON.parse(savedEntries));
-      }
-    }
-  };
-
-  const saveEntries = (newEntries: JournalEntry[]) => {
-    setEntries(newEntries);
-    localStorage.setItem('journalEntries', JSON.stringify(newEntries));
-  };
-
-  const saveEntry = async () => {
-    if (!currentEntry.content?.trim()) return;
-
-    const entry: JournalEntry = {
-      id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
-      mood: currentEntry.mood || '',
-      content: currentEntry.content || '',
-      gratitude: currentEntry.gratitude || [],
-      reflection: currentEntry.reflection || '',
-      day: currentDay
-    };
-
-    // Sauvegarder localement
-    const newEntries = [entry, ...entries];
-    saveEntries(newEntries);
-
-    // Sauvegarder dans Supabase
-    try {
-      await supabaseService.saveJournalEntry(
-        currentEntry.content || '',
-        currentEntry.mood || 'neutre',
-        currentDay
-      );
-      console.log('Entrée sauvegardée dans Supabase');
-    } catch (error) {
-      console.error('Erreur sauvegarde Supabase:', error);
-    }
-
-    setCurrentEntry({});
-    setShowNewEntry(false);
-    setCurrentDay(currentDay + 1);
-  };
+  const { toast } = useToast();
+  const [journalContent, setJournalContent] = useState("");
+  const [selectedMood, setSelectedMood] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [journalEntries, setJournalEntries] = useState<any[]>([]);
 
   const moods = [
-    { value: 'joyful', label: '😊 Joyeux', color: 'bg-yellow-100 text-yellow-800' },
-    { value: 'calm', label: '😌 Calme', color: 'bg-green-100 text-green-800' },
-    { value: 'stressed', label: '😰 Stressé', color: 'bg-red-100 text-red-800' },
-    { value: 'sad', label: '😢 Triste', color: 'bg-blue-100 text-blue-800' },
-    { value: 'energetic', label: '⚡ Énergique', color: 'bg-orange-100 text-orange-800' },
-    { value: 'thoughtful', label: '🤔 Pensif', color: 'bg-purple-100 text-purple-800' },
-    { value: 'grateful', label: '🙏 Reconnaissant', color: 'bg-pink-100 text-pink-800' }
+    { emoji: "😊", label: "Joyeux", color: "bg-yellow-100 text-yellow-800" },
+    { emoji: "😌", label: "Paisible", color: "bg-green-100 text-green-800" },
+    { emoji: "😔", label: "Triste", color: "bg-blue-100 text-blue-800" },
+    { emoji: "😰", label: "Anxieux", color: "bg-orange-100 text-orange-800" },
+    { emoji: "😡", label: "Colère", color: "bg-red-100 text-red-800" },
+    { emoji: "🤔", label: "Réfléchi", color: "bg-purple-100 text-purple-800" }
   ];
 
-  const prompts = [
-    "Qu'est-ce qui vous a apporté de la joie aujourd'hui ?",
-    "Quel défi avez-vous surmonté récemment ?",
-    "Pour quoi êtes-vous reconnaissant(e) en ce moment ?",
-    "Quelle émotion avez-vous ressentie le plus fortement aujourd'hui ?",
-    "Qu'avez-vous appris sur vous-même cette semaine ?",
-    "Comment vous êtes-vous montré(e) bienveillant(e) envers vous-même ?",
-    "Quelle est une petite victoire que vous célébrez aujourd'hui ?"
-  ];
+  useEffect(() => {
+    loadJournalEntries();
+  }, []);
 
-  const todayPrompt = prompts[new Date().getDate() % prompts.length];
+  const loadJournalEntries = async () => {
+    setLoading(true);
+    try {
+      const userData = await supabaseService.getUserData();
+      setJournalEntries(userData.journal || []);
+    } catch (error) {
+      console.error('Erreur chargement journal:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!journalContent.trim() || !selectedMood) {
+      toast({
+        title: "Champs manquants",
+        description: "Veuillez remplir votre ressenti et sélectionner une humeur.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const dayNumber = Math.floor((Date.now() - (parseInt(localStorage.getItem('trialStart') || '0'))) / (1000 * 60 * 60 * 24)) + 1;
+      
+      await supabaseService.saveJournalEntry(journalContent, selectedMood, dayNumber);
+      
+      toast({
+        title: "Journal sauvegardé",
+        description: "Votre ressenti a été enregistré avec succès.",
+      });
+
+      // Réinitialiser le formulaire
+      setJournalContent("");
+      setSelectedMood("");
+      
+      // Recharger les entrées
+      loadJournalEntries();
+    } catch (error) {
+      console.error('Erreur sauvegarde journal:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de sauvegarder votre journal.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <RefreshCw className="w-6 h-6 animate-spin text-emerald-600 mr-2" />
+        <span className="text-emerald-700">Chargement de votre journal...</span>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-4 flex items-center justify-center gap-2">
-          <Edit className="w-8 h-8 text-purple-600" />
-          Journal Personnel
-        </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Prenez quelques minutes chaque jour pour réfléchir à vos émotions et expériences. 
-          L'écriture est un outil puissant de développement personnel.
-        </p>
-      </div>
+    <div className="space-y-6 animate-slide-in-gentle">
+      <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-emerald-800">
+            <BookOpen className="w-5 h-5" />
+            Mon Journal Personnel
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-emerald-700 mb-2">
+              Comment vous sentez-vous aujourd'hui ?
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {moods.map((mood) => (
+                <Badge
+                  key={mood.label}
+                  className={`cursor-pointer transition-all ${
+                    selectedMood === mood.label
+                      ? mood.color + " scale-110"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                  onClick={() => setSelectedMood(mood.label)}
+                >
+                  <span className="mr-1">{mood.emoji}</span>
+                  {mood.label}
+                </Badge>
+              ))}
+            </div>
+          </div>
 
-      {!showNewEntry && (
-        <Card className="border-dashed border-2 border-purple-300 hover:border-purple-500 transition-colors">
-          <CardContent className="p-8 text-center">
-            <Plus className="w-12 h-12 text-purple-500 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Créer une nouvelle entrée - Jour {currentDay}</h3>
-            <p className="text-gray-600 mb-4">Prompt du jour : "{todayPrompt}"</p>
-            <Button 
-              onClick={() => setShowNewEntry(true)}
-              className="bg-purple-600 hover:bg-purple-700"
-            >
-              Commencer à écrire
-            </Button>
-          </CardContent>
-        </Card>
-      )}
+          <div>
+            <label className="block text-sm font-medium text-emerald-700 mb-2">
+              Exprimez vos pensées et ressentis
+            </label>
+            <Textarea
+              value={journalContent}
+              onChange={(e) => setJournalContent(e.target.value)}
+              placeholder="Décrivez votre journée, vos émotions, vos réflexions..."
+              className="min-h-[120px] border-emerald-200 focus:border-emerald-400"
+              maxLength={1000}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              {journalContent.length}/1000 caractères
+            </p>
+          </div>
 
-      {showNewEntry && (
-        <Card className="border-purple-500 shadow-lg">
+          <EnhancedButton
+            onClick={handleSave}
+            disabled={!journalContent.trim() || !selectedMood || saving}
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white"
+            soundType="success"
+            animationType="glow"
+          >
+            {saving ? (
+              <>
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                Sauvegarde...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4 mr-2" />
+                Sauvegarder mon ressenti
+              </>
+            )}
+          </EnhancedButton>
+        </CardContent>
+      </Card>
+
+      {/* Affichage des entrées précédentes */}
+      {journalEntries.length > 0 && (
+        <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-emerald-800">
               <Calendar className="w-5 h-5" />
-              Nouvelle entrée - Jour {currentDay} - {new Date().toLocaleDateString('fr-FR')}
+              Mes entrées précédentes
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium mb-2">Comment vous sentez-vous aujourd'hui ?</label>
-              <div className="flex flex-wrap gap-2">
-                {moods.map((mood) => (
-                  <Badge
-                    key={mood.value}
-                    className={`cursor-pointer transition-all ${
-                      currentEntry.mood === mood.value 
-                        ? mood.color + ' ring-2 ring-offset-2 ring-purple-500' 
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                    onClick={() => setCurrentEntry({ ...currentEntry, mood: mood.value })}
-                  >
-                    {mood.label}
+          <CardContent className="space-y-4">
+            {journalEntries.slice(-5).reverse().map((entry, index) => (
+              <div key={entry.id} className="border-l-4 border-emerald-300 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <Badge className="bg-emerald-100 text-emerald-800">
+                    {moods.find(m => m.label === entry.mood)?.emoji} {entry.mood}
                   </Badge>
-                ))}
+                  <span className="text-xs text-gray-500">
+                    {new Date(entry.created_at).toLocaleDateString('fr-FR')}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {entry.content}
+                </p>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Réflexion du jour <span className="text-gray-500">({todayPrompt})</span>
-              </label>
-              <Textarea
-                value={currentEntry.content || ''}
-                onChange={(e) => setCurrentEntry({ ...currentEntry, content: e.target.value })}
-                placeholder="Exprimez vos pensées et émotions librement..."
-                className="min-h-[120px]"
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <Button 
-                onClick={saveEntry}
-                className="bg-purple-600 hover:bg-purple-700 flex-1"
-                disabled={!currentEntry.content?.trim()}
-              >
-                Sauvegarder l'entrée
-              </Button>
-              <Button 
-                onClick={() => {
-                  setShowNewEntry(false);
-                  setCurrentEntry({});
-                }}
-                variant="outline"
-              >
-                Annuler
-              </Button>
-            </div>
+            ))}
           </CardContent>
         </Card>
       )}
-
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold">Vos entrées récentes</h3>
-        {entries.length === 0 ? (
-          <Card>
-            <CardContent className="p-8 text-center text-gray-500">
-              <Edit className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p>Aucune entrée pour le moment. Commencez votre voyage de réflexion !</p>
-            </CardContent>
-          </Card>
-        ) : (
-          entries.slice(0, 5).map((entry) => {
-            const mood = moods.find(m => m.value === entry.mood);
-            return (
-              <Card key={entry.id}>
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-lg">
-                      Jour {entry.day || 1} - {new Date(entry.date).toLocaleDateString('fr-FR', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
-                    </CardTitle>
-                    {mood && (
-                      <Badge className={mood.color}>
-                        {mood.label}
-                      </Badge>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 line-clamp-3">{entry.content}</p>
-                </CardContent>
-              </Card>
-            );
-          })
-        )}
-      </div>
     </div>
   );
 };

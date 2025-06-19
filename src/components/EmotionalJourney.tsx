@@ -7,6 +7,7 @@ import { supabaseService } from "@/lib/supabase";
 import EnhancedButton from "./EnhancedButton";
 import { getProfileData } from "@/lib/profilesData";
 import ActivityManager from "./activities/ActivityManager";
+import { useToast } from "@/hooks/use-toast";
 
 interface EmotionalJourneyProps {
   profile: string;
@@ -14,11 +15,13 @@ interface EmotionalJourneyProps {
 }
 
 const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
+  const { toast } = useToast();
   const [currentDay, setCurrentDay] = useState(1);
   const [completedActivities, setCompletedActivities] = useState<string[]>([]);
   const [selectedDay, setSelectedDay] = useState(1);
   const [activeActivity, setActiveActivity] = useState<any>(null);
   const [newUnlockedDay, setNewUnlockedDay] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const profileData = getProfileData(profile);
   const isPremium = trialDays > 0 || localStorage.getItem('arboriaPlus') === 'true';
@@ -52,12 +55,15 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
   };
 
   useEffect(() => {
+    loadJourneyProgress();
+  }, [profile]);
+
+  useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
     if (trialStart) {
       const daysPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24));
       const newCurrentDay = Math.min(daysPassed + 1, 7);
       
-      // Animation pour nouveau jour débloqué
       if (newCurrentDay > currentDay) {
         setNewUnlockedDay(newCurrentDay);
         setTimeout(() => setNewUnlockedDay(null), 2000);
@@ -65,20 +71,41 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
       
       setCurrentDay(newCurrentDay);
     }
+  }, [currentDay]);
 
-    const savedActivities = localStorage.getItem('completedActivities');
-    if (savedActivities) {
-      setCompletedActivities(JSON.parse(savedActivities));
-    }
-
-    loadJourneyData();
-  }, [profile, currentDay]);
-
-  const loadJourneyData = async () => {
+  const loadJourneyProgress = async () => {
+    setLoading(true);
     try {
-      await supabaseService.saveJourneyProgress(profile, currentDay, completedActivities);
+      const userData = await supabaseService.getUserData();
+      
+      if (userData.journeyProgress) {
+        setCurrentDay(userData.journeyProgress.day_number || 1);
+        setCompletedActivities(userData.journeyProgress.completed_activities || []);
+      } else {
+        // Initialiser la progression si elle n'existe pas
+        await supabaseService.saveJourneyProgress(profile, 1, []);
+      }
     } catch (error) {
-      console.error('Erreur lors du chargement des données:', error);
+      console.error('Erreur chargement progression:', error);
+      // Fallback vers localStorage
+      const savedActivities = localStorage.getItem('completedActivities');
+      if (savedActivities) {
+        setCompletedActivities(JSON.parse(savedActivities));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveJourneyProgress = async (dayNumber: number, activities: string[]) => {
+    try {
+      await supabaseService.saveJourneyProgress(profile, dayNumber, activities);
+      // Aussi sauvegarder en local pour le fallback
+      localStorage.setItem('completedActivities', JSON.stringify(activities));
+    } catch (error) {
+      console.error('Erreur sauvegarde progression:', error);
+      // En cas d'erreur, sauvegarder au moins localement
+      localStorage.setItem('completedActivities', JSON.stringify(activities));
     }
   };
 
@@ -102,12 +129,19 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
     }
   };
 
-  const handleActivityComplete = (dayNumber: number, activityIndex: number) => {
+  const handleActivityComplete = async (dayNumber: number, activityIndex: number) => {
     const activityId = `day-${dayNumber}-activity-${activityIndex}`;
     if (!completedActivities.includes(activityId)) {
       const newCompleted = [...completedActivities, activityId];
       setCompletedActivities(newCompleted);
-      localStorage.setItem('completedActivities', JSON.stringify(newCompleted));
+      
+      // Sauvegarder la progression dans Supabase
+      await saveJourneyProgress(currentDay, newCompleted);
+      
+      toast({
+        title: "Activité terminée !",
+        description: "Votre progression a été sauvegardée.",
+      });
     }
     setActiveActivity(null);
   };
@@ -148,6 +182,15 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
 
   // Génération des jours (affichage jusqu'à 7 jours)
   const days = Array.from({ length: 7 }, (_, i) => i + 1);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <div className="animate-spin w-6 h-6 border-2 border-emerald-300 border-t-emerald-600 rounded-full"></div>
+        <span className="ml-2 text-gray-600">Chargement de votre parcours...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-slide-in-gentle">
