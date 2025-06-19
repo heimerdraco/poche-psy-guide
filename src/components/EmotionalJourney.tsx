@@ -148,13 +148,13 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
               onClick={() => handleDayClick(dayNumber)}
               soundType="click"
               animationType="scale"
-              className={`min-w-[60px] h-12 rounded-xl transition-all duration-300 ${
+              className={`min-w-[65px] h-14 rounded-xl transition-all duration-300 ${
                 isSelected
                   ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
                   : isCompleted
                     ? 'bg-green-100 text-green-700 hover:bg-green-200'
                     : isLocked
-                      ? 'bg-gray-100 text-gray-400 opacity-50'
+                      ? 'bg-gray-600 text-white opacity-90 hover:bg-gray-700 border-2 border-gray-500'
                       : hasActivities
                         ? 'bg-white text-emerald-700 hover:bg-emerald-50 border border-emerald-200'
                         : 'bg-gray-50 text-gray-400 border border-gray-200'
@@ -162,10 +162,14 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
               disabled={isLocked}
             >
               <div className="text-center">
-                <div className="text-xs font-medium">Jour</div>
-                <div className="text-lg font-bold">{dayNumber}</div>
+                <div className={`text-xs font-semibold ${isLocked ? 'text-gray-200' : ''}`}>
+                  Jour
+                </div>
+                <div className={`text-xl font-bold ${isLocked ? 'text-white' : ''}`}>
+                  {dayNumber}
+                </div>
                 {isCompleted && <CheckCircle className="w-3 h-3 mx-auto mt-1" />}
-                {isLocked && <Lock className="w-3 h-3 mx-auto mt-1" />}
+                {isLocked && <Lock className="w-3 h-3 mx-auto mt-1 text-gray-200" />}
               </div>
             </EnhancedButton>
           );
