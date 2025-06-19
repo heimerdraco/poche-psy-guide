@@ -60,6 +60,36 @@ export type Database = {
         }
         Relationships: []
       }
+      journey_progress: {
+        Row: {
+          completed_activities: string[] | null
+          created_at: string
+          current_phase: string
+          day_number: number
+          device_id: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          completed_activities?: string[] | null
+          created_at?: string
+          current_phase: string
+          day_number?: number
+          device_id: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          completed_activities?: string[] | null
+          created_at?: string
+          current_phase?: string
+          day_number?: number
+          device_id?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       questionnaire_answers: {
         Row: {
           answer: string
@@ -110,6 +140,36 @@ export type Database = {
           enabled?: boolean
           id?: string
           reminder_time?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      theme_progress: {
+        Row: {
+          completed: boolean
+          created_at: string
+          device_id: string
+          id: string
+          progress: number
+          theme_id: string
+          updated_at: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          device_id: string
+          id?: string
+          progress?: number
+          theme_id: string
+          updated_at?: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          device_id?: string
+          id?: string
+          progress?: number
+          theme_id?: string
           updated_at?: string
         }
         Relationships: []
