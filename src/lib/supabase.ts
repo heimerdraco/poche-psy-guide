@@ -14,6 +14,8 @@ export const supabaseService = {
   // Utilisateurs
   async saveUser(profile: string, trialStart: string) {
     const deviceId = getDeviceId();
+    console.log('Sauvegarde utilisateur avec profil:', profile);
+    
     const { data, error } = await supabase
       .from('users')
       .upsert({
@@ -25,7 +27,11 @@ export const supabaseService = {
         onConflict: 'device_id'
       });
     
-    if (error) console.error('Erreur sauvegarde utilisateur:', error);
+    if (error) {
+      console.error('Erreur sauvegarde utilisateur:', error);
+    } else {
+      console.log('Utilisateur sauvegardé avec succès:', data);
+    }
     return { data, error };
   },
 

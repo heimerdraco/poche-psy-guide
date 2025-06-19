@@ -26,6 +26,7 @@ const DailyActivitiesSection = ({ profile, dayNumber, isTrialExpired }: DailyAct
   const [completedActivities, setCompletedActivities] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState<any>(null);
+  const [activitiesAdded, setActivitiesAdded] = useState(false);
 
   const profileData = getProfileData(profile);
 
@@ -36,7 +37,16 @@ const DailyActivitiesSection = ({ profile, dayNumber, isTrialExpired }: DailyAct
   const loadDailyActivities = async () => {
     setLoading(true);
     try {
+      console.log('Chargement activités pour profil:', profile);
+      
+      // Ajouter les activités supplémentaires si pas encore fait
+      if (!activitiesAdded) {
+        await activitiesService.addMoreActivities();
+        setActivitiesAdded(true);
+      }
+
       const dailyActivities = await activitiesService.getDailyActivities(profile, dayNumber);
+      console.log('Activités récupérées:', dailyActivities);
       setActivities(dailyActivities);
 
       // Vérifier les activités complétées

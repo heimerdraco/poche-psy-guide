@@ -26,6 +26,8 @@ export const activitiesService = {
   // Récupérer les activités du jour pour un profil
   async getDailyActivities(profile: string, dayNumber: number): Promise<DailyActivities> {
     try {
+      console.log('Récupération activités pour profil:', profile, 'jour:', dayNumber);
+      
       const { data, error } = await supabase
         .from('activities')
         .select('*')
@@ -38,12 +40,19 @@ export const activitiesService = {
         return { morning: null, afternoon: null, evening: null };
       }
 
+      console.log('Activités trouvées:', data?.length || 0);
       const activities = data || [];
       
       // Sélectionner une activité aléatoire pour chaque moment de la journée
       const morningActivities = activities.filter(a => a.type === 'morning');
       const afternoonActivities = activities.filter(a => a.type === 'afternoon');
       const eveningActivities = activities.filter(a => a.type === 'evening');
+
+      console.log('Répartition activités:', {
+        morning: morningActivities.length,
+        afternoon: afternoonActivities.length,
+        evening: eveningActivities.length
+      });
 
       return {
         morning: morningActivities.length > 0 ? 
@@ -131,146 +140,246 @@ export const activitiesService = {
     }
   },
 
-  // Insérer des activités supplémentaires pour enrichir la base de données
-  async seedMoreActivities(): Promise<void> {
-    const additionalActivities = [
-      // Activités pour L'Anxieux
+  // Ajouter plus d'activités pour compléter tous les profils
+  async addMoreActivities(): Promise<void> {
+    const moreActivities = [
+      // Activités supplémentaires pour L'Anxieux
       {
-        title: "Technique de la boule de lumière",
-        description: "Visualisation apaisante pour calmer l'anxiété",
-        type: "morning",
-        activity_format: "audio",
-        content: { duration: 480, theme: "calming-light" },
-        target_profiles: ["anxieux"]
-      },
-      {
-        title: "Journal des gratitudes",
-        description: "Notez 3 choses positives de votre journée",
-        type: "evening",
-        activity_format: "notebook",
-        content: { prompt: "Quelles sont les 3 choses pour lesquelles vous êtes reconnaissant(e) aujourd'hui ?" },
-        target_profiles: ["anxieux"]
-      },
-      
-      // Activités pour Le Fatigué
-      {
-        title: "Micro-méditation énergisante",
-        description: "5 minutes pour retrouver de l'élan",
-        type: "afternoon",
-        activity_format: "audio",
-        content: { duration: 300, theme: "energy-boost" },
-        target_profiles: ["fatigue"]
-      },
-      {
-        title: "Cartographie de l'énergie",
-        description: "Identifiez vos sources d'énergie et de fatigue",
-        type: "evening",
-        activity_format: "notebook",
-        content: { prompt: "Qu'est-ce qui vous donne de l'énergie ? Qu'est-ce qui vous en prend ?" },
-        target_profiles: ["fatigue"]
-      },
-
-      // Activités pour Le Déraciné
-      {
-        title: "Rituel d'ancrage matinal",
-        description: "Connectez-vous à l'instant présent",
+        title: "Affirmations rassurantes",
+        description: "Répétez des phrases positives pour calmer votre mental",
         type: "morning",
         activity_format: "explanatory",
-        content: { steps: ["Posez vos pieds au sol", "Respirez profondément 5 fois", "Nommez 3 choses que vous voyez", "Connectez-vous à votre corps"] },
-        target_profiles: ["deracine"]
+        content: { steps: ["Je suis en sécurité", "Je contrôle ma respiration", "Cette émotion va passer", "Je suis plus fort que mes peurs"] },
+        target_profiles: ["anxieux"],
+        day_min: 20,
+        day_max: 365
       },
       {
-        title: "Lettre à un proche",
-        description: "Reconnectez-vous avec une personne importante",
+        title: "Méditation progressive",
+        description: "Détente musculaire progressive pour relâcher les tensions",
         type: "evening",
-        activity_format: "notebook",
-        content: { prompt: "Écrivez une lettre (que vous n'enverrez pas forcément) à quelqu'un qui compte pour vous." },
-        target_profiles: ["deracine"]
-      },
-
-      // Activités pour Le Contrôlant
-      {
-        title: "Agenda du chaos",
-        description: "Planifiez délibérément de l'imprévu",
-        type: "morning",
-        activity_format: "notebook",
-        content: { prompt: "Planifiez 15 minutes de 'temps libre' sans objectif précis dans votre journée." },
-        target_profiles: ["controlant"]
-      },
-      {
-        title: "Dessin spontané",
-        description: "Lâchez prise à travers l'art",
-        type: "afternoon",
-        activity_format: "explanatory",
-        content: { steps: ["Prenez une feuille et un crayon", "Dessinez sans but pendant 10 minutes", "Ne jugez pas le résultat", "Observez ce qui émerge"] },
-        target_profiles: ["controlant"]
-      },
-
-      // Activités pour L'Hypersensible
-      {
-        title: "Bulle de protection",
-        description: "Créez votre espace émotionnel sécurisé",
-        type: "morning",
         activity_format: "audio",
-        content: { duration: 420, theme: "protection-bubble" },
-        target_profiles: ["hypersensible"]
+        content: { duration: 900, theme: "progressive-relaxation" },
+        target_profiles: ["anxieux"],
+        day_min: 25,
+        day_max: 365
       },
       {
-        title: "Écriture cathartique",
-        description: "Libérez vos émotions par l'écriture",
-        type: "evening",
+        title: "Plan d'action anti-stress",
+        description: "Créez votre stratégie personnelle contre l'anxiété",
+        type: "afternoon",
         activity_format: "notebook",
-        content: { prompt: "Écrivez tout ce que vous ressentez, sans censure, pendant 10 minutes." },
-        target_profiles: ["hypersensible"]
+        content: { prompt: "Listez 5 techniques qui vous aident quand vous êtes anxieux. Comment les utiliser au quotidien ?" },
+        target_profiles: ["anxieux"],
+        day_min: 30,
+        day_max: 365
       },
 
-      // Activités pour Le Refoulé
+      // Activités supplémentaires pour Le Fatigué
       {
-        title: "Dialogue intérieur",
-        description: "Reconnectez-vous à votre voix intérieure",
+        title: "Booster matinal",
+        description: "Réveil énergique avec des mouvements simples",
         type: "morning",
-        activity_format: "notebook",
-        content: { prompt: "Posez-vous la question : 'Qu'est-ce que j'ai vraiment envie de dire aujourd'hui ?'" },
-        target_profiles: ["refoule"]
+        activity_format: "explanatory",
+        content: { steps: ["Sautillements sur place 30 sec", "Rotations des bras", "Respirations dynamisantes", "Sourire forcé 30 sec"] },
+        target_profiles: ["fatigue"],
+        day_min: 20,
+        day_max: 365
       },
       {
-        title: "Méditation de reconnexion",
-        description: "Retrouvez le contact avec vos émotions",
+        title: "Pause renaissance",
+        description: "Méditation pour retrouver sa vitalité",
         type: "afternoon",
         activity_format: "audio",
-        content: { duration: 600, theme: "emotional-reconnection" },
-        target_profiles: ["refoule"]
+        content: { duration: 480, theme: "vitality-restoration" },
+        target_profiles: ["fatigue"],
+        day_min: 25,
+        day_max: 365
       },
-
-      // Activités pour Le Volcan
       {
-        title: "Journal de colère",
-        description: "Exprimez votre colère de manière constructive",
+        title: "Agenda des priorités",
+        description: "Organisez votre énergie sur ce qui compte vraiment",
         type: "evening",
         activity_format: "notebook",
-        content: { prompt: "Qu'est-ce qui vous a mis en colère aujourd'hui ? Écrivez sans retenue." },
-        target_profiles: ["volcan"]
+        content: { prompt: "Identifiez 3 priorités de demain. Quelle énergie chacune nécessite-t-elle ? Comment optimiser ?" },
+        target_profiles: ["fatigue"],
+        day_min: 30,
+        day_max: 365
+      },
+
+      // Activités supplémentaires pour Le Déraciné
+      {
+        title: "Rituel de gratitude",
+        description: "Appréciez ce qui vous entoure maintenant",
+        type: "morning",
+        activity_format: "explanatory",
+        content: { steps: ["Regardez autour de vous", "Nommez 5 choses que vous appréciez", "Ressentez la gratitude dans votre corps", "Ancrez cette sensation"] },
+        target_profiles: ["deracine"],
+        day_min: 20,
+        day_max: 365
       },
       {
-        title: "Respiration de libération",
-        description: "Technique pour évacuer les tensions",
+        title: "Méditation du foyer",
+        description: "Créez un sentiment de chez-soi intérieur",
+        type: "evening",
+        activity_format: "audio",
+        content: { duration: 720, theme: "inner-home" },
+        target_profiles: ["deracine"],
+        day_min: 25,
+        day_max: 365
+      },
+      {
+        title: "Carnet de souvenirs",
+        description: "Reconnectez-vous à votre histoire personnelle",
+        type: "afternoon",
+        activity_format: "notebook",
+        content: { prompt: "Décrivez un souvenir heureux de votre enfance. Quelles valeurs y trouvez-vous ? Comment les vivre aujourd'hui ?" },
+        target_profiles: ["deracine"],
+        day_min: 35,
+        day_max: 365
+      },
+
+      // Activités supplémentaires pour Le Contrôlant
+      {
+        title: "Exercice d'improvisation",
+        description: "Pratiquez la spontanéité dans votre quotidien",
         type: "afternoon",
         activity_format: "explanatory",
-        content: { steps: ["Inspirez profondément", "Retenez 3 secondes", "Expirez en faisant un son (ahh, ouf...)", "Répétez 10 fois"] },
-        target_profiles: ["volcan"]
+        content: { steps: ["Choisissez une tâche routinière", "Changez votre façon habituelle de la faire", "Observez vos résistances", "Appréciez la nouveauté"] },
+        target_profiles: ["controlant"],
+        day_min: 20,
+        day_max: 365
+      },
+      {
+        title: "Méditation de confiance",
+        description: "Apprenez à faire confiance à la vie",
+        type: "morning",
+        activity_format: "audio",
+        content: { duration: 600, theme: "trust-meditation" },
+        target_profiles: ["controlant"],
+        day_min: 25,
+        day_max: 365
+      },
+      {
+        title: "Journal de lâcher prise",
+        description: "Identifiez ce que vous pouvez relâcher",
+        type: "evening",
+        activity_format: "notebook",
+        content: { prompt: "Sur quoi avez-vous essayé de garder le contrôle aujourd'hui ? Que pourriez-vous lâcher demain ?" },
+        target_profiles: ["controlant"],
+        day_min: 30,
+        day_max: 365
+      },
+
+      // Activités supplémentaires pour L'Hypersensible
+      {
+        title: "Bouclier émotionnel",
+        description: "Technique de protection énergétique",
+        type: "morning",
+        activity_format: "explanatory",
+        content: { steps: ["Visualisez une lumière dorée autour de vous", "Cette lumière filtre les énergies négatives", "Seul l'amour peut la traverser", "Portez ce bouclier toute la journée"] },
+        target_profiles: ["hypersensible"],
+        day_min: 20,
+        day_max: 365
+      },
+      {
+        title: "Méditation de centrage",
+        description: "Retrouvez votre équilibre émotionnel",
+        type: "afternoon",
+        activity_format: "audio",
+        content: { duration: 540, theme: "emotional-centering" },
+        target_profiles: ["hypersensible"],
+        day_min: 25,
+        day_max: 365
+      },
+      {
+        title: "Carnet de protection",
+        description: "Planifiez vos stratégies de préservation",
+        type: "evening",
+        activity_format: "notebook",
+        content: { prompt: "Dans quelles situations vous sentez-vous le plus vulnérable ? Quelles stratégies de protection pouvez-vous mettre en place ?" },
+        target_profiles: ["hypersensible"],
+        day_min: 30,
+        day_max: 365
+      },
+
+      // Activités supplémentaires pour Le Refoulé
+      {
+        title: "Exercice de voix",
+        description: "Libérez votre expression vocale",
+        type: "morning",
+        activity_format: "explanatory",
+        content: { steps: ["Faites des vocalises (ah, eh, oh)", "Parlez plus fort que d'habitude", "Chantez une chanson que vous aimez", "Exprimez-vous avec conviction"] },
+        target_profiles: ["refoule"],
+        day_min: 20,
+        day_max: 365
+      },
+      {
+        title: "Méditation d'expression",
+        description: "Libérez votre parole intérieure",
+        type: "afternoon",
+        activity_format: "audio",
+        content: { duration: 480, theme: "inner-voice" },
+        target_profiles: ["refoule"],
+        day_min: 25,
+        day_max: 365
+      },
+      {
+        title: "Lettre de libération",
+        description: "Exprimez ce que vous n'avez jamais dit",
+        type: "evening",
+        activity_format: "notebook",
+        content: { prompt: "Écrivez une lettre à quelqu'un (vivant ou décédé) en exprimant tout ce que vous n'avez jamais osé dire." },
+        target_profiles: ["refoule"],
+        day_min: 30,
+        day_max: 365
+      },
+
+      // Activités supplémentaires pour Le Volcan
+      {
+        title: "Exercice de décharge",
+        description: "Libérez la pression avant qu'elle monte",
+        type: "morning",
+        activity_format: "explanatory",
+        content: { steps: ["Secouez vos bras énergiquement", "Tapez des pieds", "Faites des grimaces", "Criez dans un coussin si besoin"] },
+        target_profiles: ["volcan"],
+        day_min: 20,
+        day_max: 365
+      },
+      {
+        title: "Méditation de refroidissement",
+        description: "Calmez le feu intérieur avant l'explosion",
+        type: "afternoon",
+        activity_format: "audio",
+        content: { duration: 360, theme: "cooling-down" },
+        target_profiles: ["volcan"],
+        day_min: 25,
+        day_max: 365
+      },
+      {
+        title: "Plan de gestion de crise",
+        description: "Préparez-vous aux moments difficiles",
+        type: "evening",
+        activity_format: "notebook",
+        content: { prompt: "Créez votre plan d'urgence : que faire quand vous sentez la colère monter ? Listez 5 stratégies concrètes." },
+        target_profiles: ["volcan"],
+        day_min: 30,
+        day_max: 365
       }
     ];
 
     try {
       const { error } = await supabase
         .from('activities')
-        .insert(additionalActivities);
+        .insert(moreActivities);
       
       if (error) {
-        console.error('Erreur insertion activités:', error);
+        console.error('Erreur insertion activités supplémentaires:', error);
+      } else {
+        console.log('Activités supplémentaires ajoutées avec succès');
       }
     } catch (error) {
-      console.error('Erreur seed activités:', error);
+      console.error('Erreur ajout activités:', error);
     }
   }
 };
