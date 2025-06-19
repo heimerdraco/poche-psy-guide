@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // Générer un device_id unique
@@ -154,7 +153,42 @@ export const supabaseService = {
     }
   },
 
-  // Récupérer toutes les données d'un utilisateur
+  // Sauvegarder un pseudonyme utilisateur
+  async savePseudonym(profile: string, pseudonym: string) {
+    const deviceId = getDeviceId();
+    const { data, error } = await supabase
+      .from('user_pseudonyms')
+      .upsert({
+        device_id: deviceId,
+        profile: profile,
+        pseudonym: pseudonym,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'device_id'
+      });
+    
+    if (error) console.error('Erreur sauvegarde pseudonyme:', error);
+    return { data, error };
+  },
+
+  // Sauvegarder un message de chat
+  async saveChatMessage(profile: string, pseudonym: string, message: string) {
+    const deviceId = getDeviceId();
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .insert({
+        device_id: deviceId,
+        profile: profile,
+        pseudonym: pseudonym,
+        message: message,
+        created_at: new Date().toISOString()
+      });
+    
+    if (error) console.error('Erreur sauvegarde message chat:', error);
+    return { data, error };
+  },
+
+  // Récupérer toutes les données d'un utilisateur (méthode étendue)
   async getUserData() {
     const deviceId = getDeviceId();
     
@@ -169,6 +203,8 @@ export const supabaseService = {
     // Récupérer les données des nouvelles tables
     let journeyProgress = null;
     let themeProgress = [];
+    let userPseudonyms = [];
+    let chatMessages = [];
 
     try {
       const journeyResult = await supabase
@@ -190,6 +226,26 @@ export const supabaseService = {
       console.error('Erreur récupération theme_progress:', error);
     }
 
+    try {
+      const pseudonymResult = await supabase
+        .from('user_pseudonyms')
+        .select('*')
+        .eq('device_id', deviceId);
+      userPseudonyms = pseudonymResult.data || [];
+    } catch (error) {
+      console.error('Erreur récupération user_pseudonyms:', error);
+    }
+
+    try {
+      const chatResult = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('device_id', deviceId);
+      chatMessages = chatResult.data || [];
+    } catch (error) {
+      console.error('Erreur récupération chat_messages:', error);
+    }
+
     return {
       user: users.data?.[0] || null,
       answers: answers.data || [],
@@ -197,7 +253,9 @@ export const supabaseService = {
       journal: journal.data || [],
       reminders: reminders.data?.[0] || null,
       journeyProgress,
-      themeProgress
+      themeProgress,
+      userPseudonyms,
+      chatMessages
     };
   }
 };

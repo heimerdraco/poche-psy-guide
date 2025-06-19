@@ -33,6 +33,36 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_messages: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          is_moderated: boolean
+          message: string
+          profile: string
+          pseudonym: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          is_moderated?: boolean
+          message: string
+          profile: string
+          pseudonym: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          is_moderated?: boolean
+          message?: string
+          profile?: string
+          pseudonym?: string
+        }
+        Relationships: []
+      }
       journaling: {
         Row: {
           content: string
@@ -87,6 +117,27 @@ export type Database = {
           device_id?: string
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      moderation_keywords: {
+        Row: {
+          created_at: string
+          id: string
+          keyword: string
+          severity: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keyword: string
+          severity?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keyword?: string
+          severity?: string
         }
         Relationships: []
       }
@@ -170,6 +221,33 @@ export type Database = {
           id?: string
           progress?: number
           theme_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_pseudonyms: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          profile: string
+          pseudonym: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          profile: string
+          pseudonym: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          profile?: string
+          pseudonym?: string
           updated_at?: string
         }
         Relationships: []
