@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ import DailyQuote from "@/components/DailyQuote";
 import MoodTracker from "@/components/MoodTracker";
 import QuickThought from "@/components/QuickThought";
 import ContinuedJourney from "@/components/ContinuedJourney";
-import EnhancedSplashScreen from "@/components/EnhancedSplashScreen";
+import SplashScreen from "@/components/SplashScreen";
 import AnimatedNatureBackground from "@/components/AnimatedNatureBackground";
 import DailyMoodWidget from "@/components/DailyMoodWidget";
 import ActivityCompletionCelebration from "@/components/ActivityCompletionCelebration";
@@ -31,7 +32,7 @@ const Index = () => {
   const [trialDays, setTrialDays] = useState(3);
   const [currentSection, setCurrentSection] = useState('home');
   const [isTrialExpired, setIsTrialExpired] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(!userProfile); // Show splash for new users
   const [currentPhase, setCurrentPhase] = useState<'calm' | 'hopeful' | 'warm'>('calm');
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedActivity, setCompletedActivity] = useState('');
@@ -86,9 +87,9 @@ const Index = () => {
     setShowSubscription(true);
   };
 
-  // Show enhanced splash screen on first launch
+  // Show splash screen for new users
   if (showSplash) {
-    return <EnhancedSplashScreen onComplete={() => setShowSplash(false)} />;
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
   // Show trial expired screen if trial is over
@@ -115,11 +116,11 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8 max-w-md relative z-10">
           <div className="text-center mb-12 animate-slide-in-gentle">
             <div className="inline-flex items-center gap-3 mb-6">
-              <div className="w-16 h-16 animate-pulse-gentle">
+              <div className="w-16 h-16 bg-gradient-to-br from-sage-200 to-forest-200 rounded-full p-2 animate-pulse-gentle shadow-lg">
                 <img 
                   src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
                   alt="Arboria Logo"
-                  className="w-full h-full object-contain drop-shadow-lg"
+                  className="w-full h-full object-contain drop-shadow-lg rounded-full"
                 />
               </div>
               <h1 className="text-3xl font-bold text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
@@ -197,11 +198,11 @@ const Index = () => {
       <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
         <header className="flex justify-between items-center mb-6 animate-slide-in-gentle">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 animate-pulse-gentle">
+            <div className="w-10 h-10 bg-gradient-to-br from-sage-200 to-forest-200 rounded-full p-1 animate-pulse-gentle shadow-md">
               <img 
                 src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
                 alt="Arboria Logo"
-                className="w-full h-full object-contain drop-shadow-lg"
+                className="w-full h-full object-contain drop-shadow-lg rounded-full"
               />
             </div>
             <h1 className="text-xl font-bold text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
