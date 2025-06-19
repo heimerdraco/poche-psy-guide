@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, User, Book, Edit, MessageCircle, Calendar, Sparkles } from "lucide-react";
+import { Heart, User, Book, Edit, MessageCircle, Calendar, Sparkles, HelpCircle } from "lucide-react";
 import QuestionnaireModal from "@/components/QuestionnaireModal";
 import ProfileDisplay from "@/components/ProfileDisplay";
 import JournalingSection from "@/components/JournalingSection";
@@ -11,6 +11,7 @@ import SubscriptionModal from "@/components/SubscriptionModal";
 import MessagesSection from "@/components/MessagesSection";
 import EmotionalJourney from "@/components/EmotionalJourney";
 import DeveloperMode from "@/components/DeveloperMode";
+import TrialExpiredScreen from "@/components/TrialExpiredScreen";
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
