@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -153,17 +154,29 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
       });
       setScores(newScores);
 
-      // Sauvegarder la réponse dans Supabase
-      await supabaseService.saveQuestionnaireAnswer(questionId, optionValue, option.points);
+      // Tentative de sauvegarde dans Supabase (optionnelle)
+      try {
+        await supabaseService.saveQuestionnaireAnswer(questionId, optionValue, option.points);
+        console.log('Réponse sauvegardée avec succès');
+      } catch (error) {
+        console.log('Sauvegarde Supabase non disponible, continuons localement');
+        // L'erreur est ignorée pour permettre de continuer
+      }
     }
   };
 
   const handleOpenAnswer = async (questionId: number, value: string) => {
     setOpenAnswers({ ...openAnswers, [questionId]: value });
     
-    // Sauvegarder la réponse ouverte dans Supabase
+    // Tentative de sauvegarde dans Supabase (optionnelle)
     if (value.trim()) {
-      await supabaseService.saveQuestionnaireAnswer(questionId, value, {});
+      try {
+        await supabaseService.saveQuestionnaireAnswer(questionId, value, {});
+        console.log('Réponse ouverte sauvegardée avec succès');
+      } catch (error) {
+        console.log('Sauvegarde Supabase non disponible, continuons localement');
+        // L'erreur est ignorée pour permettre de continuer
+      }
     }
   };
 
@@ -200,9 +213,15 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
     // Sauvegarder les réponses locales
     localStorage.setItem('questionnaireAnswers', JSON.stringify({ answers, openAnswers }));
     
-    // Sauvegarder l'utilisateur dans Supabase
+    // Tentative de sauvegarde utilisateur dans Supabase (optionnelle)
     const trialStart = Date.now().toString();
-    await supabaseService.saveUser(dominantProfile, trialStart);
+    try {
+      await supabaseService.saveUser(dominantProfile, trialStart);
+      console.log('Utilisateur sauvegardé avec succès');
+    } catch (error) {
+      console.log('Sauvegarde utilisateur Supabase non disponible, continuons localement');
+      // L'erreur est ignorée pour permettre de continuer
+    }
     
     onComplete(dominantProfile);
   };
