@@ -7,6 +7,7 @@ import { CheckCircle, Circle, Calendar, Heart, Lock, Sparkles, Play } from "luci
 import { supabaseService } from "@/lib/supabase";
 import EnhancedButton from "./EnhancedButton";
 import { getProfileData } from "@/lib/profilesData";
+import ActivityManager from "./activities/ActivityManager";
 
 interface EmotionalJourneyProps {
   profile: string;
@@ -17,6 +18,7 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
   const [currentDay, setCurrentDay] = useState(1);
   const [completedActivities, setCompletedActivities] = useState<string[]>([]);
   const [selectedDay, setSelectedDay] = useState(1);
+  const [activeActivity, setActiveActivity] = useState<any>(null);
 
   const profileData = getProfileData(profile);
   const isPremium = trialDays > 0 || localStorage.getItem('unlimitedAccess') === 'true';
@@ -54,6 +56,17 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
     setSelectedDay(dayNumber);
   };
 
+  const handleActivityStart = (dayNumber: number, activityIndex: number) => {
+    const dayActivities = getDayActivities(dayNumber);
+    if (dayActivities && dayActivities[activityIndex]) {
+      const activity = {
+        ...dayActivities[activityIndex],
+        id: `day-${dayNumber}-activity-${activityIndex}`
+      };
+      setActiveActivity(activity);
+    }
+  };
+
   const handleActivityComplete = (dayNumber: number, activityIndex: number) => {
     const activityId = `day-${dayNumber}-activity-${activityIndex}`;
     if (!completedActivities.includes(activityId)) {
@@ -61,6 +74,11 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
       setCompletedActivities(newCompleted);
       localStorage.setItem('completedActivities', JSON.stringify(newCompleted));
     }
+    setActiveActivity(null);
+  };
+
+  const handleActivityBack = () => {
+    setActiveActivity(null);
   };
 
   const getDayActivities = (dayNumber: number) => {
@@ -76,6 +94,20 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
       completedActivities.includes(`day-${dayNumber}-activity-${index}`)
     );
   };
+
+  // Si une activité est active, afficher l'ActivityManager
+  if (activeActivity) {
+    return (
+      <ActivityManager
+        activity={activeActivity}
+        onComplete={() => {
+          const [, dayStr, , activityStr] = activeActivity.id.split('-');
+          handleActivityComplete(parseInt(dayStr), parseInt(activityStr));
+        }}
+        onBack={handleActivityBack}
+      />
+    );
+  }
 
   // Génération des jours (affichage jusqu'à 7 jours)
   const days = Array.from({ length: 7 }, (_, i) => i + 1);
@@ -218,14 +250,15 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
                     </div>
 
                     <EnhancedButton
-                      onClick={() => handleActivityComplete(selectedDay, index)}
+                      onClick={() => isCompleted ? null : handleActivityStart(selectedDay, index)}
                       className={`w-full transition-all duration-300 ${
                         isCompleted
-                          ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                          ? 'bg-green-100 text-green-700 hover:bg-green-200 cursor-default'
                           : `bg-gradient-to-r ${profileData.color} hover:shadow-lg text-white`
                       }`}
                       soundType={isCompleted ? "calm" : "success"}
                       animationType={isCompleted ? "scale" : "glow"}
+                      disabled={isCompleted}
                     >
                       {isCompleted ? '✅ Activité terminée' : '🌟 Commencer l\'activité'}
                     </EnhancedButton>
