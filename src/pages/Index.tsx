@@ -15,6 +15,7 @@ import TrialExpiredScreen from "@/components/TrialExpiredScreen";
 import DailyQuote from "@/components/DailyQuote";
 import MoodTracker from "@/components/MoodTracker";
 import QuickThought from "@/components/QuickThought";
+import ContinuedJourney from "@/components/ContinuedJourney";
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
@@ -282,7 +283,13 @@ const Index = () => {
           </div>
         )}
 
-        {currentSection === 'journey' && <EmotionalJourney profile={userProfile} trialDays={trialDays} />}
+        {currentSection === 'journey' && userProfile && (
+          <div className="space-y-6">
+            <EmotionalJourney profile={userProfile} trialDays={trialDays} />
+            <ContinuedJourney profile={userProfile} trialDays={trialDays} />
+          </div>
+        )}
+
         {currentSection === 'profile' && <ProfileDisplay profile={userProfile} />}
         {currentSection === 'journal' && <JournalingSection />}
         {currentSection === 'messages' && <MessagesSection />}
