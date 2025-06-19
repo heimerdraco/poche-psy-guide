@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, User, Book, Edit, MessageCircle, Calendar, Sparkles, HelpCircle } from "lucide-react";
+import { Heart, User, Book, Edit, MessageCircle, Calendar, Sparkles } from "lucide-react";
 import QuestionnaireModal from "@/components/QuestionnaireModal";
 import ProfileDisplay from "@/components/ProfileDisplay";
 import JournalingSection from "@/components/JournalingSection";
@@ -11,7 +11,6 @@ import ExercisesSection from "@/components/ExercisesSection";
 import SubscriptionModal from "@/components/SubscriptionModal";
 import MessagesSection from "@/components/MessagesSection";
 import EmotionalJourney from "@/components/EmotionalJourney";
-import DeveloperMode from "@/components/DeveloperMode";
 import TrialExpiredScreen from "@/components/TrialExpiredScreen";
 import DailyQuote from "@/components/DailyQuote";
 import MoodTracker from "@/components/MoodTracker";
@@ -24,18 +23,12 @@ const Index = () => {
   const [showSubscription, setShowSubscription] = useState(false);
   const [trialDays, setTrialDays] = useState(3);
   const [currentSection, setCurrentSection] = useState('home');
-  const [devMode, setDevMode] = useState(localStorage.getItem('devMode') === 'true');
-  const [logoTapCount, setLogoTapCount] = useState(0);
   const [isTrialExpired, setIsTrialExpired] = useState(false);
 
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
-    const unlimitedAccess = localStorage.getItem('unlimitedAccess') === 'true';
     
-    if (unlimitedAccess) {
-      setTrialDays(99); // Unlimited for dev mode
-      setIsTrialExpired(false);
-    } else if (trialStart) {
+    if (trialStart) {
       const daysPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24));
       const remainingDays = Math.max(0, 3 - daysPassed);
       setTrialDays(remainingDays);
@@ -46,56 +39,6 @@ const Index = () => {
       setIsTrialExpired(false);
     }
   }, [userProfile]);
-
-  const handleLogoTap = () => {
-    setLogoTapCount(prev => {
-      const newCount = prev + 1;
-      if (newCount >= 5) {
-        setDevMode(true);
-        localStorage.setItem('devMode', 'true');
-        setLogoTapCount(0);
-        return 0;
-      }
-      return newCount;
-    });
-
-    // Reset counter after 3 seconds of inactivity
-    setTimeout(() => {
-      setLogoTapCount(0);
-    }, 3000);
-  };
-
-  const toggleDevMode = () => {
-    const newDevMode = !devMode;
-    setDevMode(newDevMode);
-    if (newDevMode) {
-      localStorage.setItem('devMode', 'true');
-    } else {
-      localStorage.removeItem('devMode');
-      localStorage.removeItem('unlimitedAccess');
-    }
-  };
-
-  const handleDevProfileSelect = (profile: string) => {
-    // Map questionnaire profiles to component profiles
-    const profileMap: Record<string, string> = {
-      'epuisement': 'epuise',
-      'anxiete': 'anxieux',
-      'tristesse': 'triste',
-      'estime': 'estime',
-      'confusion': 'confus',
-      'solitude': 'seul',
-      'trauma': 'trauma'
-    };
-    
-    const mappedProfile = profileMap[profile] || profile;
-    setUserProfile(mappedProfile);
-    localStorage.setItem('psyProfile', mappedProfile);
-    if (!localStorage.getItem('trialStart')) {
-      localStorage.setItem('trialStart', Date.now().toString());
-    }
-    setCurrentSection('journey');
-  };
 
   const handleProfileComplete = (profile: string) => {
     // Map questionnaire profiles to component profiles
@@ -123,8 +66,8 @@ const Index = () => {
     setShowSubscription(true);
   };
 
-  // Show trial expired screen if trial is over and not in dev mode
-  if (isTrialExpired && !devMode) {
+  // Show trial expired screen if trial is over
+  if (isTrialExpired) {
     return <TrialExpiredScreen onUpgrade={handleUpgrade} />;
   }
 
@@ -143,22 +86,11 @@ const Index = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50" style={{
         background: 'linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fdf2f8 100%)'
       }}>
-        <DeveloperMode 
-          isActive={devMode}
-          onToggle={toggleDevMode}
-          onProfileSelect={handleDevProfileSelect}
-          currentProfile={userProfile}
-        />
-        
         <div className="container mx-auto px-4 py-8 max-w-md">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 mb-6">
-              <div 
-                className="w-12 h-12 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
-                onClick={handleLogoTap}
-              >
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center">
                 <Heart className="w-6 h-6 text-purple-600" />
-                {devMode && <span className="absolute -top-1 -right-1 text-xs">⚙️</span>}
               </div>
               <h1 className="text-3xl font-bold text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
                 Psy de poche
@@ -229,35 +161,20 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50" style={{
       background: 'linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fdf2f8 100%)'
     }}>
-      <DeveloperMode 
-        isActive={devMode}
-        onToggle={toggleDevMode}
-        onProfileSelect={handleDevProfileSelect}
-        currentProfile={userProfile}
-      />
-      
       <div className="container mx-auto px-4 py-4 max-w-md">
         <header className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-2">
-            <div 
-              className="w-8 h-8 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-105 relative"
-              onClick={handleLogoTap}
-            >
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center">
               <Heart className="w-4 h-4 text-purple-600" />
-              {devMode && <span className="absolute -top-1 -right-1 text-xs">⚙️</span>}
             </div>
             <h1 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
               Psy de poche
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            {trialDays > 0 && trialDays < 90 ? (
+            {trialDays > 0 ? (
               <Badge variant="outline" className="border-green-400 text-green-700 bg-green-50">
                 Jour {4 - trialDays}/3 gratuit
-              </Badge>
-            ) : trialDays >= 90 ? (
-              <Badge className="bg-red-100 text-red-800">
-                🔓 Dev Mode
               </Badge>
             ) : (
               <Button 
@@ -285,7 +202,7 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            {/* New Daily Features */}
+            {/* Daily Features */}
             <div className="space-y-4">
               <DailyQuote />
               <MoodTracker />

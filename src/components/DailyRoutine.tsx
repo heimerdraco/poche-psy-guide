@@ -60,13 +60,55 @@ const DailyRoutine = ({ profile, dayNumber, isPremium }: DailyRoutineProps) => {
       { action: "Regarde le ciel ou les nuages", affirmation: "L'immensité me donne de la perspective", emoji: "☁️" },
       { action: "Célèbre ton courage d'avoir continué", affirmation: "J'ai fait preuve d'une grande force", emoji: "🏆" },
     ],
-    // Ajout des autres profils...
     triste: [
       { action: "Autorise-toi à ressentir cette tristesse", affirmation: "Mes émotions sont valides", emoji: "💙" },
       { action: "Écoute une musique qui te parle", affirmation: "La musique comprend mon cœur", emoji: "🎶" },
       { action: "Écris une lettre à ta tristesse", affirmation: "Je peux dialoguer avec mes émotions", emoji: "✉️" },
       { action: "Regarde un film ou une série réconfortante", affirmation: "Le divertissement peut être thérapeutique", emoji: "🎬" },
       { action: "Prépare-toi quelque chose de bon", affirmation: "Je mérite d'être nourri(e)", emoji: "🍲" },
+      { action: "Prends un bain chaud avec de la musique douce", affirmation: "L'eau et les sons guérissent", emoji: "🛀" },
+      { action: "Écris 3 souvenirs heureux", affirmation: "La joie existe aussi en moi", emoji: "📝" },
+      { action: "Appelle quelqu'un qui te comprend", affirmation: "Je ne suis pas seul(e)", emoji: "☎️" },
+      { action: "Fais quelque chose de créatif", affirmation: "Ma créativité transforme la douleur", emoji: "🎨" },
+      { action: "Prends l'air, même 5 minutes", affirmation: "Le monde extérieur m'accueille", emoji: "🌳" },
+      { action: "Regarde des photos d'animaux", affirmation: "La tendresse existe partout", emoji: "🐕" },
+      { action: "Écris ce que tu ressentirais mieux demain", affirmation: "L'espoir peut renaître", emoji: "🌅" },
+      { action: "Fais-toi un thé réconfortant", affirmation: "Les petits plaisirs comptent", emoji: "🍵" },
+      { action: "Lis quelque chose d'inspirant", affirmation: "Les mots peuvent guérir", emoji: "📖" },
+      { action: "Fais un petit rangement doux", affirmation: "L'ordre apaise le chaos intérieur", emoji: "🧹" },
+      { action: "Médite 5 minutes sur ta respiration", affirmation: "Mon souffle m'ancre dans le présent", emoji: "🧘‍♀️" },
+      { action: "Écris une lettre à ton futur toi", affirmation: "Je peux espérer des jours meilleurs", emoji: "💌" },
+      { action: "Regarde le coucher de soleil", affirmation: "Chaque fin annonce un nouveau début", emoji: "🌅" },
+      { action: "Fais-toi un compliment sincère", affirmation: "Je mérite ma propre bienveillance", emoji: "💝" },
+      { action: "Célèbre ta force d'avoir traversé ces jours", affirmation: "Ma résilience est ma plus grande force", emoji: "🏆" },
+    ],
+    estime: [
+      { action: "Regarde-toi dans le miroir et souris", affirmation: "Je mérite de l'amour, surtout le mien", emoji: "😊" },
+      { action: "Écris 3 qualités que tu as", affirmation: "J'ai de la valeur", emoji: "✨" },
+      { action: "Rappelle-toi un compliment récent", affirmation: "Les autres voient ma beauté", emoji: "💖" },
+      { action: "Fais quelque chose que tu fais bien", affirmation: "J'ai des talents uniques", emoji: "🎯" },
+      { action: "Pardonne-toi une erreur récente", affirmation: "Je peux apprendre sans me juger", emoji: "🤗" },
+    ],
+    confus: [
+      { action: "Écris 3 choses dont tu es sûr(e)", affirmation: "Certaines vérités m'appartiennent", emoji: "📝" },
+      { action: "Fais une liste de tes valeurs importantes", affirmation: "Je connais ce qui compte pour moi", emoji: "💎" },
+      { action: "Pose-toi une question simple sur maintenant", affirmation: "Le présent est plus clair que l'avenir", emoji: "🤔" },
+      { action: "Choisis une petite décision facile", affirmation: "Je peux décider, même petit", emoji: "✅" },
+      { action: "Médite 5 minutes sans chercher de réponses", affirmation: "La confusion peut coexister avec la paix", emoji: "🧘" },
+    ],
+    seul: [
+      { action: "Envoie un message à quelqu'un", affirmation: "Je peux créer du lien", emoji: "📱" },
+      { action: "Souris à un inconnu ou salue un voisin", affirmation: "La connexion commence par un geste", emoji: "👋" },
+      { action: "Rejoins un groupe ou une activité", affirmation: "J'appartiens à une communauté", emoji: "👥" },
+      { action: "Écris à ton moi enfant", affirmation: "Je ne suis jamais vraiment seul(e)", emoji: "💌" },
+      { action: "Prends soin d'une plante ou d'un animal", affirmation: "Donner de l'amour en crée", emoji: "🌱" },
+    ],
+    trauma: [
+      { action: "Respire profondément 5 fois", affirmation: "Je suis en sécurité maintenant", emoji: "🌬️" },
+      { action: "Touche quelque chose de doux", affirmation: "Mon corps peut ressentir de la douceur", emoji: "🧸" },
+      { action: "Nomme 5 choses que tu vois ici", affirmation: "Je suis présent(e) et ancré(e)", emoji: "👁️" },
+      { action: "Bois de l'eau lentement", affirmation: "Je prends soin de moi avec gentillesse", emoji: "💧" },
+      { action: "Dis-toi 'C'est fini, je suis en sécurité'", affirmation: "Le passé ne peut plus me blesser", emoji: "🛡️" },
     ]
   };
 
@@ -124,6 +166,9 @@ const DailyRoutine = ({ profile, dayNumber, isPremium }: DailyRoutineProps) => {
           <div className="text-center py-6">
             <Lock className="w-8 h-8 text-gray-400 mx-auto mb-3" />
             <p className="text-gray-600 mb-4">Contenu premium requis</p>
+            <p className="text-xs text-gray-500 mb-4">
+              Débloquez l'accès complet pour continuer votre parcours
+            </p>
             <Button 
               disabled
               className="bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -181,6 +226,9 @@ const DailyRoutine = ({ profile, dayNumber, isPremium }: DailyRoutineProps) => {
                     />
                   ))}
                 </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  {completedDays.length}/20 jours complétés
+                </p>
               </div>
             )}
           </div>
