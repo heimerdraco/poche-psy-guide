@@ -1,5 +1,5 @@
-
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ import QuickThought from "@/components/QuickThought";
 import ContinuedJourney from "@/components/ContinuedJourney";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
   const [userProfile, setUserProfile] = useState<string | null>(localStorage.getItem('psyProfile'));
   const [showSubscription, setShowSubscription] = useState(false);
