@@ -9,7 +9,138 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      anonymous_messages: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          message: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          message: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          message?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      journaling: {
+        Row: {
+          content: string
+          created_at: string
+          day: number
+          device_id: string
+          id: string
+          mood: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          day: number
+          device_id: string
+          id?: string
+          mood: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          day?: number
+          device_id?: string
+          id?: string
+          mood?: string
+        }
+        Relationships: []
+      }
+      questionnaire_answers: {
+        Row: {
+          answer: string
+          created_at: string
+          device_id: string
+          id: string
+          points: Json | null
+          question_id: number
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          device_id: string
+          id?: string
+          points?: Json | null
+          question_id: number
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          device_id?: string
+          id?: string
+          points?: Json | null
+          question_id?: number
+        }
+        Relationships: []
+      }
+      reminder_settings: {
+        Row: {
+          created_at: string
+          device_id: string
+          enabled: boolean
+          id: string
+          reminder_time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          enabled?: boolean
+          id?: string
+          reminder_time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          enabled?: boolean
+          id?: string
+          reminder_time?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          profile: string | null
+          trial_start: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          profile?: string | null
+          trial_start?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          profile?: string | null
+          trial_start?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

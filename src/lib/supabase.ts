@@ -1,10 +1,5 @@
 
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://mvxsywwscdcxrpshmrrx.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eHN5d3dzY2RjeHJwc2htcnJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyOTA5MTksImV4cCI6MjA2NTg2NjkxOX0.Hj8sS7aAxzsemoZjuU1HinismI17SC2klWFizlvzndI';
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "@/integrations/supabase/client";
 
 // Générer un device_id unique
 export const getDeviceId = () => {
