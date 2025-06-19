@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { Heart } from "lucide-react";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -11,7 +10,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   
   const phrases = [
     "Respire un instant.",
-    "On est là pour avancer ensemble."
+    "Trouve ton équilibre intérieur."
   ];
 
   useEffect(() => {
@@ -29,17 +28,14 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50 overflow-hidden"
-         style={{
-           background: 'linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fdf2f8 100%)'
-         }}>
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-emerald-100 via-teal-50 to-green-100 overflow-hidden">
       
       {/* Particules flottantes */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-white/30 rounded-full animate-float"
+            className="absolute w-2 h-2 bg-white/40 rounded-full animate-float"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -52,17 +48,21 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
       {/* Logo central avec animation pulse */}
       <div className={`transition-all duration-1000 ${currentPhase >= 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-        <div className="w-20 h-20 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center mb-8 animate-pulse-gentle shadow-lg">
-          <Heart className="w-10 h-10 text-purple-600" />
+        <div className="w-24 h-24 mb-8 animate-pulse-gentle">
+          <img 
+            src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
+            alt="Arboria Logo"
+            className="w-full h-full object-contain"
+          />
         </div>
       </div>
 
       {/* Titre avec animation */}
       <div className={`text-center mb-12 transition-all duration-1000 ${currentPhase >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-        <h1 className="text-4xl font-bold text-gray-800 mb-2" style={{ fontFamily: 'Quicksand, sans-serif' }}>
-          Psy de poche
+        <h1 className="text-4xl font-bold text-emerald-800 mb-2" style={{ fontFamily: 'Quicksand, sans-serif' }}>
+          Arboria
         </h1>
-        <div className="w-16 h-1 bg-gradient-to-r from-purple-300 to-pink-300 mx-auto rounded-full"></div>
+        <div className="w-16 h-1 bg-gradient-to-r from-emerald-400 to-teal-400 mx-auto rounded-full"></div>
       </div>
 
       {/* Phrases apaisantes */}
@@ -70,7 +70,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
         {phrases.map((phrase, index) => (
           <p
             key={index}
-            className={`text-lg text-gray-700 mb-3 transition-all duration-1000 ${
+            className={`text-lg text-emerald-700 mb-3 transition-all duration-1000 ${
               currentPhase >= 2 + index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ 

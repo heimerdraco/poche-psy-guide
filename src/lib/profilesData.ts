@@ -1,888 +1,854 @@
-export const profilesData = {
-  "Épuisement mental": {
-    name: "Le Surmené Structuré",
-    description: "un esprit structuré qui oublie parfois de respirer",
-    explanation: "Vous êtes hyper-organisé mais souvent anxieux. Votre quête de perfection vous mène parfois vers l'épuisement. Il est temps d'apprendre à faire des pauses et à lâcher prise.",
-    color: "from-blue-400 to-cyan-400",
+
+export interface ProfileData {
+  name: string;
+  description: string;
+  explanation: string;
+  color: string;
+  activities: Array<Array<{
+    title: string;
+    description: string;
+    duration: string;
+    type: 'explanatory' | 'audio' | 'interactive';
+    content?: any;
+  }>>;
+}
+
+const profilesData: Record<string, ProfileData> = {
+  'Le Sensible Silencieux': {
+    name: 'Le Sensible Silencieux',
+    description: 'Vous évitez les conflits, avez du mal à exprimer vos émotions et ressentez souvent de l\'anxiété.',
+    explanation: 'Votre sensibilité est une force, mais elle peut parfois vous paralyser. Nous allons vous accompagner pour apprendre à vous exprimer sans peur et trouver votre voix intérieure.',
+    color: 'from-blue-400 to-teal-400',
     activities: [
-      // Jour 1
       [
-        { 
-          id: "surmene_j1_a1",
-          title: "Micro-méditation express", 
-          description: "3 minutes de respiration guidée", 
-          duration: "3 min", 
-          type: "audio",
+        {
+          title: 'Reconnection à sa voix intérieure',
+          description: 'Comprendre pourquoi exprimer ses émotions est vital',
+          duration: '5 min',
+          type: 'explanatory',
           content: {
-            audioText: "Fermez les yeux... Inspirez profondément par le nez pendant 4 secondes... Retenez votre souffle 4 secondes... Expirez lentement par la bouche pendant 6 secondes. Répétez ce cycle 5 fois en vous concentrant uniquement sur votre respiration.",
-            introduction: "Une pause respiratoire pour calmer votre mental en seulement 3 minutes."
-          }
-        },
-        { 
-          id: "surmene_j1_a2",
-          title: "Check-list inversée", 
-          description: "Noter ce que vous n'avez PAS à faire aujourd'hui", 
-          duration: "5 min", 
-          type: "interactive",
-          content: {
-            prompt: "Listez 5 choses que vous n'avez PAS à faire aujourd'hui. Autorisez-vous à les laisser de côté.",
-            placeholder: "Exemple : Je n'ai pas à répondre à tous mes emails ce soir...",
-          }
-        },
-        { 
-          id: "surmene_j1_a3",
-          title: "Pause sensorielle", 
-          description: "Observer 5 choses autour de vous", 
-          duration: "2 min", 
-          type: "explanatory",
-          content: {
-            objective: "Ramener votre attention dans l'instant présent et sortir du mental.",
+            introduction: 'Votre sensibilité n\'est pas une faiblesse, c\'est un don précieux.',
+            objective: 'Comprendre l\'importance de votre expression personnelle',
             steps: [
-              "Regardez autour de vous et nommez mentalement 5 choses que vous VOYEZ",
-              "Identifiez 4 choses que vous pouvez TOUCHER",
-              "Repérez 3 sons que vous ENTENDEZ",
-              "Trouvez 2 odeurs que vous SENTEZ",
-              "Notez 1 goût dans votre BOUCHE"
+              'Reconnaître que vos émotions ont de la valeur',
+              'Identifier les moments où vous vous taisez par peur',
+              'Visualiser une version de vous qui s\'exprime librement'
             ],
-            text: "Cet exercice simple mais puissant vous aide à vous ancrer dans l'instant présent et à calmer votre mental hyperactif."
-          }
-        }
-      ],
-      // Jour 2
-      [
-        { 
-          id: "surmene_j2_a1",
-          title: "Respiration 4-7-8", 
-          description: "Technique de relaxation profonde", 
-          duration: "5 min", 
-          type: "audio",
-          content: {
-            audioText: "La respiration 4-7-8 est une technique puissante. Inspirez par le nez en comptant jusqu'à 4... Retenez votre souffle en comptant jusqu'à 7... Expirez complètement par la bouche en comptant jusqu'à 8. Cette respiration active votre système nerveux parasympathique et induit un état de calme profond.",
+            text: 'Aujourd\'hui, nous commençons un voyage vers votre authenticité. Vos émotions méritent d\'être entendues, d\'abord par vous-même.'
           }
         },
-        { 
-          id: "surmene_j2_a2",
-          title: "Rupture de routine", 
-          description: "Changez une habitude aujourd'hui", 
-          duration: "10 min", 
-          type: "explanatory",
+        {
+          title: 'Méditation du coeur qui s\'ouvre',
+          description: 'Audio guidé pour libérer les tensions émotionnelles',
+          duration: '7 min',
+          type: 'audio',
           content: {
-            introduction: "Sortir de l'automatisme pour réveiller votre créativité et réduire le stress.",
-            objective: "Briser le pilote automatique qui maintient votre stress.",
-            steps: [
-              "Choisissez une routine habituelle (chemin pour aller au travail, petit-déjeuner, etc.)",
-              "Modifiez délibérément cette routine aujourd'hui",
-              "Observez ce que vous ressentez lors de ce changement",
-              "Notez si cela influence votre état mental"
-            ],
-            text: "Les habitudes automatiques maintiennent notre stress. En changeant consciemment une routine, vous reprenez le contrôle et stimulez votre adaptabilité."
+            audioText: 'Respire profondément... Imagine ton cœur qui s\'ouvre doucement comme une fleur... Chaque inspiration apporte la confiance, chaque expiration libère la peur...',
+            visualUrl: '/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png'
           }
         },
-        { 
-          id: "surmene_j2_a3",
-          title: "Journal de gratitude", 
-          description: "3 choses positives de votre journée", 
-          duration: "3 min", 
-          type: "interactive",
+        {
+          title: 'Lettre à mon moi silencieux',
+          description: 'Dialogue écrit avec la partie de vous qui se tait',
+          duration: '10 min',
+          type: 'interactive',
           content: {
-            prompt: "Écrivez 3 choses pour lesquelles vous êtes reconnaissant(e) aujourd'hui, même les plus petites.",
-            placeholder: "Exemple : Le sourire du boulanger ce matin, avoir eu 5 minutes de calme, ce café délicieux...",
-          }
-        }
-      ],
-      // Jour 3
-      [
-        { 
-          id: "surmene_j3_a1",
-          title: "Méditation du lâcher-prise", 
-          description: "Accepter ce qui ne dépend pas de vous", 
-          duration: "8 min", 
-          type: "audio",
-          content: {
-            audioText: "Installez-vous confortablement... Respirez naturellement... Pensez à une situation qui vous préoccupe... Demandez-vous : 'Est-ce que cela dépend vraiment de moi ?' Si oui, que pouvez-vous faire concrètement ? Si non, visualisez-vous en train de lâcher prise, comme un ballon qui s'envole dans le ciel... Répétez : 'J'accepte ce qui ne dépend pas de moi, j'agis sur ce qui dépend de moi.'",
-          }
-        },
-        { 
-          id: "surmene_j3_a2",
-          title: "Planification douce", 
-          description: "Organiser sans pression", 
-          duration: "10 min", 
-          type: "interactive",
-          content: {
-            prompt: "Créez votre planning idéal en incluant des pauses. Que feriez-vous si vous aviez 25% de temps en plus ?",
-            placeholder: "Pensez à intégrer des moments de respiration entre vos tâches...",
-          }
-        },
-        { 
-          id: "surmene_j3_a3",
-          title: "Automassage détente", 
-          description: "Relâcher les tensions physiques", 
-          duration: "5 min", 
-          type: "explanatory",
-          content: {
-            objective: "Libérer les tensions accumulées dans votre corps.",
-            steps: [
-              "Massez doucement vos tempes avec des mouvements circulaires (30 secondes)",
-              "Pressez délicatement le point entre vos sourcils (30 secondes)",
-              "Massez vos épaules et votre nuque (2 minutes)",
-              "Pressez les points d'acupression dans vos paumes (1 minute)",
-              "Terminez par 3 respirations profondes"
-            ],
-            text: "Le stress se loge dans notre corps. Ces gestes simples permettent de relâcher les tensions physiques et, par effet domino, d'apaiser le mental."
-          }
-        }
-      ]
-    ]
-  },
-  
-  "Anxiété / blocage": {
-    name: "L'Inquiet Chronique",
-    description: "un esprit qui imagine souvent le pire mais peut apprendre la sérénité",
-    explanation: "Votre mental anticipe constamment les difficultés. Cette vigilance peut être un atout, mais elle vous épuise. Apprenons ensemble à apaiser ces inquiétudes.",
-    color: "from-red-400 to-orange-400",
-    activities: [
-      // Jour 1
-      [
-        { 
-          id: "anxiete_j1_a1",
-          title: "3 preuves que tout va bien", 
-          description: "Identifier le positif dans votre réalité", 
-          duration: "5 min", 
-          type: "interactive",
-          content: {
-            prompt: "Listez 3 preuves concrètes que tout va bien dans votre vie en ce moment. Concentrez-vous sur les faits, pas sur les émotions.",
-            placeholder: "Exemple : J'ai un toit, j'ai mangé aujourd'hui, quelqu'un m'a souri...",
-          }
-        },
-        { 
-          id: "anxiete_j1_a2",
-          title: "Ancrage sensoriel", 
-          description: "Technique 5-4-3-2-1 pour revenir au présent", 
-          duration: "4 min", 
-          type: "explanatory",
-          content: {
-            objective: "Interrompre le cycle des pensées anxieuses en vous reconnectant au présent.",
-            steps: [
-              "5 choses que vous VOYEZ autour de vous",
-              "4 choses que vous pouvez TOUCHER",
-              "3 choses que vous ENTENDEZ",
-              "2 choses que vous SENTEZ (odeurs)",
-              "1 chose que vous GOÛTEZ"
-            ],
-            text: "Quand l'anxiété vous projette dans le futur, cet exercice vous ramène dans l'ici et maintenant, là où vous êtes en sécurité."
-          }
-        },
-        { 
-          id: "anxiete_j1_a3",
-          title: "Respiration carrée", 
-          description: "Calmer le système nerveux", 
-          duration: "6 min", 
-          type: "audio",
-          content: {
-            audioText: "La respiration carrée va apaiser votre système nerveux. Inspirez en comptant jusqu'à 4... Retenez en comptant jusqu'à 4... Expirez en comptant jusqu'à 4... Pause en comptant jusqu'à 4... Continuez ce rythme régulier, comme si vous dessiniez un carré avec votre respiration. Chaque côté du carré représente une phase de 4 temps.",
-          }
-        }
-      ],
-      // Jour 2 et 3 avec structure similaire...
-      [
-        { 
-          id: "anxiete_j2_a1",
-          title: "Reframing des pensées", 
-          description: "Transformer une inquiétude en action", 
-          duration: "8 min", 
-          type: "interactive",
-          content: {
-            prompt: "Prenez une inquiétude actuelle. Écrivez-la, puis reformulez-la sous forme de question constructive ou d'action possible.",
-            placeholder: "Exemple : 'Et si je rate ma présentation ?' devient 'Comment puis-je me préparer au mieux ?'",
-          }
-        },
-        { 
-          id: "anxiete_j2_a2",
-          title: "Marche consciente", 
-          description: "5 minutes de marche en pleine conscience", 
-          duration: "5 min", 
-          type: "explanatory",
-          content: {
-            objective: "Utiliser le mouvement pour calmer l'anxiété et ancrer l'attention.",
-            text: "Marchez lentement, en portant attention à chaque pas. Sentez vos pieds toucher le sol, observez votre environnement sans jugement. Si des pensées anxieuses arrivent, revenez simplement à la sensation de marcher."
-          }
-        },
-        { 
-          id: "anxiete_j2_a3",
-          title: "Visualisation sécurisante", 
-          description: "Créer votre lieu de paix mental", 
-          duration: "7 min", 
-          type: "audio",
-          content: {
-            audioText: "Fermez les yeux et imaginez un lieu où vous vous sentez complètement en sécurité et en paix... Cela peut être un endroit réel ou imaginaire... Observez les détails : les couleurs, les sons, les odeurs... Sentez la sérénité de ce lieu vous envelopper... Ancrez cette sensation dans votre corps... Vous pouvez revenir dans ce lieu mental quand vous en avez besoin.",
+            prompt: 'Écrivez une lettre bienveillante à la partie de vous qui préfère se taire. Que lui diriez-vous pour la rassurer ?',
+            placeholder: 'Cher moi silencieux, je comprends ta peur...'
           }
         }
       ],
       [
-        { 
-          id: "anxiete_j3_a1",
-          title: "Journal des victoires", 
-          description: "Lister vos réussites récentes", 
-          duration: "6 min", 
-          type: "interactive",
+        {
+          title: 'Anatomie de l\'expression émotionnelle',
+          description: 'Comprendre les mécanismes de l\'expression',
+          duration: '6 min',
+          type: 'explanatory',
           content: {
-            prompt: "Écrivez 5 choses que vous avez réussies récemment, même les plus petites. Chaque victoire compte.",
-            placeholder: "Exemple : J'ai fini ce dossier, j'ai appelé ma mère, j'ai fait le ménage...",
-          }
-        },
-        { 
-          id: "anxiete_j3_a2",
-          title: "Technique de désamorçage", 
-          description: "Neutraliser une peur irrationnelle", 
-          duration: "10 min", 
-          type: "explanatory",
-          content: {
-            objective: "Défuser le pouvoir d'une peur en l'examinant rationnellement.",
+            introduction: 'S\'exprimer, c\'est comme apprendre à marcher : cela demande de la pratique.',
+            objective: 'Déconstruire les peurs liées à l\'expression',
             steps: [
-              "Identifiez une peur qui vous paralyse",
-              "Écrivez le pire scénario possible",
-              "Évaluez la probabilité réelle que cela arrive (sur 10)",
-              "Listez 3 solutions si cela arrivait vraiment",
-              "Constatez que vous avez plus de ressources que vous ne le pensiez"
+              'Identifier vos patterns de silence',
+              'Comprendre l\'origine de vos blocages',
+              'Expérimenter de petites expressions sécurisées'
             ],
-            text: "La plupart de nos peurs s'effondrent quand on les examine à la lumière de la logique et qu'on se rend compte de notre capacité d'adaptation."
+            text: 'Votre silence protège quelque chose de précieux en vous. Aujourd\'hui, nous explorons ce que c\'est et comment l\'honorer tout en vous permettant de vous exprimer.'
           }
         },
-        { 
-          id: "anxiete_j3_a3",
-          title: "Auto-compassion", 
-          description: "Se parler avec bienveillance", 
-          duration: "5 min", 
-          type: "audio",
+        {
+          title: 'Affirmations de courage',
+          description: 'Phrases à répéter pour renforcer votre confiance',
+          duration: '5 min',
+          type: 'audio',
           content: {
-            audioText: "Placez une main sur votre cœur... Respirez doucement... Maintenant, parlez-vous comme vous parleriez à votre meilleur ami qui traverse une période difficile... Répétez : 'Je traverse une période difficile, c'est normal d'avoir peur parfois. Je mérite de la compassion et de la douceur. Je fais de mon mieux avec les ressources que j'ai.'",
+            audioText: 'Ma voix a de la valeur... Mes émotions méritent d\'être entendues... Je peux exprimer ma vérité avec douceur... Je suis en sécurité quand je parle de mon cœur...'
+          }
+        },
+        {
+          title: 'Cartographie de mes peurs',
+          description: 'Identifier ce qui vous empêche de vous exprimer',
+          duration: '8 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Listez 3 situations où vous aimeriez vous exprimer mais n\'osez pas. Pour chacune, notez ce que vous craignez exactement.',
+            placeholder: 'Situation 1: Au travail quand je ne suis pas d\'accord...\nJe crains: ...'
+          }
+        }
+      ],
+      [
+        {
+          title: 'Le courage de la vulnérabilité',
+          description: 'Transformer sa sensibilité en force',
+          duration: '7 min',
+          type: 'explanatory',
+          content: {
+            introduction: 'La vulnérabilité n\'est pas de la faiblesse, c\'est du courage brut.',
+            objective: 'Réframe votre sensibilité comme un atout',
+            steps: [
+              'Reconnaître la force qu\'il faut pour ressentir profondément',
+              'Identifier comment votre sensibilité aide les autres',
+              'Choisir un petit acte de vulnérabilité pour aujourd\'hui'
+            ],
+            text: 'Votre capacité à ressentir profondément fait de vous quelqu\'un d\'extraordinaire. C\'est un superpouvoir déguisé en sensibilité.'
+          }
+        },
+        {
+          title: 'Visualisation: Mon expression libérée',
+          description: 'Imaginer votre version la plus expressive',
+          duration: '8 min',
+          type: 'audio',
+          content: {
+            audioText: 'Ferme les yeux... Imagine-toi dans 6 mois... Tu t\'exprimes librement, avec confiance... Comment te sens-tu ? Comment les autres réagissent-ils ? Ancre cette sensation...'
+          }
+        },
+        {
+          title: 'Mon premier pas d\'expression',
+          description: 'Choisir une action concrète pour aujourd\'hui',
+          duration: '5 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Choisissez UNE petite action que vous pouvez faire aujourd\'hui pour vous exprimer davantage. Quelque chose de tout petit mais significatif.',
+            placeholder: 'Aujourd\'hui, je vais...'
           }
         }
       ]
     ]
   },
 
-  "Tristesse / vide": {
-    name: "Le Faux Positif",
-    description: "une âme qui dit souvent 'ça va' mais ressent un vide intérieur",
-    explanation: "Vous excellez à rassurer les autres, mais vous oubliez de prendre soin de vos propres émotions. Il est temps de reconnecter avec votre vraie météo intérieure.",
-    color: "from-yellow-400 to-amber-400",
+  'L\'Hyperlucide': {
+    name: 'L\'Hyperlucide',
+    description: 'Votre mental envahissant sur-réfléchit tout, vous êtes perfectionniste et avez du mal à lâcher prise.',
+    explanation: 'Votre intelligence est remarquable, mais elle peut parfois vous piéger dans des spirales de réflexion. Nous allons vous aider à vous reconnecter à votre corps et au moment présent.',
+    color: 'from-purple-400 to-indigo-400',
     activities: [
       [
-        { 
-          id: "tristesse_j1_a1",
-          title: "Météo intérieure réelle", 
-          description: "Comment vous sentez-vous vraiment ?", 
-          duration: "4 min", 
-          type: "interactive",
+        {
+          title: 'Sortir du mental, revenir au corps',
+          description: 'Comprendre l\'équilibre tête-corps',
+          duration: '6 min',
+          type: 'explanatory',
           content: {
-            prompt: "Décrivez votre vraie météo intérieure aujourd'hui, sans filtre. Que ressentez-vous réellement ?",
-            placeholder: "Exemple : Je me sens comme un ciel gris avec quelques éclaircies...",
-          }
-        },
-        { 
-          id: "tristesse_j1_a2",
-          title: "Miroir émotionnel", 
-          description: "Regarder et nommer vos émotions", 
-          duration: "6 min", 
-          type: "explanatory",
-          content: {
-            objective: "Reconnecter avec vos vraies émotions sans jugement.",
-            text: "Regardez-vous dans un miroir pendant 2 minutes. Observez votre visage sans jugement. Que voyez-vous dans vos yeux ? Quelles émotions transparaissent ? Nommez-les à voix haute avec bienveillance."
-          }
-        },
-        { 
-          id: "tristesse_j1_a3",
-          title: "Activation plaisir", 
-          description: "Une petite chose qui vous fait du bien", 
-          duration: "10 min", 
-          type: "explanatory",
-          content: {
-            objective: "Réveiller votre capacité à ressentir du plaisir.",
-            text: "Faites une petite chose qui vous procure un plaisir simple : boire un thé en pleine conscience, écouter une chanson qui vous émeut, sentir une fleur, caresser un animal... L'important est de vous autoriser ce moment de plaisir."
-          }
-        }
-      ],
-      [
-        { 
-          id: "tristesse_j2_a1",
-          title: "Journal authentique", 
-          description: "Écrire sans filtre pendant 5 minutes", 
-          duration: "5 min", 
-          type: "interactive",
-          content: {
-            prompt: "Écrivez pendant 5 minutes sans vous arrêter, sans vous censurer. Laissez sortir tout ce qui vous passe par la tête.",
-            placeholder: "Écrivez tout ce qui vous vient, même si ça n'a pas de sens...",
-          }
-        },
-        { 
-          id: "tristesse_j2_a2",
-          title: "Reconnexion corporelle", 
-          description: "Que dit votre corps aujourd'hui ?", 
-          duration: "7 min", 
-          type: "explanatory",
-          content: {
-            objective: "Écouter les messages de votre corps.",
+            introduction: 'Votre mental brillant peut parfois vous déconnecter de votre sagesse corporelle.',
+            objective: 'Rétablir l\'équilibre entre mental et ressenti',
             steps: [
-              "Allongez-vous confortablement",
-              "Portez attention à chaque partie de votre corps, de la tête aux pieds",
-              "Remarquez les zones tendues ou douloureuses",
-              "Respirez dans ces zones",
-              "Demandez-vous ce que votre corps essaie de vous dire"
+              'Reconnaître les signes de sur-mentalisation',
+              'Identifier les moments où votre corps vous parle',
+              'Pratiquer l\'ancrage dans l\'instant présent'
             ],
-            text: "Votre corps porte souvent les émotions que votre mental refuse de reconnaître."
+            text: 'Aujourd\'hui, nous explorons comment votre corps peut devenir votre meilleur allié pour calmer votre mental hyperactif.'
           }
         },
-        { 
-          id: "tristesse_j2_a3",
-          title: "Moment créatif", 
-          description: "Dessiner, chanter, danser librement", 
-          duration: "8 min", 
-          type: "explanatory",
+        {
+          title: 'Scan corporel apaisant',
+          description: 'Méditation guidée pour reconnecter corps et esprit',
+          duration: '10 min',
+          type: 'audio',
           content: {
-            objective: "Exprimer vos émotions à travers la créativité.",
-            text: "Choisissez une forme d'expression créative (dessin, chant, danse, écriture...) et laissez-vous aller sans vous juger. Il n'y a pas de bon ou mauvais résultat, juste de l'expression authentique."
+            audioText: 'Commence par tes pieds... Sens-les contre le sol... Remonte lentement vers tes jambes... Que ressens-tu ? Monte vers ton ventre... Ton cœur... Laisse ton mental observer sans analyser...'
+          }
+        },
+        {
+          title: 'Journal de mes sur-pensées',
+          description: 'Identifier vos patterns de rumination',
+          duration: '8 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Notez 3 sujets sur lesquels vous sur-réfléchissez le plus. Pour chacun, décrivez comment cela affecte votre bien-être.',
+            placeholder: 'Sujet 1: Mon travail/mes performances...\nComment ça m\'affecte: ...'
           }
         }
       ],
       [
-        { 
-          id: "tristesse_j3_a1",
-          title: "Lettre à soi-même", 
-          description: "Écrire avec compassion à votre enfant intérieur", 
-          duration: "10 min", 
-          type: "interactive",
+        {
+          title: 'L\'art de l\'imperfection',
+          description: 'Libérer l\'emprise du perfectionnisme',
+          duration: '7 min',
+          type: 'explanatory',
           content: {
-            prompt: "Écrivez une lettre bienveillante à votre enfant intérieur, à cette partie de vous qui souffre et a besoin de réconfort.",
-            placeholder: "Mon/ma chéri(e), je vois ta tristesse et elle est légitime...",
+            introduction: 'Le perfectionnisme est souvent la prison dorée de l\'intelligence.',
+            objective: 'Embrasser l\'imperfection comme chemin de liberté',
+            steps: [
+              'Identifier où le perfectionnisme vous limite',
+              'Comprendre que "assez bien" peut être parfait',
+              'Célébrer vos imperfections comme preuves d\'authenticité'
+            ],
+            text: 'Votre intelligence vous pousse vers l\'excellence, mais parfois, le "assez bien" est exactement ce dont vous avez besoin pour avancer.'
           }
         },
-        { 
-          id: "tristesse_j3_a2",
-          title: "Rituel de joie", 
-          description: "Créer un moment de bonheur simple", 
-          duration: "5 min", 
-          type: "explanatory",
+        {
+          title: 'Respiration 4-7-8 anti-rumination',
+          description: 'Technique respiratoire pour calmer le mental',
+          duration: '6 min',
+          type: 'audio',
           content: {
-            objective: "Créer consciemment un moment de joie, même petit.",
-            text: "Créez un petit rituel qui vous apporte de la joie : préparer votre boisson préférée, mettre votre musique favorite, allumer une bougie... Savourez ce moment en pleine conscience."
+            audioText: 'Inspire sur 4 temps... 1, 2, 3, 4... Retiens sur 7 temps... 1, 2, 3, 4, 5, 6, 7... Expire sur 8 temps... Laisse ton mental se poser sur ce rythme...'
           }
         },
-        { 
-          id: "tristesse_j3_a3",
-          title: "Partage authentique", 
-          description: "Dire votre vérité à quelqu'un", 
-          duration: "15 min", 
-          type: "explanatory",
+        {
+          title: 'Mes moments de lâcher-prise',
+          description: 'Identifier quand vous arrivez à vous détendre',
+          duration: '7 min',
+          type: 'interactive',
           content: {
-            objective: "Sortir de l'isolement en partageant votre vraie expérience.",
-            text: "Contactez une personne de confiance et partagez authentiquement comment vous vous sentez vraiment. Pas besoin de solutions, juste d'être entendu(e)."
+            prompt: 'Décrivez 3 moments récents où vous avez réussi à lâcher prise et à être présent(e). Qu\'est-ce qui a facilité ces moments ?',
+            placeholder: 'Moment 1: Quand je...\nCe qui m\'a aidé: ...'
+          }
+        }
+      ],
+      [
+        {
+          title: 'La sagesse du présent',
+          description: 'Cultiver la présence comme antidote au mental',
+          duration: '8 min',
+          type: 'explanatory',
+          content: {
+            introduction: 'Le moment présent contient toute la paix que votre mental cherche dans le futur.',
+            objective: 'Développer votre capacité à habiter l\'instant',
+            steps: [
+              'Pratiquer l\'observation sans jugement',
+              'Utiliser vos 5 sens comme ancres au présent',
+              'Transformer l\'analyse en contemplation'
+            ],
+            text: 'Votre capacité d\'analyse peut devenir un outil de contemplation profonde plutôt qu\'une source d\'agitation.'
+          }
+        },
+        {
+          title: 'Méditation des 5 sens',
+          description: 'Ancrage sensoriel dans l\'instant présent',
+          duration: '9 min',
+          type: 'audio',
+          content: {
+            audioText: '5 choses que tu vois... 4 que tu entends... 3 que tu touches... 2 que tu sens... 1 que tu goûtes... Reste dans cette présence sensorielle... Ton mental peut observer et se reposer...'
+          }
+        },
+        {
+          title: 'Ma routine d\'ancrage quotidien',
+          description: 'Créer des rituels pour revenir au présent',
+          duration: '6 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Concevez 3 petits rituels quotidiens qui vous aideront à sortir de votre tête et revenir à votre corps et au présent.',
+            placeholder: 'Matin: Je vais...\nMidi: ...\nSoir: ...'
           }
         }
       ]
     ]
   },
 
-  "Estime cassée": {
-    name: "L'Hyper-Adapté(e)",
-    description: "une personne qui s'adapte toujours aux autres mais oublie ses propres besoins",
-    explanation: "Vous êtes expert(e) pour vous adapter aux attentes d'autrui, mais cette habileté vous fait parfois oublier qui vous êtes vraiment. Retrouvons votre voix intérieure.",
-    color: "from-purple-400 to-pink-400",
+  'Le Blessé Loyal': {
+    name: 'Le Blessé Loyal',
+    description: 'Votre loyauté excessive et votre peur du rejet vous ont souvent mené à être blessé par des trahisons.',
+    explanation: 'Votre capacité à aimer et à être loyal est magnifique, mais elle a besoin d\'être équilibrée par l\'amour de soi. Nous allons reconstruire votre confiance.',
+    color: 'from-rose-400 to-pink-400',
     activities: [
       [
-        { 
-          id: "estime_j1_a1",
-          title: "Si j'osais...", 
-          description: "Imaginer ce que vous feriez sans peur du jugement", 
-          duration: "6 min", 
-          type: "interactive",
+        {
+          title: 'Reconnaître sa loyauté blessée',
+          description: 'Comprendre le cycle loyauté-trahison-blessure',
+          duration: '7 min',
+          type: 'explanatory',
           content: {
-            prompt: "Complétez cette phrase : 'Si je n'avais peur du jugement de personne, je...' Écrivez au moins 5 réponses.",
-            placeholder: "Si j'osais, je changerais de travail, je porterais des couleurs vives...",
-          }
-        },
-        { 
-          id: "estime_j1_a2",
-          title: "Mes valeurs profondes", 
-          description: "Identifier ce qui compte vraiment pour vous", 
-          duration: "8 min", 
-          type: "explanatory",
-          content: {
-            objective: "Reconnecter avec vos valeurs authentiques, pas celles qu'on attend de vous.",
+            introduction: 'Votre loyauté est un cadeau précieux, mais elle mérite d\'être protégée.',
+            objective: 'Comprendre comment transformer votre loyauté en force',
             steps: [
-              "Listez 10 valeurs importantes (liberté, justice, créativité, famille...)",
-              "Classez-les par ordre d'importance pour VOUS",
-              "Pour chacune des 3 principales, donnez un exemple concret",
-              "Réfléchissez : vivez-vous en accord avec ces valeurs ?",
-              "Identifiez une petite action pour mieux les honorer"
+              'Identifier vos patterns de loyauté excessive',
+              'Reconnaître les signaux de relations déséquilibrées',
+              'Apprendre à être loyal envers vous-même d\'abord'
             ],
-            text: "Vos valeurs sont votre boussole intérieure. Quand vous les honorez, vous vous respectez."
+            text: 'Aujourd\'hui, nous explorons comment honorer votre nature loyale tout en vous protégeant des blessures répétées.'
           }
         },
-        { 
-          id: "estime_j1_a3",
-          title: "Non bienveillant", 
-          description: "Dire non à quelque chose aujourd'hui", 
-          duration: "2 min", 
-          type: "explanatory",
+        {
+          title: 'Guérison du coeur blessé',
+          description: 'Méditation pour apaiser les blessures relationnelles',
+          duration: '10 min',
+          type: 'audio',
           content: {
-            objective: "Exercer votre droit de refuser sans culpabiliser.",
-            text: "Identifiez quelque chose à laquelle vous pouvez dire 'non' aujourd'hui. Commencez petit : un appel que vous n'avez pas envie de passer, une sortie qui ne vous tente pas... Dites non avec respect mais fermeté."
+            audioText: 'Place ta main sur ton cœur... Sens sa chaleur... Respire dans cet espace... Envoie de la compassion à toutes tes blessures... Tu as aimé courageusement... C\'est beau...'
+          }
+        },
+        {
+          title: 'Carte de mes loyautés',
+          description: 'Identifier où va votre énergie loyale',
+          duration: '9 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Listez les personnes/situations auxquelles vous êtes le plus loyal(e). Pour chacune, notez si cette loyauté est réciproque.',
+            placeholder: 'Personne/Situation 1: ...\nRéciproque ? ...\nComment je me sens: ...'
           }
         }
       ],
       [
-        { 
-          id: "estime_j2_a1",
-          title: "Miroir de force", 
-          description: "Reconnaître vos qualités uniques", 
-          duration: "5 min", 
-          type: "interactive",
+        {
+          title: 'Les frontières de l\'amour',
+          description: 'Apprendre à aimer avec des limites saines',
+          duration: '8 min',
+          type: 'explanatory',
           content: {
-            prompt: "Listez 10 qualités que vous possédez. Si c'est difficile, pensez à ce que vos proches diraient de vous.",
-            placeholder: "Je suis généreux/se, à l'écoute, créatif/ve, déterminé(e)...",
+            introduction: 'Aimer sans limites n\'est pas de l\'amour, c\'est de l\'épuisement.',
+            objective: 'Créer des frontières qui protègent votre capacité d\'aimer',
+            steps: [
+              'Identifier où vous donnez trop',
+              'Comprendre que dire non peut être un acte d\'amour',
+              'Pratiquer l\'amour conditionnel sain'
+            ],
+            text: 'Vos limites ne diminuent pas votre amour, elles le rendent durable et authentique.'
           }
         },
-        { 
-          id: "estime_j2_a2",
-          title: "Expression libre", 
-          description: "Parler ou écrire sans vous censurer", 
-          duration: "7 min", 
-          type: "interactive",
+        {
+          title: 'Affirmations de protection',
+          description: 'Renforcer votre bouclier émotionnel',
+          duration: '6 min',
+          type: 'audio',
           content: {
-            prompt: "Exprimez librement une opinion que vous gardez habituellement pour vous. Qu'aimeriez-vous dire au monde ?",
-            placeholder: "Ce que je pense vraiment c'est que...",
+            audioText: 'Je mérite d\'être traité(e) avec respect... Ma loyauté est précieuse... Je peux aimer et me protéger... Je choisis qui mérite mon dévouement...'
           }
         },
-        { 
-          id: "estime_j2_a3",
-          title: "Choix personnel", 
-          description: "Prendre une décision juste pour vous", 
-          duration: "10 min", 
-          type: "explanatory",
+        {
+          title: 'Mes signaux d\'alarme',
+          description: 'Reconnaître les signes de relations toxiques',
+          duration: '10 min',
+          type: 'interactive',
           content: {
-            objective: "Exercer votre autonomie en prenant une décision basée sur VOS désirs.",
-            text: "Identifiez une petite décision que vous pouvez prendre aujourd'hui en vous basant uniquement sur ce que VOUS voulez, pas sur ce que les autres attendent. Cela peut être le choix de votre repas, de vos vêtements, de votre activité de soirée..."
+            prompt: 'Identifiez 5 signaux qui vous alertent qu\'une relation ou situation pourrait blesser votre loyauté. Comment allez-vous réagir quand vous les verrez ?',
+            placeholder: 'Signal 1: Quand quelqu\'un...\nMa réaction sera: ...'
           }
         }
       ],
       [
-        { 
-          id: "estime_j3_a1",
-          title: "Affirmations personnalisées", 
-          description: "Créer vos propres phrases de pouvoir", 
-          duration: "6 min", 
-          type: "interactive",
+        {
+          title: 'Reconstruire la confiance',
+          description: 'Les étapes pour faire confiance à nouveau',
+          duration: '9 min',
+          type: 'explanatory',
           content: {
-            prompt: "Créez 5 affirmations personnalisées qui vous donnent du courage et vous rappellent votre valeur.",
-            placeholder: "Je mérite d'être respecté(e), ma voix compte, je suis digne d'amour...",
+            introduction: 'La confiance brisée peut se reconstruire, pierre après pierre.',
+            objective: 'Développer une confiance éclairée et progressive',
+            steps: [
+              'Distinguer confiance aveugle et confiance éclairée',
+              'Pratiquer la confiance par petites doses',
+              'Apprendre à faire confiance à votre intuition'
+            ],
+            text: 'Votre capacité à faire confiance peut se régénérer tout en devenant plus sage et plus sélective.'
           }
         },
-        { 
-          id: "estime_j3_a2",
-          title: "Limite saine", 
-          description: "Poser une limite respectueuse", 
-          duration: "5 min", 
-          type: "explanatory",
+        {
+          title: 'Visualisation: Mon nouveau moi confiant',
+          description: 'Imaginer votre version qui fait confiance sainement',
+          duration: '8 min',
+          type: 'audio',
           content: {
-            objective: "Apprendre à protéger votre énergie et votre temps.",
-            text: "Identifiez une situation où vous devez poser une limite. Formulez votre demande de manière respectueuse mais ferme. Exemple : 'J'ai besoin de temps pour moi ce soir, je ne serai pas disponible après 20h.'"
+            audioText: 'Imagine-toi dans 6 mois... Tu fais confiance de manière éclairée... Tu es loyal(e) envers ceux qui le méritent... Comment te sens-tu ? Tu es protégé(e) et aimant(e)...'
           }
         },
-        { 
-          id: "estime_j3_a3",
-          title: "Célébration de soi", 
-          description: "Honorer une de vos réussites", 
-          duration: "4 min", 
-          type: "explanatory",
+        {
+          title: 'Mon plan de loyauté éclairée',
+          description: 'Créer des critères pour votre loyauté future',
+          duration: '7 min',
+          type: 'interactive',
           content: {
-            objective: "Apprendre à reconnaître et célébrer vos accomplissements.",
-            text: "Choisissez une réussite récente, même petite, et célébrez-la consciemment. Dites-vous à voix haute : 'Je suis fier/fière de...' et offrez-vous une petite récompense."
+            prompt: 'Définissez 3 critères que quelqu\'un doit remplir pour mériter votre loyauté profonde. Comment allez-vous tester ces critères ?',
+            placeholder: 'Critère 1: Cette personne doit...\nComment je le teste: ...'
           }
         }
       ]
     ]
   },
 
-  "Confusion intérieure": {
-    name: "Le Déphasé",
-    description: "une âme qui se sent parfois à côté du monde mais retrouve petit à petit ses repères",
-    explanation: "Vous ressentez parfois un sentiment de flottement, comme si vous étiez déconnecté(e) du monde. Cette sensation peut être temporaire, créons ensemble de nouveaux ancrages.",
-    color: "from-gray-400 to-slate-400",
+  'Le Colérique Fatigué': {
+    name: 'Le Colérique Fatigué',
+    description: 'Vous êtes impulsif, souvent frustré et ressentez des conflits intérieurs constants.',
+    explanation: 'Votre colère cache souvent des besoins non exprimés et des blessures profondes. Nous allons transformer cette énergie en force constructive.',
+    color: 'from-orange-400 to-red-400',
     activities: [
       [
-        { 
-          id: "confusion_j1_a1",
-          title: "Ancrage symbolique", 
-          description: "Choisir un objet qui vous relie au présent", 
-          duration: "5 min", 
-          type: "explanatory",
+        {
+          title: 'Comprendre sa colère',
+          description: 'Décoder les messages cachés de votre colère',
+          duration: '8 min',
+          type: 'explanatory',
           content: {
-            objective: "Créer un point d'ancrage physique pour vous reconnecter au réel.",
-            text: "Choisissez un petit objet que vous pouvez garder avec vous (pierre, bijou, photo...). Tenez-le dans vos mains, observez sa texture, son poids, sa température. Cet objet devient votre ancre : quand vous vous sentez perdu(e), touchez-le pour revenir au présent."
-          }
-        },
-        { 
-          id: "confusion_j1_a2",
-          title: "Routine douce", 
-          description: "Créer un petit rituel réconfortant", 
-          duration: "8 min", 
-          type: "explanatory",
-          content: {
-            objective: "Créer des repères stables dans votre quotidien.",
+            introduction: 'Votre colère n\'est pas votre ennemi, c\'est un messager incompris.',
+            objective: 'Apprendre à écouter ce que votre colère tente de vous dire',
             steps: [
-              "Choisissez un moment de la journée (matin, midi, soir)",
-              "Définissez 3 gestes simples et apaisants",
-              "Exemple : boire un thé, allumer une bougie, écrire une phrase",
-              "Répétez cette séquence chaque jour à la même heure",
-              "Laissez ce rituel devenir un point de stabilité"
+              'Identifier les déclencheurs récurrents de votre colère',
+              'Reconnaître les besoins cachés derrière la frustration',
+              'Distinguer colère saine et colère destructrice'
             ],
-            text: "Les rituels créent des îlots de stabilité qui vous aident à vous retrouver quand tout semble flou."
+            text: 'Aujourd\'hui, nous apprenons à transformer votre colère de force destructrice en énergie constructive.'
           }
         },
-        { 
-          id: "confusion_j1_a3",
-          title: "Carnet de re-présence", 
-          description: "Noter une chose concrète de votre journée", 
-          duration: "3 min", 
-          type: "interactive",
+        {
+          title: 'Respiration de libération',
+          description: 'Technique pour évacuer la tension accumulée',
+          duration: '7 min',
+          type: 'audio',
           content: {
-            prompt: "Notez un fait concret et précis de votre journée. Quelque chose de simple mais réel.",
-            placeholder: "Aujourd'hui, j'ai bu un café à 9h15, il était chaud et avait un goût de noisette...",
+            audioText: 'Inspire profondément la frustration... Expire en faisant un son "Ahhhh"... Laisse sortir cette énergie bloquée... Ton corps se libère... Ta colère se transforme...'
+          }
+        },
+        {
+          title: 'Journal de ma colère',
+          description: 'Traquer vos patterns de frustration',
+          duration: '10 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Décrivez votre dernière grosse colère. Qu\'est-ce qui l\'a déclenchée ? Quel besoin n\'était pas satisfait ? Que vous disait-elle vraiment ?',
+            placeholder: 'Situation: ...\nDéclencheur: ...\nBesoin caché: ...\nMessage réel: ...'
           }
         }
       ],
       [
-        { 
-          id: "confusion_j2_a1",
-          title: "Connexion nature", 
-          description: "Observer un élément naturel pendant 5 minutes", 
-          duration: "5 min", 
-          type: "explanatory",
+        {
+          title: 'L\'art de canaliser l\'énergie',
+          description: 'Transformer l\'impulsivité en action constructive',
+          duration: '7 min',
+          type: 'explanatory',
           content: {
-            objective: "Utiliser la nature comme point d'ancrage au réel.",
-            text: "Trouvez un élément naturel (arbre, fleur, nuage, oiseau...) et observez-le pendant 5 minutes. Remarquez les détails, les mouvements, les changements. Laissez cette observation vous ramener dans l'instant présent."
-          }
-        },
-        { 
-          id: "confusion_j2_a2",
-          title: "Exercice d'orientation", 
-          description: "Nommer où vous êtes dans l'espace et le temps", 
-          duration: "4 min", 
-          type: "explanatory",
-          content: {
-            objective: "Vous réorienter dans l'espace-temps pour réduire la sensation de flottement.",
+            introduction: 'Votre énergie intense est un carburant précieux qu\'il faut apprendre à diriger.',
+            objective: 'Développer des stratégies pour utiliser votre énergie positivement',
             steps: [
-              "Dites à voix haute la date d'aujourd'hui",
-              "Nommez le lieu où vous êtes précisément",
-              "Décrivez ce que vous voyez autour de vous",
-              "Identifiez les sons que vous entendez",
-              "Terminez par : 'Je suis ici, maintenant, et c'est réel'"
+              'Reconnaître les signaux avant-coureurs de l\'impulsivité',
+              'Créer des pauses conscientes',
+              'Rediriger l\'énergie vers des actions constructives'
             ],
-            text: "Cet exercice simple mais puissant vous aide à vous réancrer dans la réalité présente."
+            text: 'Votre intensité émotionnelle peut devenir votre plus grand atout si vous apprenez à la canaliser.'
           }
         },
-        { 
-          id: "confusion_j2_a3",
-          title: "Micro-objectif", 
-          description: "Vous fixer un petit but atteignable", 
-          duration: "6 min", 
-          type: "interactive",
+        {
+          title: 'Méditation du guerrier pacifique',
+          description: 'Cultiver la force calme',
+          duration: '9 min',
+          type: 'audio',
           content: {
-            prompt: "Définissez un petit objectif très concret que vous pouvez accomplir aujourd'hui ou demain.",
-            placeholder: "Ranger mon bureau, appeler ma sœur, finir ce livre, faire une promenade de 10 minutes...",
+            audioText: 'Tu es un guerrier... Mais un guerrier de paix... Ta force vient de ta maîtrise... Sens cette puissance tranquille en toi... Tu peux choisir tes batailles...'
+          }
+        },
+        {
+          title: 'Mes nouveaux exutoires',
+          description: 'Créer des canaux sains pour votre énergie',
+          duration: '8 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Listez 5 activités qui pourraient vous aider à canaliser votre énergie de manière positive quand vous sentez la frustration monter.',
+            placeholder: '1. Quand je sens la colère monter, je peux...\n2. ...'
           }
         }
       ],
       [
-        { 
-          id: "confusion_j3_a1",
-          title: "Tisser des liens", 
-          description: "Reconnectez avec une personne proche", 
-          duration: "10 min", 
-          type: "explanatory",
+        {
+          title: 'Retrouver sa boussole intérieure',
+          description: 'Se reconnecter à ses valeurs profondes',
+          duration: '8 min',
+          type: 'explanatory',
           content: {
-            objective: "Utiliser les relations humaines pour vous réancrer dans le réel.",
-            text: "Contactez quelqu'un qui vous fait du bien. Pas forcément pour parler de vos difficultés, juste pour créer du lien. Posez des questions sur sa journée, partagez un souvenir, riez ensemble. Les relations authentiques nous ramènent à nous-mêmes."
-          }
-        },
-        { 
-          id: "confusion_j3_a2",
-          title: "Rituel du soir", 
-          description: "Créer une transition douce vers la nuit", 
-          duration: "7 min", 
-          type: "explanatory",
-          content: {
-            objective: "Créer une transition apaisante qui ferme la journée en beauté.",
+            introduction: 'Sous la colère se cache souvent une boussole morale très forte.',
+            objective: 'Retrouver vos valeurs comme guide de vos actions',
             steps: [
-              "Éteignez les écrans 30 minutes avant le coucher",
-              "Faites un bilan bienveillant de votre journée",
-              "Préparez consciemment votre espace de sommeil",
-              "Faites 3 respirations profondes",
-              "Remerciez votre corps pour cette journée"
+              'Identifier ce qui vous révolte vraiment et pourquoi',
+              'Reconnaître vos valeurs fondamentales',
+              'Aligner vos actions sur vos convictions profondes'
             ],
-            text: "Un rituel du soir crée une frontière rassurante entre le jour et la nuit, entre l'action et le repos."
+            text: 'Votre colère révèle souvent vos valeurs les plus importantes. C\'est un cadeau déguisé.'
           }
         },
-        { 
-          id: "confusion_j3_a3",
-          title: "Bilan de présence", 
-          description: "Mesurer votre ancrage d'aujourd'hui", 
-          duration: "5 min", 
-          type: "interactive",
+        {
+          title: 'Visualisation: Mon calme puissant',
+          description: 'Ancrer votre nouvelle façon d\'être',
+          duration: '10 min',
+          type: 'audio',
           content: {
-            prompt: "Sur une échelle de 1 à 10, comment vous sentez-vous ancré(e) aujourd'hui ? Qu'est-ce qui vous a aidé à vous sentir plus présent(e) ?",
-            placeholder: "Aujourd'hui je me sens ancré(e) à 6/10. Ce qui m'a aidé c'est...",
+            audioText: 'Imagine-toi face à une situation frustrante... Mais cette fois, tu restes centré(e)... Tu sens ta force tranquille... Tu choisis ta réponse... Tu es maître de ton énergie...'
+          }
+        },
+        {
+          title: 'Mon code de conduite personnel',
+          description: 'Définir vos nouvelles règles de vie',
+          duration: '9 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Créez votre code personnel : 5 principes qui vous guideront quand vous sentez la colère monter. Comment voulez-vous réagir désormais ?',
+            placeholder: 'Principe 1: Quand je me sens en colère, je...\nPrincipe 2: ...'
           }
         }
       ]
     ]
   },
 
-  "Solitude / déconnexion": {
-    name: "L'Éponge Émotionnelle",
-    description: "un cœur qui absorbe les émotions des autres mais oublie de se protéger",
-    explanation: "Votre empathie est un don, mais elle peut vous épuiser si vous ne savez pas vous en protéger. Apprenons à créer des limites saines tout en gardant votre sensibilité.",
-    color: "from-green-400 to-emerald-400",
+  'Le Surefficace Usé': {
+    name: 'Le Surefficace Usé',
+    description: 'Vous êtes surmené, épuisé par la charge mentale et le perfectionnisme vous consume.',
+    explanation: 'Votre efficacité remarquable vous a mené à l\'épuisement. Il est temps d\'apprendre à ralentir et à retrouver du sens sans perdre votre essence.',
+    color: 'from-yellow-400 to-amber-400',
     activities: [
       [
-        { 
-          id: "solitude_j1_a1",
-          title: "Bulle de protection", 
-          description: "Visualiser votre espace personnel protégé", 
-          duration: "6 min", 
-          type: "audio",
+        {
+          title: 'Reconnaître son épuisement',
+          description: 'Comprendre les signaux de votre surmenage',
+          duration: '7 min',
+          type: 'explanatory',
           content: {
-            audioText: "Fermez les yeux et imaginez une bulle de lumière dorée qui vous entoure... Cette bulle est perméable à l'amour et à la bienveillance, mais elle filtre les énergies négatives... Sentez-vous en sécurité à l'intérieur... Vous pouvez réactiver cette bulle mentalement quand vous en avez besoin...",
-          }
-        },
-        { 
-          id: "solitude_j1_a2",
-          title: "Recentrage express", 
-          description: "Revenir à vos propres sensations", 
-          duration: "4 min", 
-          type: "explanatory",
-          content: {
-            objective: "Distinguer vos émotions de celles que vous captez chez les autres.",
+            introduction: 'Votre efficacité est devenue une prison dorée dont il faut sortir.',
+            objective: 'Identifier les signaux d\'alarme de votre épuisement',
             steps: [
-              "Posez une main sur votre cœur, une sur votre ventre",
-              "Respirez profondément et concentrez-vous sur VOS sensations",
-              "Demandez-vous : 'Cette émotion, est-elle vraiment mienne ?'",
-              "Si elle vient d'ailleurs, visualisez-la qui s'évacue par vos pieds",
-              "Reconnectez-vous à votre centre émotionnel"
+              'Reconnaître les symptômes physiques et émotionnels',
+              'Identifier vos drivers de performance toxiques',
+              'Comprendre que ralentir n\'est pas échouer'
             ],
-            text: "Votre sensibilité est précieuse, mais vous devez apprendre à distinguer ce qui vous appartient de ce qui appartient aux autres."
+            text: 'Aujourd\'hui, nous apprenons à distinguer efficacité saine et épuisement masqué.'
           }
         },
-        { 
-          id: "solitude_j1_a3",
-          title: "Activité 'toi d'abord'", 
-          description: "Faire quelque chose uniquement pour vous", 
-          duration: "10 min",
-          type: "explanatory",
+        {
+          title: 'Méditation de récupération',
+          description: 'Permettre à votre système nerveux de se reposer',
+          duration: '12 min',
+          type: 'audio',
           content: {
-            objective: "Vous reconnecter à vos propres besoins et désirs.",
-            text: "Faites quelque chose uniquement pour VOUS, sans penser aux autres. Cela peut être lire quelques pages, prendre un bain, écouter votre musique préférée... L'important est que ce soit VOTRE choix, pour VOTRE plaisir."
+            audioText: 'Tu as le droit de te reposer... Ton corps a besoin de récupérer... Sens cette fatigue sans la juger... Elle te demande de ralentir... C\'est un message d\'amour...'
+          }
+        },
+        {
+          title: 'Inventaire de mon épuisement',
+          description: 'Faire le bilan de votre charge mentale actuelle',
+          duration: '10 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Listez tout ce qui vous épuise actuellement : tâches, responsabilités, préoccupations. Évaluez l\'urgence réelle de chaque élément sur 10.',
+            placeholder: 'Charge 1: ...\nUrgence réelle: .../10\nImpact sur mon énergie: ...'
           }
         }
       ],
       [
-        { 
-          id: "solitude_j2_a1",
-          title: "Tri émotionnel", 
-          description: "Distinguer vos émotions de celles des autres", 
-          duration: "8 min", 
-          type: "interactive",
+        {
+          title: 'L\'art du "assez bien"',
+          description: 'Libérer l\'emprise du perfectionnisme',
+          duration: '8 min',
+          type: 'explanatory',
           content: {
-            prompt: "Décrivez ce que vous ressentez maintenant, puis demandez-vous : quelles émotions sont vraiment miennes ? Lesquelles ai-je 'captées' ailleurs ?",
-            placeholder: "Je ressens de la tristesse... En y réfléchissant, je pense qu'elle vient de...",
+            introduction: 'Le perfectionnisme vous vole votre énergie et votre joie de vivre.',
+            objective: 'Apprendre à accepter "assez bien" comme parfait',
+            steps: [
+              'Identifier où le perfectionnisme vous coûte le plus',
+              'Expérimenter le "assez bien" dans des domaines sécurisés',
+              'Célébrer vos accomplissements même imparfaits'
+            ],
+            text: 'Votre valeur ne dépend pas de votre performance. Vous êtes précieux(se) par votre seule existence.'
           }
         },
-        { 
-          id: "solitude_j2_a2",
-          title: "Journaling personnel", 
-          description: "Écrire uniquement sur vos ressentis", 
-          duration: "7 min", 
-          type: "interactive",
+        {
+          title: 'Respiration de lâcher-prise',
+          description: 'Technique pour relâcher le contrôle',
+          duration: '8 min',
+          type: 'audio',
           content: {
-            prompt: "Écrivez uniquement sur VOS émotions, VOS besoins, VOS désirs. Commencez chaque phrase par 'Je'.",
-            placeholder: "Je ressens... Je veux... J'ai besoin de... Je rêve de...",
+            audioText: 'À chaque expiration, lâche un peu de contrôle... "Assez bien" suffit... Tu n\'as pas à tout porter... Laisse d\'autres s\'occuper de certaines choses...'
           }
         },
-        { 
-          id: "solitude_j2_a3",
-          title: "Respiration purifiante", 
-          description: "Évacuer les énergies parasites", 
-          duration: "5 min", 
-          type: "audio",
+        {
+          title: 'Mes priorités essentielles',
+          description: 'Identifier ce qui mérite vraiment votre énergie',
+          duration: '12 min',
+          type: 'interactive',
           content: {
-            audioText: "Inspirez de la lumière pure et dorée... Expirez tout ce qui ne vous appartient pas... À chaque expiration, libérez les émotions des autres... À chaque inspiration, accueillez votre propre énergie... Continuez jusqu'à vous sentir centré(e) et purifié(e)...",
+            prompt: 'Parmi toutes vos activités, identifiez les 3 plus importantes pour VOUS (pas pour les autres). Qu\'est-ce que vous pourriez abandonner ou déléguer ?',
+            placeholder: 'Priorité essentielle 1: ...\nPourquoi c\'est important POUR MOI: ...\nJe peux abandonner: ...'
           }
         }
       ],
       [
-        { 
-          id: "solitude_j3_a1",
-          title: "Dialogue intérieur", 
-          description: "Conversation avec votre moi profond", 
-          duration: "9 min", 
-          type: "interactive",
+        {
+          title: 'Retrouver du sens',
+          description: 'Reconnecter avec vos motivations profondes',
+          duration: '9 min',
+          type: 'explanatory',
           content: {
-            prompt: "Entamez un dialogue écrit avec votre sagesse intérieure. Posez-vous une question importante et laissez la réponse venir.",
-            placeholder: "Moi : Qu'est-ce dont j'ai vraiment besoin ? Ma sagesse intérieure : ...",
-          }
-        },
-        { 
-          id: "solitude_j3_a2",
-          title: "Limite douce", 
-          description: "Dire non avec bienveillance", 
-          duration: "5 min", 
-          type: "explanatory",
-          content: {
-            objective: "Apprendre à vous protéger sans blesser les autres.",
-            text: "Entraînez-vous à dire non de manière bienveillante. Exemple : 'Je comprends que tu aies besoin de parler, mais je ne suis pas disponible émotionnellement en ce moment. Puis-je t'appeler demain ?' Votre empathie n'est pas une obligation 24h/24."
-          }
-        },
-        { 
-          id: "solitude_j3_a3",
-          title: "Rituel de clôture", 
-          description: "Fermer la journée en beauté", 
-          duration: "6 min", 
-          type: "explanatory",
-          content: {
-            objective: "Créer une transition qui vous libère des énergies de la journée.",
+            introduction: 'L\'efficacité sans sens mène à l\'épuisement. Il est temps de retrouver votre pourquoi.',
+            objective: 'Redécouvrir ce qui donne du sens à vos actions',
             steps: [
-              "Visualisez votre journée comme un livre",
-              "Remerciez les belles rencontres et expériences",
-              "Libérez mentalement ce qui ne vous appartient pas",
-              "Fermez symboliquement ce livre",
-              "Accueillez la soirée comme un nouveau chapitre pour vous"
+              'Identifier ce qui vous animait avant l\'épuisement',
+              'Reconnaître vos valeurs fondamentales',
+              'Aligner vos actions sur ce qui compte vraiment'
             ],
-            text: "Chaque fin de journée est l'occasion de vous libérer de ce qui ne vous appartient pas et de revenir à vous."
+            text: 'Votre efficacité retrouvera sa puissance quand elle sera au service de ce qui vous anime vraiment.'
+          }
+        },
+        {
+          title: 'Visualisation: Ma vie équilibrée',
+          description: 'Imaginer votre nouveau rythme de vie',
+          duration: '10 min',
+          type: 'audio',
+          content: {
+            audioText: 'Imagine ta vie dans 6 mois... Tu es efficace ET reposé(e)... Tu as du temps pour toi... Tu choisis tes priorités... Comment te sens-tu ? Ancre cette sensation...'
+          }
+        },
+        {
+          title: 'Mon plan de récupération',
+          description: 'Créer votre stratégie de sortie du surmenage',
+          duration: '11 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Concevez votre plan en 3 étapes : 1) Ce que vous allez arrêter, 2) Ce que vous allez déléguer, 3) Les nouveaux espaces que vous allez créer pour vous.',
+            placeholder: 'ARRÊTER: ...\nDÉLÉGUER: ...\nCRÉER POUR MOI: ...'
           }
         }
       ]
     ]
   },
 
-  "Trauma / événement marquant": {
-    name: "Le Ruminant du Soir",
-    description: "un esprit qui ressasse souvent le passé, surtout quand vient la nuit",
-    explanation: "Vos pensées ont tendance à tourner en boucle, particulièrement le soir. Cette rumination peut être apaisée avec des techniques de clôture mentale et de transition douce.",
-    color: "from-indigo-400 to-purple-400",
+  'Le Vide Camouflé': {
+    name: 'Le Vide Camouflé',
+    description: 'Vous paraissez bien en surface, mais vous ressentez un vide profond à l\'intérieur.',
+    explanation: 'Votre façade parfaite cache une déconnexion de vos désirs authentiques. Nous allons vous aider à retrouver votre essence véritable.',
+    color: 'from-gray-400 to-slate-400',
     activities: [
       [
-        { 
-          id: "trauma_j1_a1",
-          title: "Vidage mental", 
-          description: "Déposer toutes vos pensées sur papier", 
-          duration: "8 min", 
-          type: "interactive",
+        {
+          title: 'Reconnaître le vide camouflé',
+          description: 'Comprendre pourquoi vous vous sentez vide malgré les apparences',
+          duration: '8 min',
+          type: 'explanatory',
           content: {
-            prompt: "Videz votre mental en écrivant tout ce qui vous préoccupe, sans ordre ni logique. Laissez sortir le flot de pensées.",
-            placeholder: "J'ai cette réunion demain, je pense à ce qui s'est passé la semaine dernière, j'ai oublié d'appeler...",
-          }
-        },
-        { 
-          id: "trauma_j1_a2",
-          title: "Rituel de transition", 
-          description: "Marquer la fin de la journée consciemment", 
-          duration: "6 min", 
-          type: "explanatory",
-          content: {
-            objective: "Créer une frontière claire entre le jour et le soir pour arrêter les ruminations.",
+            introduction: 'Votre vide n\'est pas un défaut, c\'est un signal que votre vraie nature demande à s\'exprimer.',
+            objective: 'Identifier les mécanismes de camouflage de votre vide',
             steps: [
-              "Choisissez une heure de fin de journée (ex: 19h)",
-              "Faites un bilan : 3 choses accomplies aujourd'hui",
-              "Rangez symboliquement votre espace de travail/jour",
-              "Dites à voix haute : 'Ma journée est terminée'",
-              "Passez à une activité différente (détente, plaisir)"
+              'Reconnaître la différence entre paraître et être',
+              'Identifier les moments où le vide se fait sentir',
+              'Comprendre que le vide appelle l\'authenticité'
             ],
-            text: "Sans transition claire, votre mental continue de 'travailler' et de ruminer. Ce rituel marque une frontière nette."
+            text: 'Aujourd\'hui, nous explorons ce vide non comme un problème, mais comme un espace à remplir de votre vérité.'
           }
         },
-        { 
-          id: "trauma_j1_a3",
-          title: "Audio apaisant", 
-          description: "Écouter un son relaxant", 
-          duration: "10 min", 
-          type: "audio",
+        {
+          title: 'Méditation du retour à soi',
+          description: 'Se reconnecter à son essence profonde',
+          duration: '11 min',
+          type: 'audio',
           content: {
-            audioText: "Voici 10 minutes de sons apaisants pour calmer votre mental agité... Laissez ces sons remplacer le bruit de vos pensées... Concentrez-vous uniquement sur ce que vous entendez... Si des pensées arrivent, revenez simplement aux sons... Laissez-vous porter par cette douceur auditive...",
+            audioText: 'Au-delà de tous tes rôles... Au-delà de toutes tes performances... Qui es-tu vraiment ? Descends dans ce silence... Il y a quelqu\'un là... Ton vrai toi...'
+          }
+        },
+        {
+          title: 'Cartographie de mon vide',
+          description: 'Explorer les contours de votre sentiment de vide',
+          duration: '10 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Décrivez les moments où vous ressentez le plus ce vide. Dans quelles situations ? Avec quelles personnes ? Que recherchez-vous vraiment dans ces moments ?',
+            placeholder: 'Je me sens vide quand...\nCe que je recherche vraiment: ...\nCe qui pourrait combler: ...'
           }
         }
       ],
       [
-        { 
-          id: "trauma_j2_a1",
-          title: "Technique du coffre", 
-          description: "Ranger mentalement vos préoccupations", 
-          duration: "7 min", 
-          type: "audio",
+        {
+          title: 'Sortir de l\'automatisme',
+          description: 'Briser les patterns qui vous déconnectent de vous',
+          duration: '7 min',
+          type: 'explanatory',
           content: {
-            audioText: "Imaginez un grand coffre solide... Prenez chaque préoccupation de votre mental et placez-la délicatement dans ce coffre... Fermez le coffre avec une clé... Dites-vous : 'Mes préoccupations sont enfermées pour la nuit, je peux me reposer l'esprit tranquille'... Demain, si besoin, vous pourrez rouvrir le coffre...",
+            introduction: 'L\'automatisme est le terreau du vide. Il est temps de réveiller votre conscience.',
+            objective: 'Identifier et transformer vos automatismes',
+            steps: [
+              'Reconnaître vos comportements automatiques',
+              'Identifier les moments de vraie présence',
+              'Créer des interruptions conscientes dans votre quotidien'
+            ],
+            text: 'Chaque moment de conscience que vous créez est une victoire contre le vide.'
           }
         },
-        { 
-          id: "trauma_j2_a2",
-          title: "Écriture libératrice", 
-          description: "Lettre que vous ne posterez jamais", 
-          duration: "10 min", 
-          type: "interactive",
+        {
+          title: 'Éveil sensoriel',
+          description: 'Réveiller vos sens pour revenir à la vie',
+          duration: '9 min',
+          type: 'audio',
           content: {
-            prompt: "Écrivez une lettre à quelqu'un (réel ou imaginaire) pour exprimer tout ce que vous avez sur le cœur. Vous ne l'enverrez jamais.",
-            placeholder: "Cher/Chère..., j'ai besoin de te dire que...",
+            audioText: 'Réveille tes sens... Que vois-tu vraiment ? Que sens-tu ? Que goûtes-tu ? Ton corps est vivant... Il ressent... Il existe... Tu existes...'
           }
         },
-        { 
-          id: "trauma_j2_a3",
-          title: "Respiration du soir", 
-          description: "Calmer le mental avant le coucher", 
-          duration: "5 min", 
-          type: "audio",
+        {
+          title: 'Mes moments de vraie vie',
+          description: 'Identifier quand vous vous sentez vraiment vivant(e)',
+          duration: '9 min',
+          type: 'interactive',
           content: {
-            audioText: "Cette respiration va préparer votre mental au repos... Inspirez en comptant jusqu'à 6... Expirez en comptant jusqu'à 8... À chaque expiration, relâchez les tensions de votre journée... Laissez votre corps s'alourdir... Votre mental se calme progressivement... Vous vous préparez à une nuit paisible...",
+            prompt: 'Rappelez-vous 3 moments récents où vous vous êtes senti(e) vraiment vivant(e), présent(e). Qu\'est-ce qui rendait ces moments spéciaux ?',
+            placeholder: 'Moment 1: ...\nCe qui le rendait spécial: ...\nComment reproduire cette sensation: ...'
           }
         }
       ],
       [
-        { 
-          id: "trauma_j3_a1",
-          title: "Bilan positif", 
-          description: "3 bonnes choses de votre journée", 
-          duration: "4 min", 
-          type: "interactive",
+        {
+          title: 'Reconnecter avec ses désirs',
+          description: 'Redécouvrir ce que vous voulez vraiment',
+          duration: '9 min',
+          type: 'explanatory',
           content: {
-            prompt: "Notez 3 choses positives qui se sont passées aujourd'hui, même les plus petites.",
-            placeholder: "1. J'ai eu un sourire d'un inconnu 2. Mon café était délicieux 3. J'ai terminé cette tâche...",
-          }
-        },
-        { 
-          id: "trauma_j3_a2",
-          title: "Méditation du pardon", 
-          description: "Lâcher prise sur une frustration", 
-          duration: "8 min", 
-          type: "audio",
-          content: {
-            audioText: "Pensez à quelque chose qui vous contrarie... Observez cette contrariété sans la juger... Maintenant, imaginez que vous la prenez délicatement dans vos mains... Sentez son poids... Et maintenant, libérez-la comme un oiseau qui s'envole... Répétez : 'Je libère ce qui ne me sert plus'... Sentez l'espace qui se crée en vous...",
-          }
-        },
-        { 
-          id: "trauma_j3_a3",
-          title: "Préparation au sommeil", 
-          description: "Rituel pour un endormissement serein", 
-          duration: "7 min", 
-          type: "explanatory",
-          content: {
-            objective: "Créer les conditions optimales pour un sommeil réparateur sans ruminations.",
+            introduction: 'Sous le vide se cachent des désirs authentiques que vous avez peut-être oubliés.',
+            objective: 'Retrouver le contact avec vos désirs profonds',
             steps: [
-              "Éteignez tous les écrans 1h avant le coucher",
-              "Préparez votre chambre : température fraîche, obscurité",
-              "Faites 5 respirations profondes dans votre lit",
-              "Passez en revue votre corps : relâchez chaque tension",
-              "Répétez : 'Je mérite un sommeil paisible et réparateur'"
+              'Distinguer vos vrais désirs des attentes extérieures',
+              'Explorer ce qui vous fait vibrer naturellement',
+              'Oser reconnaître ce que vous voulez vraiment'
             ],
-            text: "Un bon sommeil commence par une bonne préparation. Ces gestes simples préparent votre corps et votre mental au repos."
+            text: 'Vos désirs sont la boussole qui peut vous sortir du vide et vous mener vers une vie authentique.'
+          }
+        },
+        {
+          title: 'Visualisation de vos désirs profonds',
+          description: 'Explorer ce que votre cœur désire vraiment',
+          duration: '12 min',
+          type: 'audio',
+          content: {
+            audioText: 'Si tu étais totalement libre... Si tu n\'avais peur de rien... Que ferais-tu ? Qui serais-tu ? Laisse monter ces images... Ces sensations... C\'est ton vrai toi...'
+          }
+        },
+        {
+          title: 'Ma liste de désirs authentiques',
+          description: 'Créer votre feuille de route vers l\'authenticité',
+          duration: '10 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Listez 10 choses que vous désirez vraiment (pas ce que vous "devriez" vouloir). Grandes ou petites. Pour chacune, notez un premier petit pas.',
+            placeholder: 'Désir 1: ...\nPremier pas: ...\nDésir 2: ...'
+          }
+        }
+      ]
+    ]
+  },
+
+  'Le Refoulé Rieur': {
+    name: 'Le Refoulé Rieur',
+    description: 'Vous cachez tout sous l\'humour ou le déni, refusant l\'introspection profonde.',
+    explanation: 'Votre humour est un mécanisme de défense brillant, mais il vous empêche parfois d\'accéder à votre vérité intérieure. Il est temps d\'équilibrer légèreté et profondeur.',
+    color: 'from-green-400 to-emerald-400',
+    activities: [
+      [
+        {
+          title: 'Reconnaître ses mécanismes de défense',
+          description: 'Comprendre comment l\'humour peut masquer vos émotions',
+          duration: '8 min',
+          type: 'explanatory',
+          content: {
+            introduction: 'Votre humour est un cadeau, mais il ne doit pas devenir une prison qui vous empêche d\'être authentique.',
+            objective: 'Identifier quand l\'humour devient une fuite',
+            steps: [
+              'Reconnaître les situations où vous utilisez l\'humour pour éviter',
+              'Identifier ce que vous craignez de ressentir',
+              'Apprendre à doser humour et authenticité'
+            ],
+            text: 'Aujourd\'hui, nous explorons comment garder votre légèreté tout en accueillant votre profondeur.'
+          }
+        },
+        {
+          title: 'Méditation du sérieux bienveillant',
+          description: 'Apprendre à être avec vos émotions sans les fuir',
+          duration: '10 min',
+          type: 'audio',
+          content: {
+            audioText: 'Pour quelques minutes, pose ton masque de légèreté... Tu peux être sérieux(se) et bienveillant(e) avec toi... Qu\'est-ce qui se cache derrière le rire ? Accueille-le...'
+          }
+        },
+        {
+          title: 'Journal de mes fuites',
+          description: 'Identifier vos patterns d\'évitement',
+          duration: '9 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Pensez à 3 situations récentes où vous avez utilisé l\'humour ou le déni pour éviter une émotion. Qu\'essayiez-vous de ne pas ressentir ?',
+            placeholder: 'Situation 1: ...\nÉmotion évitée: ...\nCe que ça m\'a coûté: ...'
+          }
+        }
+      ],
+      [
+        {
+          title: 'L\'art de la vulnérabilité légère',
+          description: 'Apprendre à être authentique sans drama',
+          duration: '7 min',
+          type: 'explanatory',
+          content: {
+            introduction: 'Vous pouvez être profond(e) sans perdre votre légèreté naturelle.',
+            objective: 'Développer une authenticité qui vous ressemble',
+            steps: [
+              'Comprendre que vulnérabilité ne signifie pas lourdeur',
+              'Pratiquer l\'honnêteté émotionnelle avec douceur',
+              'Garder votre humour tout en étant vrai(e)'
+            ],
+            text: 'Votre capacité à voir le côté léger peut coexister avec votre capacité à ressentir profondément.'
+          }
+        },
+        {
+          title: 'Affirmations d\'authenticité',
+          description: 'Renforcer votre droit à être authentique',
+          duration: '7 min',
+          type: 'audio',
+          content: {
+            audioText: 'J\'ai le droit d\'être triste parfois... J\'ai le droit d\'être sérieux(se)... Mon humour ET mes émotions ont leur place... Je peux être complet(e)...'
+          }
+        },
+        {
+          title: 'Mes émotions cachées',
+          description: 'Explorer ce que vous gardez sous silence',
+          duration: '11 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Listez 5 émotions ou pensées que vous gardez généralement pour vous. Pour chacune, imaginez comment vous pourriez l\'exprimer de manière authentique mais douce.',
+            placeholder: 'Émotion cachée 1: ...\nComment l\'exprimer sainement: ...'
+          }
+        }
+      ],
+      [
+        {
+          title: 'Libérer ses non-dits',
+          description: 'Apprendre à exprimer ce que vous taisez',
+          duration: '8 min',
+          type: 'explanatory',
+          content: {
+            introduction: 'Vos non-dits s\'accumulent et créent une distance avec votre vérité.',
+            objective: 'Développer des façons saines d\'exprimer vos non-dits',
+            steps: [
+              'Identifier vos non-dits les plus lourds',
+              'Comprendre pourquoi vous les gardez',
+              'Trouver des façons sécurisées de les exprimer'
+            ],
+            text: 'Chaque non-dit libéré vous rapproche de votre authenticité et allège votre être.'
+          }
+        },
+        {
+          title: 'Visualisation: Mon expression libérée',
+          description: 'Imaginer votre version authentiquement expressive',
+          duration: '10 min',
+          type: 'audio',
+          content: {
+            audioText: 'Imagine-toi exprimant ta vérité avec douceur... Tu gardes ton humour mais tu dis aussi tes vraies émotions... Les gens te voient vraiment... Comment te sens-tu ?'
+          }
+        },
+        {
+          title: 'Ma stratégie d\'expression authentique',
+          description: 'Créer votre plan pour être plus vrai(e)',
+          duration: '12 min',
+          type: 'interactive',
+          content: {
+            prompt: 'Choisissez 3 personnes avec qui vous aimeriez être plus authentique. Pour chacune, identifiez ce que vous aimeriez partager et comment vous pourriez le faire.',
+            placeholder: 'Personne 1: ...\nCe que j\'aimerais partager: ...\nComment je vais m\'y prendre: ...'
           }
         }
       ]
@@ -890,6 +856,6 @@ export const profilesData = {
   }
 };
 
-export const getProfileData = (profileName: string) => {
-  return profilesData[profileName as keyof typeof profilesData] || profilesData["Épuisement mental"];
+export const getProfileData = (profileName: string): ProfileData => {
+  return profilesData[profileName] || profilesData['Le Sensible Silencieux'];
 };
