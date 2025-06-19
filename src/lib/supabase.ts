@@ -98,16 +98,56 @@ export const supabaseService = {
     return { data, error };
   },
 
+  // Sauvegarder la progression du parcours
+  async saveJourneyProgress(phase: string, dayNumber: number, completedActivities: string[]) {
+    const deviceId = getDeviceId();
+    const { data, error } = await supabase
+      .from('journey_progress')
+      .upsert({
+        device_id: deviceId,
+        current_phase: phase,
+        day_number: dayNumber,
+        completed_activities: completedActivities,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'device_id'
+      });
+    
+    if (error) console.error('Erreur sauvegarde progression:', error);
+    return { data, error };
+  },
+
+  // Sauvegarder les explorations thématiques
+  async saveThemeProgress(themeId: string, progress: number, completed: boolean) {
+    const deviceId = getDeviceId();
+    const { data, error } = await supabase
+      .from('theme_progress')
+      .upsert({
+        device_id: deviceId,
+        theme_id: themeId,
+        progress: progress,
+        completed: completed,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'device_id, theme_id'
+      });
+    
+    if (error) console.error('Erreur sauvegarde thème:', error);
+    return { data, error };
+  },
+
   // Récupérer toutes les données d'un utilisateur
   async getUserData() {
     const deviceId = getDeviceId();
     
-    const [users, answers, messages, journal, reminders] = await Promise.all([
+    const [users, answers, messages, journal, reminders, journeyProgress, themeProgress] = await Promise.all([
       supabase.from('users').select('*').eq('device_id', deviceId),
       supabase.from('questionnaire_answers').select('*').eq('device_id', deviceId),
       supabase.from('anonymous_messages').select('*').eq('device_id', deviceId),
       supabase.from('journaling').select('*').eq('device_id', deviceId),
-      supabase.from('reminder_settings').select('*').eq('device_id', deviceId)
+      supabase.from('reminder_settings').select('*').eq('device_id', deviceId),
+      supabase.from('journey_progress').select('*').eq('device_id', deviceId),
+      supabase.from('theme_progress').select('*').eq('device_id', deviceId)
     ]);
 
     return {
@@ -115,7 +155,9 @@ export const supabaseService = {
       answers: answers.data || [],
       messages: messages.data || [],
       journal: journal.data || [],
-      reminders: reminders.data?.[0] || null
+      reminders: reminders.data?.[0] || null,
+      journeyProgress: journeyProgress.data?.[0] || null,
+      themeProgress: themeProgress.data || []
     };
   }
 };

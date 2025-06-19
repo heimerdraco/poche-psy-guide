@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Compass, Lock, Flame, Target, Brain, Users } from "lucide-react";
+import { Compass, Lock, Flame, Target, Brain, Users, Clock } from "lucide-react";
 
 interface ThematicExplorationsProps {
   profile: string;
@@ -18,11 +18,13 @@ interface Theme {
   icon: React.ReactNode;
   color: string;
   duration: number;
+  unlockDay: number;
 }
 
 const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplorationsProps) => {
   const [unlockedThemes, setUnlockedThemes] = useState<string[]>([]);
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
+  const [completedThemes, setCompletedThemes] = useState<string[]>([]);
 
   const themes: Theme[] = [
     {
@@ -31,7 +33,8 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
       description: 'Apprivoiser et canaliser ses émotions intenses',
       icon: <Flame className="w-5 h-5" />,
       color: 'from-red-400 to-orange-400',
-      duration: 3
+      duration: 3,
+      unlockDay: 20
     },
     {
       id: 'failure',
@@ -39,7 +42,8 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
       description: 'Transformer la peur en motivation constructive',
       icon: <Target className="w-5 h-5" />,
       color: 'from-yellow-400 to-amber-400',
-      duration: 3
+      duration: 3,
+      unlockDay: 35
     },
     {
       id: 'overstimulation',
@@ -47,7 +51,8 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
       description: 'Calmer le mental et retrouver la clarté',
       icon: <Brain className="w-5 h-5" />,
       color: 'from-cyan-400 to-blue-400',
-      duration: 3
+      duration: 3,
+      unlockDay: 50
     },
     {
       id: 'relationships',
@@ -55,32 +60,74 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
       description: 'Réparer et renforcer ses liens avec les autres',
       icon: <Users className="w-5 h-5" />,
       color: 'from-pink-400 to-purple-400',
-      duration: 3
+      duration: 3,
+      unlockDay: 65
+    },
+    // Thèmes avancés pour utilisateurs premium
+    {
+      id: 'deep-healing',
+      title: 'Guérison profonde',
+      description: 'Travail en profondeur sur les blessures anciennes',
+      icon: <Heart className="w-5 h-5" />,
+      color: 'from-purple-400 to-indigo-400',
+      duration: 7,
+      unlockDay: 80
+    },
+    {
+      id: 'life-purpose',
+      title: 'Sens de la vie',
+      description: 'Découvrir sa mission et ses valeurs profondes',
+      icon: <Compass className="w-5 h-5" />,
+      color: 'from-emerald-400 to-teal-400',
+      duration: 5,
+      unlockDay: 100
     }
   ];
 
   useEffect(() => {
-    // Débloquer automatiquement des thèmes selon les jours écoulés
-    const autoUnlocked = Math.floor(daysElapsed / 15); // 1 thème tous les 15 jours
-    const themesToUnlock = themes.slice(0, Math.min(autoUnlocked, themes.length)).map(t => t.id);
+    // Déblocage automatique selon les jours écoulés
+    const autoUnlocked = themes
+      .filter(theme => daysElapsed >= theme.unlockDay)
+      .map(theme => theme.id);
     
     const saved = localStorage.getItem('unlockedThemes');
     const previouslyUnlocked = saved ? JSON.parse(saved) : [];
     
-    const allUnlocked = [...new Set([...previouslyUnlocked, ...themesToUnlock])];
+    const allUnlocked = [...new Set([...previouslyUnlocked, ...autoUnlocked])];
     setUnlockedThemes(allUnlocked);
     localStorage.setItem('unlockedThemes', JSON.stringify(allUnlocked));
+
+    // Charger les thèmes complétés
+    const savedCompleted = localStorage.getItem('completedThemes');
+    if (savedCompleted) {
+      setCompletedThemes(JSON.parse(savedCompleted));
+    }
   }, [daysElapsed]);
 
-  const unlockTheme = (themeId: string) => {
-    if (!isPremium) return;
-    
-    const updated = [...unlockedThemes, themeId];
-    setUnlockedThemes(updated);
-    localStorage.setItem('unlockedThemes', JSON.stringify(updated));
+  const startTheme = (themeId: string) => {
+    setSelectedTheme(themeId);
+    // Marquer comme en cours
+    const inProgress = localStorage.getItem('themeInProgress');
+    if (!inProgress) {
+      localStorage.setItem('themeInProgress', JSON.stringify({
+        themeId,
+        startDate: Date.now(),
+        currentDay: 1
+      }));
+    }
   };
 
-  const freeThemesThisMonth = isPremium ? themes.length : 1;
+  const completeTheme = (themeId: string) => {
+    const newCompleted = [...completedThemes, themeId];
+    setCompletedThemes(newCompleted);
+    localStorage.setItem('completedThemes', JSON.stringify(newCompleted));
+    localStorage.removeItem('themeInProgress');
+    setSelectedTheme(null);
+  };
+
+  const nextUnlockDays = themes
+    .filter(theme => daysElapsed < theme.unlockDay)
+    .sort((a, b) => a.unlockDay - b.unlockDay)[0]?.unlockDay - daysElapsed;
 
   return (
     <Card className="shadow-lg border-0 bg-gradient-to-br from-emerald-50 to-teal-50 backdrop-blur-sm">
@@ -88,27 +135,31 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
         <div className="flex justify-between items-start mb-4">
           <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
             <Compass className="w-5 h-5 text-emerald-600" />
-            Explorer d'autres zones
+            Explorations thématiques
           </h3>
           <Badge variant="outline" className="border-emerald-400 text-emerald-700">
-            {unlockedThemes.length}/{themes.length} débloqués
+            {unlockedThemes.length}/{isPremium ? themes.length : Math.min(4, themes.length)} disponibles
           </Badge>
         </div>
 
         <p className="text-gray-600 text-sm mb-6">
-          Mini-parcours thématiques de 3 jours pour approfondir des aspects spécifiques
+          Parcours spécialisés qui se débloquent au fil de ton évolution
         </p>
 
         <div className="grid gap-4">
           {themes.map((theme) => {
             const isUnlocked = unlockedThemes.includes(theme.id);
-            const canUnlock = isPremium || unlockedThemes.length < freeThemesThisMonth;
+            const isCompleted = completedThemes.includes(theme.id);
+            const canAccess = isPremium || themes.indexOf(theme) < 4; // 4 premiers gratuits
+            const daysUntilUnlock = Math.max(0, theme.unlockDay - daysElapsed);
 
             return (
               <div
                 key={theme.id}
                 className={`relative p-4 rounded-xl border-2 transition-all ${
-                  isUnlocked 
+                  isCompleted
+                    ? 'border-green-200 bg-green-50/50'
+                    : isUnlocked 
                     ? 'border-emerald-200 bg-white/80' 
                     : 'border-gray-200 bg-gray-50/50'
                 }`}
@@ -121,34 +172,52 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
                     <div className="flex-1">
                       <h4 className="font-medium text-gray-800 mb-1">{theme.title}</h4>
                       <p className="text-sm text-gray-600 mb-2">{theme.description}</p>
-                      <Badge variant="outline" className="text-xs">
-                        {theme.duration} jours
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">
+                          {theme.duration} jours
+                        </Badge>
+                        {!isUnlocked && daysUntilUnlock > 0 && (
+                          <Badge variant="outline" className="text-xs border-orange-300 text-orange-600">
+                            <Clock className="w-3 h-3 mr-1" />
+                            Dans {daysUntilUnlock}j
+                          </Badge>
+                        )}
+                        {isCompleted && (
+                          <Badge className="text-xs bg-green-100 text-green-700">
+                            ✓ Complété
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
 
                   <div className="ml-3">
-                    {isUnlocked ? (
+                    {isCompleted ? (
                       <Button
-                        onClick={() => setSelectedTheme(theme.id)}
+                        size="sm"
+                        variant="outline"
+                        className="border-green-300 text-green-600"
+                        disabled
+                      >
+                        Terminé
+                      </Button>
+                    ) : isUnlocked && canAccess ? (
+                      <Button
+                        onClick={() => startTheme(theme.id)}
                         size="sm"
                         className="bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-500 hover:to-teal-500 text-white"
                       >
                         Commencer
                       </Button>
-                    ) : canUnlock ? (
-                      <Button
-                        onClick={() => unlockTheme(theme.id)}
-                        size="sm"
-                        variant="outline"
-                        className="border-emerald-300 text-emerald-600 hover:bg-emerald-50"
-                      >
-                        Débloquer
-                      </Button>
-                    ) : (
+                    ) : !canAccess ? (
                       <div className="flex flex-col items-center">
                         <Lock className="w-4 h-4 text-gray-400 mb-1" />
                         <span className="text-xs text-gray-400">Premium</span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center">
+                        <Lock className="w-4 h-4 text-gray-400 mb-1" />
+                        <span className="text-xs text-gray-400">Bientôt</span>
                       </div>
                     )}
                   </div>
@@ -158,11 +227,20 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
           })}
         </div>
 
+        {nextUnlockDays && (
+          <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-xs text-blue-700">
+              <Clock className="w-3 h-3 inline mr-1" />
+              Prochain déblocage dans {nextUnlockDays} jour{nextUnlockDays > 1 ? 's' : ''}
+            </p>
+          </div>
+        )}
+
         {!isPremium && (
           <div className="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
             <p className="text-xs text-yellow-700">
               <Lock className="w-3 h-3 inline mr-1" />
-              Version gratuite : 1 exploration par mois. Premium : accès illimité.
+              Version gratuite : 4 explorations. Premium : accès complet + contenus avancés.
             </p>
           </div>
         )}
@@ -175,14 +253,23 @@ const ThematicExplorations = ({ profile, daysElapsed, isPremium }: ThematicExplo
             <p className="text-sm text-emerald-700 mb-3">
               Ce parcours sera disponible dans une prochaine mise à jour 🌟
             </p>
-            <Button
-              onClick={() => setSelectedTheme(null)}
-              size="sm"
-              variant="outline"
-              className="border-emerald-300 text-emerald-600"
-            >
-              Retour
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setSelectedTheme(null)}
+                size="sm"
+                variant="outline"
+                className="border-emerald-300 text-emerald-600"
+              >
+                Retour
+              </Button>
+              <Button
+                onClick={() => completeTheme(selectedTheme)}
+                size="sm"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+              >
+                Marquer comme complété (test)
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, TrendingUp, Lock } from "lucide-react";
+import { Calendar, TrendingUp, Lock, BarChart3 } from "lucide-react";
 
 interface MonthlyCheckinProps {
   profile: string;
@@ -25,6 +25,7 @@ const MonthlyCheckin = ({ profile, isPremium }: MonthlyCheckinProps) => {
   const [showCheckin, setShowCheckin] = useState(false);
   const [responses, setResponses] = useState(['', '', '', '', '']);
   const [sliders, setSliders] = useState({ fatigue: 3, stress: 3, confiance: 3 });
+  const [daysElapsed, setDaysElapsed] = useState(0);
 
   const questions = [
     "Qu'est-ce qui a changé ce mois-ci dans ta vie ?",
@@ -37,8 +38,10 @@ const MonthlyCheckin = ({ profile, isPremium }: MonthlyCheckinProps) => {
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
     if (trialStart) {
-      const monthsPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24 * 30));
-      setCurrentMonth(Math.max(1, monthsPassed));
+      const daysPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24));
+      setDaysElapsed(daysPassed);
+      const monthsPassed = Math.floor(daysPassed / 30);
+      setCurrentMonth(Math.max(1, monthsPassed + 1));
     }
 
     const saved = localStorage.getItem('monthlyCheckins');
@@ -64,6 +67,27 @@ const MonthlyCheckin = ({ profile, isPremium }: MonthlyCheckinProps) => {
   };
 
   const thisMonthData = checkinData.find(c => c.month === currentMonth);
+  const shouldShowCheckin = daysElapsed >= 20; // Se débloque après 20 jours
+  const daysUntilUnlock = Math.max(0, 20 - daysElapsed);
+
+  if (!shouldShowCheckin) {
+    return (
+      <Card className="shadow-lg border-0 bg-gradient-to-br from-blue-50 to-purple-50 backdrop-blur-sm">
+        <CardContent className="p-6 text-center">
+          <Calendar className="w-12 h-12 text-blue-400 mx-auto mb-4" />
+          <h3 className="font-semibold text-lg text-gray-800 mb-2">
+            Check-ins mensuels
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Se débloque dans {daysUntilUnlock} jour{daysUntilUnlock > 1 ? 's' : ''}
+          </p>
+          <Badge variant="outline" className="border-blue-400 text-blue-700">
+            Jour {daysElapsed}/20
+          </Badge>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="shadow-lg border-0 bg-gradient-to-br from-blue-50 to-purple-50 backdrop-blur-sm">
@@ -71,7 +95,7 @@ const MonthlyCheckin = ({ profile, isPremium }: MonthlyCheckinProps) => {
         <div className="flex justify-between items-start mb-4">
           <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
             <Calendar className="w-5 h-5 text-blue-600" />
-            Rendez-vous mensuel
+            Check-in mensuel
           </h3>
           <Badge variant="outline" className="border-blue-400 text-blue-700">
             Mois {currentMonth}
@@ -88,10 +112,10 @@ const MonthlyCheckin = ({ profile, isPremium }: MonthlyCheckinProps) => {
           <div className="text-center py-6">
             <div className="text-3xl mb-4">📋</div>
             <h4 className="font-medium text-gray-800 mb-3">
-              C'est l'heure de ton point d'étape
+              Temps de faire le point !
             </h4>
             <p className="text-gray-600 mb-4 text-sm">
-              5 questions pour faire le bilan de ce mois
+              5 questions pour évaluer ton évolution ce mois-ci
             </p>
             <Button
               onClick={() => setShowCheckin(true)}
@@ -182,17 +206,41 @@ const MonthlyCheckin = ({ profile, isPremium }: MonthlyCheckinProps) => {
               </div>
             </div>
 
-            <Button
-              onClick={() => setShowCheckin(true)}
-              variant="outline"
-              size="sm"
-              className="w-full"
-              disabled={!isPremium}
-            >
-              Modifier mes réponses
-            </Button>
+            {/* Évolution sur plusieurs mois */}
+            {checkinData.length > 1 && (
+              <Card className="bg-white/50 border-0">
+                <CardContent className="p-3">
+                  <h4 className="text-sm font-medium mb-2 flex items-center gap-1">
+                    <BarChart3 className="w-4 h-4" />
+                    Évolution
+                  </h4>
+                  <div className="text-xs text-gray-600">
+                    {checkinData.length} bilan{checkinData.length > 1 ? 's' : ''} complété{checkinData.length > 1 ? 's' : ''}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setShowCheckin(true)}
+                variant="outline"
+                size="sm"
+                className="flex-1"
+                disabled={!isPremium}
+              >
+                Modifier mes réponses
+              </Button>
+            </div>
           </div>
         ) : null}
+
+        {/* Indicateur du prochain check-in */}
+        <div className="mt-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+          <p className="text-xs text-gray-700">
+            💡 Un nouveau check-in sera disponible chaque mois pour suivre ton évolution
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
