@@ -48,10 +48,10 @@ const profileData = {
     icon: "🌀",
     message: "La confusion est souvent le signe que tu es en train de grandir. Dans le brouillard, chaque petit pas compte pour retrouver ton chemin."
   },
-  "Solitude / isolement affectif": {
+  "Solitude / déconnexion": {
     description: "Tu te sens seul(e) même entouré(e), comme si personne ne pouvait vraiment te comprendre. Cette solitude révèle ton besoin profond de connexion authentique.",
     strengths: ["Capacité d'introspection", "Indépendance", "Authenticité", "Recherche de profondeur"],
-    challenges: ["Sentiment d'isolement", "Difficulté à créer des liens", "Peur de l'abandon"],
+    challenges: ["Sentiment de déconnexion", "Difficulté à créer des liens", "Peur de l'abandon"],
     color: "from-gray-200 to-blue-200",
     icon: "🫂",
     message: "Ta solitude n'est pas une condamnation, c'est un appel à créer des liens plus vrais. Tu n'es pas seul(e), même si tu ne le sens pas encore."

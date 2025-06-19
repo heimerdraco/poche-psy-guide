@@ -24,7 +24,7 @@ const questions: Question[] = [
       { value: "sad", label: "Triste, vide à l'intérieur", points: { tristesse: 3 } },
       { value: "low_esteem", label: "Pas assez bien, estime cassée", points: { estime: 3 } },
       { value: "confused", label: "Perdu(e), confus(e)", points: { confusion: 3 } },
-      { value: "lonely", label: "Seul(e), isolé(e)", points: { solitude: 3 } },
+      { value: "lonely", label: "Seul(e), déconnecté(e)", points: { solitude: 3 } },
       { value: "traumatized", label: "Marqué(e) par un événement", points: { trauma: 3 } }
     ]
   },
@@ -37,7 +37,7 @@ const questions: Question[] = [
       { value: "responsibilities", label: "Tout ce que je dois faire demain", points: { epuisement: 2, anxiete: 1 } },
       { value: "sadness", label: "Une tristesse profonde", points: { tristesse: 3 } },
       { value: "self_doubt", label: "Mes doutes sur moi-même", points: { estime: 2, confusion: 1 } },
-      { value: "loneliness", label: "Le sentiment de solitude", points: { solitude: 3 } },
+      { value: "loneliness", label: "Le sentiment de déconnexion", points: { solitude: 3 } },
       { value: "memories", label: "Des souvenirs douloureux", points: { trauma: 3 } }
     ]
   },
@@ -70,7 +70,7 @@ const questions: Question[] = [
       { value: "joy", label: "Retrouver la joie de vivre", points: { tristesse: 2 } },
       { value: "confidence", label: "Croire en moi à nouveau", points: { estime: 2 } },
       { value: "clarity", label: "Y voir plus clair", points: { confusion: 2 } },
-      { value: "connection", label: "Me sentir moins seul(e)", points: { solitude: 2 } },
+      { value: "connection", label: "Me sentir moins déconnecté(e)", points: { solitude: 2 } },
       { value: "healing", label: "Guérir de mes blessures", points: { trauma: 2 } }
     ]
   },
@@ -89,7 +89,7 @@ const questions: Question[] = [
       { value: "give_up", label: "J'abandonne facilement", points: { tristesse: 2, estime: 1 } },
       { value: "self_blame", label: "Je me blâme", points: { estime: 2 } },
       { value: "paralyzed", label: "Je ne sais plus quoi faire", points: { confusion: 2 } },
-      { value: "withdraw", label: "Je m'isole", points: { solitude: 2 } },
+      { value: "withdraw", label: "Je me déconnecte", points: { solitude: 2 } },
       { value: "triggered", label: "Ça réveille des douleurs", points: { trauma: 2 } }
     ]
   },
@@ -103,7 +103,7 @@ const questions: Question[] = [
       { value: "happiness", label: "Ressentir du bonheur", points: { tristesse: 3 } },
       { value: "self_love", label: "M'aimer comme je suis", points: { estime: 3 } },
       { value: "direction", label: "Savoir où je vais", points: { confusion: 3 } },
-      { value: "belonging", label: "Appartenir quelque part", points: { solitude: 3 } },
+      { value: "belonging", label: "Me sentir connecté(e)", points: { solitude: 3 } },
       { value: "peace", label: "Faire la paix avec mon passé", points: { trauma: 3 } }
     ]
   },
@@ -174,7 +174,7 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
       "Tristesse / vide": 'tristesse',
       "Estime cassée": 'estime',
       "Confusion intérieure": 'confusion',
-      "Solitude / isolement affectif": 'solitude',
+      "Solitude / déconnexion": 'solitude',
       "Trauma / événement marquant": 'trauma'
     };
 
