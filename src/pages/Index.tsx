@@ -22,16 +22,18 @@ import DailyMoodWidget from "@/components/DailyMoodWidget";
 import ActivityCompletionCelebration from "@/components/ActivityCompletionCelebration";
 import Mascot from "@/components/Mascot";
 import EnhancedButton from "@/components/EnhancedButton";
+import DisclaimerModal from "@/components/DisclaimerModal";
 
 const Index = () => {
   const navigate = useNavigate();
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [userProfile, setUserProfile] = useState<string | null>(localStorage.getItem('arboriaProfile'));
   const [showSubscription, setShowSubscription] = useState(false);
   const [trialDays, setTrialDays] = useState(3);
   const [currentSection, setCurrentSection] = useState('home');
   const [isTrialExpired, setIsTrialExpired] = useState(false);
-  const [showSplash, setShowSplash] = useState(!userProfile); // Show splash for new users
+  const [showSplash, setShowSplash] = useState(!userProfile);
   const [currentPhase, setCurrentPhase] = useState<'calm' | 'hopeful' | 'warm'>('calm');
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedActivity, setCompletedActivity] = useState('');
@@ -84,6 +86,22 @@ const Index = () => {
 
   const handleUpgrade = () => {
     setShowSubscription(true);
+  };
+
+  const handleStartQuestionnaire = () => {
+    // Vérifier si le disclaimer a été accepté
+    const disclaimerAccepted = localStorage.getItem('arboriaDisclaimerAccepted');
+    
+    if (!disclaimerAccepted) {
+      setShowDisclaimer(true);
+    } else {
+      setShowQuestionnaire(true);
+    }
+  };
+
+  const handleDisclaimerAccepted = () => {
+    setShowDisclaimer(false);
+    setShowQuestionnaire(true);
   };
 
   // Show splash screen for new users
@@ -171,7 +189,7 @@ const Index = () => {
             </div>
 
             <EnhancedButton 
-              onClick={() => setShowQuestionnaire(true)}
+              onClick={handleStartQuestionnaire}
               size="lg"
               soundType="success"
               animationType="glow"
@@ -182,6 +200,11 @@ const Index = () => {
             </EnhancedButton>
           </div>
         </div>
+
+        <DisclaimerModal 
+          isOpen={showDisclaimer}
+          onAccept={handleDisclaimerAccepted}
+        />
 
         <QuestionnaireModal 
           isOpen={showQuestionnaire}
