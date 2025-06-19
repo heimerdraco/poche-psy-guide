@@ -248,7 +248,7 @@ const Index = () => {
           </div>
         )}
 
-        {currentSection === 'profile' && <ProfileDisplay profile={userProfile} />}
+        {currentSection === 'profile' && <ProfileDisplay onOpenQuestionnaire={() => setShowQuestionnaire(true)} />}
         {currentSection === 'journal' && <JournalingSection />}
         {currentSection === 'messages' && <MessagesSection />}
 

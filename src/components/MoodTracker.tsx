@@ -104,8 +104,8 @@ const MoodTracker = () => {
     
     return {
       total: lastWeek.length,
-      dominant: dominantMood[0],
-      count: dominantMood[1]
+      dominant: dominantMood[0] as string,
+      count: dominantMood[1] as number
     };
   };
 
