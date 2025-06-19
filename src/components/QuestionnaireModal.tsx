@@ -217,7 +217,7 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
         refoule: 'Le Refoulé Rieur'
       };
       
-      const full ProfileName = profileMapping[dominantProfile as keyof typeof profileMapping];
+      const fullProfileName = profileMapping[dominantProfile as keyof typeof profileMapping];
       
       // Save profile to Supabase and localStorage
       await supabaseService.saveUser(fullProfileName, new Date().toISOString());
