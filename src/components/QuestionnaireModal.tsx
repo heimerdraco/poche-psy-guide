@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
+import { supabaseService } from "@/lib/supabase";
 
 interface Question {
   id: number;
@@ -139,7 +139,7 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
     trauma: 0
   });
 
-  const handleMultipleAnswer = (questionId: number, optionValue: string) => {
+  const handleMultipleAnswer = async (questionId: number, optionValue: string) => {
     const question = questions.find(q => q.id === questionId);
     const option = question?.options?.find(opt => opt.value === optionValue);
     
@@ -152,11 +152,19 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
         newScores[trait] = (newScores[trait] || 0) + points;
       });
       setScores(newScores);
+
+      // Sauvegarder la réponse dans Supabase
+      await supabaseService.saveQuestionnaireAnswer(questionId, optionValue, option.points);
     }
   };
 
-  const handleOpenAnswer = (questionId: number, value: string) => {
+  const handleOpenAnswer = async (questionId: number, value: string) => {
     setOpenAnswers({ ...openAnswers, [questionId]: value });
+    
+    // Sauvegarder la réponse ouverte dans Supabase
+    if (value.trim()) {
+      await supabaseService.saveQuestionnaireAnswer(questionId, value, {});
+    }
   };
 
   const handleNext = () => {
@@ -167,7 +175,7 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
     }
   };
 
-  const calculateProfile = () => {
+  const calculateProfile = async () => {
     const profiles = {
       "Épuisement mental": 'epuisement',
       "Anxiété / blocage": 'anxiete',
@@ -189,8 +197,13 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
       }
     });
 
-    // Sauvegarder les réponses
+    // Sauvegarder les réponses locales
     localStorage.setItem('questionnaireAnswers', JSON.stringify({ answers, openAnswers }));
+    
+    // Sauvegarder l'utilisateur dans Supabase
+    const trialStart = Date.now().toString();
+    await supabaseService.saveUser(dominantProfile, trialStart);
+    
     onComplete(dominantProfile);
   };
 

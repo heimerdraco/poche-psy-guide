@@ -1,11 +1,12 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings, RefreshCw, User, Calendar, Database, Unlock } from "lucide-react";
+import SupabaseTest from "./SupabaseTest";
 
 interface DeveloperModeProps {
   isActive: boolean;
@@ -65,7 +66,7 @@ const DeveloperMode = ({ isActive, onToggle, onProfileSelect, currentProfile }: 
               <Settings className="w-4 h-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Settings className="w-5 h-5" />
@@ -73,97 +74,108 @@ const DeveloperMode = ({ isActive, onToggle, onProfileSelect, currentProfile }: 
               </DialogTitle>
             </DialogHeader>
             
-            <div className="space-y-6">
-              {/* Profile Selection */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    Sélection du profil
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="grid gap-2">
-                    {profiles.map(profile => (
-                      <Button
-                        key={profile.id}
-                        onClick={() => {
-                          onProfileSelect(profile.id);
-                          setShowModal(false);
-                        }}
-                        variant={currentProfile === profile.id ? "default" : "outline"}
-                        className="justify-start text-sm h-8"
-                      >
-                        {profile.name}
-                      </Button>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+            <Tabs defaultValue="controls" className="space-y-4">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="controls">Contrôles</TabsTrigger>
+                <TabsTrigger value="supabase">Supabase Test</TabsTrigger>
+              </TabsList>
 
-              {/* Actions */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Unlock className="w-4 h-4" />
-                    Actions de développement
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button
-                    onClick={enableUnlimitedAccess}
-                    className="w-full bg-green-500 hover:bg-green-600 text-white text-sm h-8"
-                  >
-                    🔓 Débloquer accès illimité
-                  </Button>
-                  
-                  <Button
-                    onClick={clearLocalStorage}
-                    variant="destructive"
-                    className="w-full text-sm h-8"
-                  >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Réinitialiser données
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Stored Data Display */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Database className="w-4 h-4" />
-                    Données stockées
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {Object.entries(storedData).map(([key, value]) => (
-                    <div key={key} className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-gray-600">{key}:</span>
-                        <Badge variant="outline" className="text-xs">
-                          {value ? '✓' : '✗'}
-                        </Badge>
-                      </div>
-                      {value && (
-                        <div className="text-xs bg-gray-50 p-2 rounded border break-all">
-                          {typeof value === 'string' && value.length > 50 
-                            ? value.substring(0, 50) + '...'
-                            : value
-                          }
-                        </div>
-                      )}
-                      <Separator />
+              <TabsContent value="controls" className="space-y-6">
+                {/* Profile Selection */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      Sélection du profil
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="grid gap-2">
+                      {profiles.map(profile => (
+                        <Button
+                          key={profile.id}
+                          onClick={() => {
+                            onProfileSelect(profile.id);
+                            setShowModal(false);
+                          }}
+                          variant={currentProfile === profile.id ? "default" : "outline"}
+                          className="justify-start text-sm h-8"
+                        >
+                          {profile.name}
+                        </Button>
+                      ))}
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
 
-              {/* Status */}
-              <div className="flex items-center justify-between pt-2 border-t">
-                <span className="text-sm text-gray-600">Mode développeur</span>
-                <Badge className="bg-red-100 text-red-800">Actif ⚙️</Badge>
-              </div>
+                {/* Actions */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Unlock className="w-4 h-4" />
+                      Actions de développement
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button
+                      onClick={enableUnlimitedAccess}
+                      className="w-full bg-green-500 hover:bg-green-600 text-white text-sm h-8"
+                    >
+                      🔓 Débloquer accès illimité
+                    </Button>
+                    
+                    <Button
+                      onClick={clearLocalStorage}
+                      variant="destructive"
+                      className="w-full text-sm h-8"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Réinitialiser données
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Stored Data Display */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Database className="w-4 h-4" />
+                      Données stockées localement
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {Object.entries(storedData).map(([key, value]) => (
+                      <div key={key} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-gray-600">{key}:</span>
+                          <Badge variant="outline" className="text-xs">
+                            {value ? '✓' : '✗'}
+                          </Badge>
+                        </div>
+                        {value && (
+                          <div className="text-xs bg-gray-50 p-2 rounded border break-all">
+                            {typeof value === 'string' && value.length > 50 
+                              ? value.substring(0, 50) + '...'
+                              : value
+                            }
+                          </div>
+                        )}
+                        <Separator />
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="supabase">
+                <SupabaseTest />
+              </TabsContent>
+            </Tabs>
+
+            {/* Status */}
+            <div className="flex items-center justify-between pt-2 border-t">
+              <span className="text-sm text-gray-600">Mode développeur</span>
+              <Badge className="bg-red-100 text-red-800">Actif ⚙️</Badge>
             </div>
           </DialogContent>
         </Dialog>
