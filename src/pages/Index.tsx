@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,10 @@ import DailyQuote from "@/components/DailyQuote";
 import MoodTracker from "@/components/MoodTracker";
 import QuickThought from "@/components/QuickThought";
 import ContinuedJourney from "@/components/ContinuedJourney";
+import SplashScreen from "@/components/SplashScreen";
+import AnimatedBackground from "@/components/AnimatedBackground";
+import Mascot from "@/components/Mascot";
+import EnhancedButton from "@/components/EnhancedButton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -25,6 +30,8 @@ const Index = () => {
   const [trialDays, setTrialDays] = useState(3);
   const [currentSection, setCurrentSection] = useState('home');
   const [isTrialExpired, setIsTrialExpired] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const [currentPhase, setCurrentPhase] = useState<'calm' | 'hopeful' | 'warm'>('calm');
 
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
@@ -34,6 +41,11 @@ const Index = () => {
       const remainingDays = Math.max(0, 3 - daysPassed);
       setTrialDays(remainingDays);
       setIsTrialExpired(remainingDays === 0);
+      
+      // Déterminer la phase émotionnelle selon les jours
+      if (daysPassed <= 1) setCurrentPhase('calm');
+      else if (daysPassed <= 2) setCurrentPhase('hopeful');
+      else setCurrentPhase('warm');
     } else if (userProfile) {
       localStorage.setItem('trialStart', Date.now().toString());
       setTrialDays(3);
@@ -67,6 +79,11 @@ const Index = () => {
     setShowSubscription(true);
   };
 
+  // Afficher l'écran de démarrage au premier lancement
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
   // Show trial expired screen if trial is over
   if (isTrialExpired) {
     return <TrialExpiredScreen onUpgrade={handleUpgrade} />;
@@ -84,13 +101,14 @@ const Index = () => {
 
   if (!userProfile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50" style={{
-        background: 'linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fdf2f8 100%)'
-      }}>
-        <div className="container mx-auto px-4 py-8 max-w-md">
-          <div className="text-center mb-12">
+      <div className="min-h-screen relative">
+        <AnimatedBackground phase={currentPhase} intensity="subtle" />
+        <Mascot phase={currentPhase} />
+        
+        <div className="container mx-auto px-4 py-8 max-w-md relative z-10">
+          <div className="text-center mb-12 animate-slide-in-gentle">
             <div className="inline-flex items-center gap-2 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center animate-pulse-gentle">
                 <Heart className="w-6 h-6 text-purple-600" />
               </div>
               <h1 className="text-3xl font-bold text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
@@ -98,15 +116,15 @@ const Index = () => {
               </h1>
             </div>
             
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
               Ton mini-psychologue personnel. Un espace doux pour prendre soin de tes émotions 🌸
             </p>
             
-            <Card className="mb-8 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+            <Card className="mb-8 shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
               <CardContent className="p-8">
                 <div className="space-y-6">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float">
                       <User className="w-8 h-8 text-purple-600" />
                     </div>
                     <h3 className="font-semibold text-xl mb-2 text-gray-800">Découvre ton profil émotionnel</h3>
@@ -114,7 +132,7 @@ const Index = () => {
                   </div>
                   
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '1s' }}>
                       <Book className="w-8 h-8 text-blue-600" />
                     </div>
                     <h3 className="font-semibold text-xl mb-2 text-gray-800">Parcours personnalisé</h3>
@@ -122,7 +140,7 @@ const Index = () => {
                   </div>
                   
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '2s' }}>
                       <MessageCircle className="w-8 h-8 text-pink-600" />
                     </div>
                     <h3 className="font-semibold text-xl mb-2 text-gray-800">Messages bienveillants</h3>
@@ -133,19 +151,21 @@ const Index = () => {
             </Card>
 
             <div className="mb-8">
-              <Badge variant="secondary" className="text-base px-6 py-3 bg-gradient-to-r from-green-100 to-blue-100 text-gray-700 border-0">
+              <Badge variant="secondary" className="text-base px-6 py-3 bg-gradient-to-r from-green-100 to-blue-100 text-gray-700 border-0 animate-pulse-gentle">
                 ✨ 3 jours gratuits puis 3,99€/mois
               </Badge>
             </div>
 
-            <Button 
+            <EnhancedButton 
               onClick={() => setShowQuestionnaire(true)}
               size="lg"
+              soundType="success"
+              animationType="glow"
               className="w-full bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl border-0"
               style={{ fontFamily: 'Nunito, sans-serif' }}
             >
               🧠 Commencer mon questionnaire
-            </Button>
+            </EnhancedButton>
           </div>
         </div>
 
@@ -159,13 +179,14 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50" style={{
-      background: 'linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fdf2f8 100%)'
-    }}>
-      <div className="container mx-auto px-4 py-4 max-w-md">
-        <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen relative">
+      <AnimatedBackground phase={currentPhase} intensity="medium" />
+      <Mascot phase={currentPhase} isInteracting={currentSection !== 'home'} />
+      
+      <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
+        <header className="flex justify-between items-center mb-6 animate-slide-in-gentle">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center animate-pulse-gentle">
               <Heart className="w-4 h-4 text-purple-600" />
             </div>
             <h1 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
@@ -174,30 +195,31 @@ const Index = () => {
           </div>
           <div className="flex items-center gap-2">
             {trialDays > 0 ? (
-              <Badge variant="outline" className="border-green-400 text-green-700 bg-green-50">
+              <Badge variant="outline" className="border-green-400 text-green-700 bg-green-50 animate-pulse-gentle">
                 Jour {4 - trialDays}/3 gratuit
               </Badge>
             ) : (
-              <Button 
+              <EnhancedButton 
                 onClick={() => setShowSubscription(true)}
                 size="sm"
+                soundType="calm"
                 className="bg-gradient-to-r from-orange-300 to-pink-300 hover:from-orange-400 hover:to-pink-400 text-gray-800 border-0 rounded-full"
               >
                 💎 Soutien+
-              </Button>
+              </EnhancedButton>
             )}
           </div>
         </header>
 
         {currentSection === 'home' && (
-          <div className="space-y-6">
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <div className="space-y-6 animate-slide-in-gentle">
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
-                  <Calendar className="w-5 h-5 text-purple-600" />
+                  <Calendar className="w-5 h-5 text-purple-600 animate-twinkle" />
                   Message du jour
                 </h2>
-                <blockquote className="text-base text-gray-700 italic leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                <blockquote className="text-base text-gray-700 italic leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
                   {todayQuote}
                 </blockquote>
               </CardContent>
@@ -205,44 +227,56 @@ const Index = () => {
 
             {/* Daily Features */}
             <div className="space-y-4">
-              <DailyQuote />
-              <MoodTracker />
-              <QuickThought />
+              <div className="animate-slide-in-gentle" style={{ animationDelay: '0.2s' }}>
+                <DailyQuote />
+              </div>
+              <div className="animate-slide-in-gentle" style={{ animationDelay: '0.4s' }}>
+                <MoodTracker />
+              </div>
+              <div className="animate-slide-in-gentle" style={{ animationDelay: '0.6s' }}>
+                <QuickThought />
+              </div>
             </div>
 
             <div className="grid gap-4">
-              <Button
+              <EnhancedButton
                 onClick={() => setCurrentSection('journey')}
-                className="w-full bg-gradient-to-r from-blue-300 to-purple-300 hover:from-blue-400 hover:to-purple-400 text-gray-800 py-6 text-lg rounded-2xl border-0 shadow-lg"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
+                soundType="click"
+                animationType="bounce"
+                className="w-full bg-gradient-to-r from-blue-300 to-purple-300 hover:from-blue-400 hover:to-purple-400 text-gray-800 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '0.8s' }}
               >
                 <Book className="w-6 h-6 mr-2" />
                 📚 Explorer mon parcours émotionnel
-              </Button>
+              </EnhancedButton>
               
-              <Button
+              <EnhancedButton
                 onClick={() => setCurrentSection('messages')}
-                className="w-full bg-gradient-to-r from-pink-300 to-purple-300 hover:from-pink-400 hover:to-purple-400 text-gray-800 py-6 text-lg rounded-2xl border-0 shadow-lg"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
+                soundType="calm"
+                animationType="scale"
+                className="w-full bg-gradient-to-r from-pink-300 to-purple-300 hover:from-pink-400 hover:to-purple-400 text-gray-800 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '1s' }}
               >
                 <MessageCircle className="w-6 h-6 mr-2" />
                 💌 Messages bienveillants
-              </Button>
+              </EnhancedButton>
               
-              <Button
+              <EnhancedButton
                 onClick={() => setShowSubscription(true)}
-                className="w-full bg-gradient-to-r from-yellow-300 to-orange-300 hover:from-yellow-400 hover:to-orange-400 text-gray-800 py-6 text-lg rounded-2xl border-0 shadow-lg"
-                style={{ fontFamily: 'Nunito, sans-serif' }}
+                soundType="success"
+                animationType="glow"
+                className="w-full bg-gradient-to-r from-yellow-300 to-orange-300 hover:from-yellow-400 hover:to-orange-400 text-gray-800 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '1.2s' }}
               >
                 <Sparkles className="w-6 h-6 mr-2" />
                 💎 Activer Soutien+
-              </Button>
+              </EnhancedButton>
             </div>
           </div>
         )}
 
         {currentSection === 'journey' && userProfile && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-slide-in-gentle">
             <EmotionalJourney profile={userProfile} trialDays={trialDays} />
             <ContinuedJourney profile={userProfile} trialDays={trialDays} />
           </div>
@@ -253,7 +287,7 @@ const Index = () => {
         {currentSection === 'messages' && <MessagesSection />}
 
         {/* Bottom Navigation */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-purple-100 px-4 py-2">
+        <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-purple-100 px-4 py-2 z-50">
           <div className="flex justify-center max-w-md mx-auto">
             <div className="flex gap-1">
               {[
@@ -263,11 +297,13 @@ const Index = () => {
                 { key: 'journal', label: '📝', icon: Edit },
                 { key: 'settings', label: '⚙️', icon: User, isRoute: true },
               ].map(({ key, label, icon: Icon, isRoute }) => (
-                <Button
+                <EnhancedButton
                   key={key}
                   variant={currentSection === key ? "default" : "ghost"}
                   onClick={() => isRoute ? navigate('/settings') : setCurrentSection(key)}
-                  className={`flex flex-col items-center gap-1 h-12 px-3 rounded-xl ${
+                  soundType="click"
+                  animationType="scale"
+                  className={`flex flex-col items-center gap-1 h-12 px-3 rounded-xl transition-all duration-200 ${
                     currentSection === key 
                       ? 'bg-gradient-to-r from-purple-300 to-pink-300 text-gray-800' 
                       : 'text-gray-600 hover:bg-purple-50'
@@ -275,7 +311,7 @@ const Index = () => {
                   size="sm"
                 >
                   <span className="text-lg">{label}</span>
-                </Button>
+                </EnhancedButton>
               ))}
             </div>
           </div>
