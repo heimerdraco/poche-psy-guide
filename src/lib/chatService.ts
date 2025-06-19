@@ -21,6 +21,21 @@ export const generatePseudonym = (): string => {
   return `${noun} ${adjective}`;
 };
 
+// Fonction pour normaliser le texte et détecter les variantes
+const normalizeText = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replace(/[@€£$%&*]/g, 'a')
+    .replace(/[0]/g, 'o')
+    .replace(/[1]/g, 'i')
+    .replace(/[3]/g, 'e')
+    .replace(/[5]/g, 's')
+    .replace(/[7]/g, 't')
+    .replace(/\*/g, '')
+    .replace(/[^a-z\s]/g, '')
+    .trim();
+};
+
 export const chatService = {
   // Obtenir ou créer un pseudonyme pour l'utilisateur
   async getUserPseudonym(profile: string): Promise<string> {
@@ -88,7 +103,7 @@ export const chatService = {
     }
   },
 
-  // Vérifier si un message contient des mots inappropriés
+  // Vérifier si un message contient des mots inappropriés (version améliorée)
   async moderateMessage(message: string): Promise<{ isAllowed: boolean; reason?: string }> {
     try {
       const { data: keywords, error } = await supabase
@@ -100,13 +115,16 @@ export const chatService = {
         return { isAllowed: true }; // En cas d'erreur, on laisse passer
       }
 
-      const lowerMessage = message.toLowerCase();
+      const normalizedMessage = normalizeText(message);
       
       for (const { keyword, severity } of keywords || []) {
-        if (lowerMessage.includes(keyword.toLowerCase())) {
+        const normalizedKeyword = normalizeText(keyword);
+        
+        // Vérifier si le mot-clé est présent (en tant que mot complet ou partie de mot)
+        if (normalizedMessage.includes(normalizedKeyword)) {
           return { 
             isAllowed: false, 
-            reason: `Contenu inapproprié détecté (${severity})` 
+            reason: `Ce message a été bloqué pour non-respect des règles du chat.` 
           };
         }
       }

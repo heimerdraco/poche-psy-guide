@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { chatService } from "@/lib/chatService";
 import { getProfileData } from "@/lib/profilesData";
 import EnhancedButton from "./EnhancedButton";
+import { useToast } from "@/hooks/use-toast";
 
 interface ChatProps {
   profile: string;
@@ -27,6 +28,7 @@ interface ChatMessage {
 
 const Chat = ({ profile }: ChatProps) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [userPseudonym, setUserPseudonym] = useState("");
@@ -89,6 +91,10 @@ const Chat = ({ profile }: ChatProps) => {
   const handleChangePseudonym = async () => {
     const newPseudonym = await chatService.changePseudonym(profile);
     setUserPseudonym(newPseudonym);
+    toast({
+      title: "Pseudonyme mis à jour",
+      description: `Votre nouveau pseudonyme est : ${newPseudonym}`,
+    });
   };
 
   const handleSendMessage = async () => {
@@ -100,20 +106,12 @@ const Chat = ({ profile }: ChatProps) => {
     const moderation = await chatService.moderateMessage(newMessage);
     
     if (!moderation.isAllowed) {
-      // Afficher un message d'erreur temporaire
-      const tempMessage: ChatMessage = {
-        id: 'temp-error',
-        pseudonym: 'Système',
-        message: '⚠️ Ce message a été bloqué pour non-respect des règles.',
-        created_at: new Date().toISOString(),
-        device_id: 'system',
-        is_moderated: true
-      };
-      
-      setMessages(prev => [...prev, tempMessage]);
-      setTimeout(() => {
-        setMessages(prev => prev.filter(msg => msg.id !== 'temp-error'));
-      }, 3000);
+      // Afficher un toast d'erreur au lieu d'un message temporaire
+      toast({
+        title: "⚠️ Message bloqué",
+        description: "Ce message a été bloqué pour non-respect des règles du chat.",
+        variant: "destructive",
+      });
       
       setNewMessage("");
       setSending(false);
@@ -125,6 +123,16 @@ const Chat = ({ profile }: ChatProps) => {
     
     if (success) {
       setNewMessage("");
+      toast({
+        title: "Message envoyé",
+        description: "Votre message a été publié avec succès.",
+      });
+    } else {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'envoyer le message. Veuillez réessayer.",
+        variant: "destructive",
+      });
     }
     
     setSending(false);
@@ -155,10 +163,10 @@ const Chat = ({ profile }: ChatProps) => {
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
               <MessageCircle className="w-6 h-6" />
-              Discussion {profileData.name}
+              Chat Thérapeutique {profileData.name}
             </h1>
             <p className="text-sm text-gray-600 mt-1">
-              Espace bienveillant pour échanger avec d'autres personnes partageant votre profil
+              Espace bienveillant et sécurisé pour échanger avec d'autres personnes partageant votre profil
             </p>
           </div>
           <Badge className={`bg-gradient-to-r ${profileData.color} text-white`}>
@@ -175,6 +183,9 @@ const Chat = ({ profile }: ChatProps) => {
                 <p className="text-sm text-gray-600 mb-1">Vous participez en tant que :</p>
                 <p className="font-bold text-emerald-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
                   {userPseudonym || 'Chargement...'}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  🔒 Votre identité reste anonyme et protégée
                 </p>
               </div>
               <EnhancedButton
@@ -198,6 +209,9 @@ const Chat = ({ profile }: ChatProps) => {
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg flex items-center gap-2">
                 💬 Discussion en cours
+                <Badge variant="outline" className="text-xs">
+                  Modération active
+                </Badge>
               </CardTitle>
               <Button
                 onClick={loadMessages}
@@ -224,6 +238,11 @@ const Chat = ({ profile }: ChatProps) => {
                   <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                   <p className="text-lg font-semibold mb-2">Aucune discussion pour le moment</p>
                   <p className="text-sm">Soyez le premier à partager un message bienveillant !</p>
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-xs text-blue-700">
+                      🛡️ Cet espace est protégé par une modération automatique pour garantir des échanges respectueux
+                    </p>
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-4 py-4">
@@ -294,9 +313,14 @@ const Chat = ({ profile }: ChatProps) => {
                   <Send className="w-4 h-4" />
                 </EnhancedButton>
               </div>
-              <p className="text-xs text-gray-500 mt-2">
-                💝 Partagez avec bienveillance et respect • {newMessage.length}/500 caractères
-              </p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-xs text-gray-500">
+                  💝 Partagez avec bienveillance et respect • {newMessage.length}/500 caractères
+                </p>
+                <p className="text-xs text-emerald-600">
+                  🛡️ Messages protégés par modération automatique
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
