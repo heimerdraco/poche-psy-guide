@@ -36,6 +36,18 @@ const normalizeText = (text: string): string => {
     .trim();
 };
 
+// Expressions régulières pour la modération avancée
+const ADVANCED_MODERATION_PATTERNS = {
+  // URLs et liens web
+  url: /(?:https?:\/\/|www\.|[a-zA-Z0-9-]+\.(?:com|fr|org|net|eu|co|info|biz|me|io|app|dev|tech|online))/gi,
+  
+  // Adresses email
+  email: /@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/gi,
+  
+  // Numéros de téléphone français et internationaux
+  phone: /(?:\+33|0[1-9])(?:[-.\s]?\d{2}){4}|(?:\+\d{1,3}[-.\s]?)?\d{8,15}/gi
+};
+
 export const chatService = {
   // Obtenir ou créer un pseudonyme pour l'utilisateur
   async getUserPseudonym(profile: string): Promise<string> {
@@ -103,9 +115,20 @@ export const chatService = {
     }
   },
 
-  // Vérifier si un message contient des mots inappropriés (version améliorée)
+  // Modération avancée avec détection de liens, emails et téléphones
   async moderateMessage(message: string): Promise<{ isAllowed: boolean; reason?: string }> {
     try {
+      // Vérifier les patterns avancés (liens, emails, téléphones)
+      for (const [type, pattern] of Object.entries(ADVANCED_MODERATION_PATTERNS)) {
+        if (pattern.test(message)) {
+          return { 
+            isAllowed: false, 
+            reason: `Ce message contient un contenu interdit (${type === 'url' ? 'lien' : type === 'email' ? 'email' : 'numéro'}).` 
+          };
+        }
+      }
+
+      // Vérifier les mots-clés dans la base de données
       const { data: keywords, error } = await supabase
         .from('moderation_keywords')
         .select('keyword, severity');

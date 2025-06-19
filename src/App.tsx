@@ -21,7 +21,12 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="/chat/:profile" element={
             <div className="min-h-screen">
-              <Chat profile={window.location.pathname.split('/')[2]} />
+              <Chat profile={decodeURIComponent(window.location.pathname.split('/')[2])} />
+            </div>
+          } />
+          <Route path="/chat" element={
+            <div className="min-h-screen">
+              <Chat profile={localStorage.getItem('userProfile') || 'Le Sensible Silencieux'} />
             </div>
           } />
         </Routes>
