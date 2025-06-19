@@ -23,63 +23,123 @@ interface Question {
 
 const questions: Question[] = [
   {
-    question: "Face à une situation stressante, comment réagissez-vous ?",
+    question: "Quand tu ressens une émotion forte, qu'est-ce que tu fais en général ?",
     options: [
-      { text: "Je deviens très anxieux(se) et anticipe le pire.", points: { 'anxieux': 3 } },
-      { text: "Je me sens épuisé(e) et n'ai plus d'énergie pour réagir.", points: { 'fatigue': 3 } },
-      { text: "Je me sens perdu(e) et désorienté(e).", points: { 'deracine': 3 } },
-      { text: "J'essaie de tout contrôler pour éviter l'imprévu.", points: { 'controlant': 3 } },
-      { text: "Je suis submergé(e) par mes émotions.", points: { 'hypersensible': 3 } },
-      { text: "Je garde tout pour moi et évite d'en parler.", points: { 'refoule': 3 } },
-      { text: "J'accumule la frustration jusqu'à exploser.", points: { 'volcan': 3 } }
+      { text: "Je l'analyse dans tous les sens et j'anticipe le pire", points: { 'anxieux': 3 } },
+      { text: "Je me sens vidé(e) et j'ai du mal à réagir", points: { 'fatigue': 3 } },
+      { text: "Je me sens perdu(e) et désorienté(e)", points: { 'deracine': 3 } },
+      { text: "J'essaie de la contrôler et de rester maître de moi", points: { 'controlant': 3 } },
+      { text: "Elle me submerge complètement", points: { 'hypersensible': 3 } },
+      { text: "Je la refoule et fais comme si de rien n'était", points: { 'refoule': 3 } },
+      { text: "Elle s'accumule jusqu'à ce que j'explose", points: { 'volcan': 3 } }
     ]
   },
   {
-    question: "Quelle est votre plus grande difficulté au quotidien ?",
+    question: "As-tu parfois du mal à identifier ce que tu ressens ?",
     options: [
-      { text: "Les pensées négatives qui tournent en boucle.", points: { 'anxieux': 3 } },
-      { text: "Le manque d'énergie chronique.", points: { 'fatigue': 3 } },
-      { text: "Le sentiment d'isolement et de solitude.", points: { 'deracine': 3 } },
-      { text: "L'incapacité à lâcher prise.", points: { 'controlant': 3 } },
-      { text: "La difficulté à gérer mes émotions intenses.", points: { 'hypersensible': 3 } },
-      { text: "L'impossibilité d'exprimer ce que je ressens.", points: { 'refoule': 3 } },
-      { text: "Les colères soudaines et imprévisibles.", points: { 'volcan': 3 } }
+      { text: "Non, mais je ressasse tout le temps mes émotions", points: { 'anxieux': 2 } },
+      { text: "Oui, je me sens souvent engourdi(e) émotionnellement", points: { 'fatigue': 3, 'refoule': 2 } },
+      { text: "Oui, c'est comme si j'étais déconnecté(e) de moi", points: { 'deracine': 3, 'refoule': 2 } },
+      { text: "Je préfère me concentrer sur les faits plutôt que les émotions", points: { 'controlant': 3 } },
+      { text: "Au contraire, je ressens tout très intensément", points: { 'hypersensible': 3 } },
+      { text: "J'ai appris à ne pas trop écouter mes émotions", points: { 'refoule': 3 } },
+      { text: "Ça explose d'un coup sans que je comprenne pourquoi", points: { 'volcan': 3 } }
     ]
   },
   {
-    question: "Comment vous comportez-vous en société ?",
+    question: "T'arrive-t-il de ruminer longtemps sur des événements ?",
     options: [
-      { text: "J'évite les situations sociales par peur du jugement.", points: { 'anxieux': 3 } },
-      { text: "Je participe peu car je n'ai pas l'énergie.", points: { 'fatigue': 3 } },
-      { text: "Je me sens souvent à l'écart du groupe.", points: { 'deracine': 3 } },
-      { text: "J'organise et planifie tout pour que ça se passe bien.", points: { 'controlant': 3 } },
-      { text: "Je ressens intensément l'ambiance et les émotions des autres.", points: { 'hypersensible': 3 } },
-      { text: "Je souris et fait bonne figure même si ça ne va pas.", points: { 'refoule': 3 } },
-      { text: "J'ai parfois des réactions disproportionnées.", points: { 'volcan': 3 } }
+      { text: "Tout le temps, mes pensées tournent en boucle", points: { 'anxieux': 3 } },
+      { text: "Je n'ai plus l'énergie de ruminer", points: { 'fatigue': 3 } },
+      { text: "Je repense souvent au passé avec nostalgie", points: { 'deracine': 2 } },
+      { text: "Je rumine pour trouver des solutions et éviter les erreurs", points: { 'controlant': 2 } },
+      { text: "Oui, et ça me fait mal au cœur à chaque fois", points: { 'hypersensible': 2 } },
+      { text: "J'évite d'y penser, je préfère passer à autre chose", points: { 'refoule': 2 } },
+      { text: "Parfois, jusqu'à ce que la colère monte", points: { 'volcan': 2 } }
     ]
   },
   {
-    question: "Qu'est-ce qui vous aide le mieux à vous sentir mieux ?",
+    question: "Te sens-tu souvent à bout sans trop savoir pourquoi ?",
     options: [
-      { text: "Des exercices de respiration et relaxation.", points: { 'anxieux': 3 } },
-      { text: "Du repos et des moments de récupération.", points: { 'fatigue': 3 } },
-      { text: "Retrouver du lien avec mes proches.", points: { 'deracine': 3 } },
-      { text: "Avoir un plan clair et organisé.", points: { 'controlant': 3 } },
-      { text: "Un environnement calme et apaisant.", points: { 'hypersensible': 3 } },
-      { text: "Écrire ou m'exprimer artistiquement.", points: { 'refoule': 3 } },
-      { text: "Faire du sport ou une activité physique intense.", points: { 'volcan': 3 } }
+      { text: "Oui, l'anxiété me ronge de l'intérieur", points: { 'anxieux': 2 } },
+      { text: "Constamment, je suis épuisé(e) en permanence", points: { 'fatigue': 3 } },
+      { text: "Oui, comme si j'avais perdu mes repères", points: { 'deracine': 3 } },
+      { text: "Quand je n'arrive pas à tout maîtriser", points: { 'controlant': 2 } },
+      { text: "Oui, le monde me semble trop intense", points: { 'hypersensible': 3 } },
+      { text: "Parfois, mais je ne sais pas d'où ça vient", points: { 'refoule': 3 } },
+      { text: "Ça monte, monte, puis j'explose", points: { 'volcan': 3 } }
     ]
   },
   {
-    question: "Quelle est votre plus grande peur ?",
+    question: "Préfères-tu tout gérer toi-même plutôt que déléguer ?",
     options: [
-      { text: "Que quelque chose de terrible arrive.", points: { 'anxieux': 3 } },
-      { text: "Ne plus jamais retrouver mon énergie.", points: { 'fatigue': 3 } },
-      { text: "Rester seul(e) pour toujours.", points: { 'deracine': 3 } },
-      { text: "Perdre le contrôle de ma vie.", points: { 'controlant': 3 } },
-      { text: "Être submergé(e) par mes émotions.", points: { 'hypersensible': 3 } },
-      { text: "Ne jamais pouvoir dire ce que je pense vraiment.", points: { 'refoule': 3 } },
-      { text: "Faire du mal à quelqu'un dans un moment de colère.", points: { 'volcan': 3 } }
+      { text: "Oui, car j'ai peur que les autres fassent mal", points: { 'anxieux': 2, 'controlant': 2 } },
+      { text: "Non, je n'ai plus la force de tout porter", points: { 'fatigue': 3 } },
+      { text: "J'aimerais bien avoir quelqu'un sur qui compter", points: { 'deracine': 2 } },
+      { text: "Absolument, je ne fais confiance qu'à moi-même", points: { 'controlant': 3 } },
+      { text: "Ça dépend, parfois c'est trop lourd pour moi", points: { 'hypersensible': 2 } },
+      { text: "Je dis oui mais au fond j'aimerais qu'on m'aide", points: { 'refoule': 2 } },
+      { text: "Oui, sinon je m'énerve sur leur façon de faire", points: { 'volcan': 2 } }
+    ]
+  },
+  {
+    question: "Est-ce que tu as du mal à dire non ou poser tes limites ?",
+    options: [
+      { text: "Oui, j'ai peur de décevoir ou de créer des conflits", points: { 'anxieux': 2 } },
+      { text: "Je n'ai plus l'énergie de me battre pour mes limites", points: { 'fatigue': 2 } },
+      { text: "Oui, j'ai peur de perdre les liens avec les autres", points: { 'deracine': 2 } },
+      { text: "Non, je pose mes limites très clairement", points: { 'controlant': 1 } },
+      { text: "Énormément, je me laisse envahir par les autres", points: { 'hypersensible': 3 } },
+      { text: "Oui, j'évite les confrontations", points: { 'refoule': 3 } },
+      { text: "Au début oui, puis j'explose d'un coup", points: { 'volcan': 3 } }
+    ]
+  },
+  {
+    question: "Est-ce que tu t'emportes parfois sans comprendre pourquoi ?",
+    options: [
+      { text: "Rarement, je suis plutôt dans l'inquiétude", points: { 'anxieux': 1 } },
+      { text: "Non, je suis trop fatigué(e) pour m'emporter", points: { 'fatigue': 1 } },
+      { text: "Parfois, quand je me sens incompris(e)", points: { 'deracine': 2 } },
+      { text: "Quand les choses échappent à mon contrôle", points: { 'controlant': 2 } },
+      { text: "Oui, mes émotions débordent facilement", points: { 'hypersensible': 2 } },
+      { text: "Rarement, je garde tout pour moi", points: { 'refoule': 1 } },
+      { text: "Oui, c'est exactement ça, des explosions soudaines", points: { 'volcan': 3 } }
+    ]
+  },
+  {
+    question: "Te sens-tu souvent en décalage avec les autres ?",
+    options: [
+      { text: "Oui, j'ai l'impression qu'ils ne comprennent pas mes peurs", points: { 'anxieux': 2 } },
+      { text: "Oui, comme si j'étais dans un brouillard", points: { 'fatigue': 2 } },
+      { text: "Tout le temps, je ne trouve pas ma place", points: { 'deracine': 3 } },
+      { text: "Parfois, car j'ai des standards élevés", points: { 'controlant': 2 } },
+      { text: "Énormément, je me sens différent(e) et incompris(e)", points: { 'hypersensible': 3 } },
+      { text: "Oui, mais je ne le montre pas", points: { 'refoule': 2 } },
+      { text: "Oui, et ça me met en colère", points: { 'volcan': 2 } }
+    ]
+  },
+  {
+    question: "Ressens-tu un besoin fréquent de silence ou d'isolement ?",
+    options: [
+      { text: "Oui, pour échapper à mes pensées anxieuses", points: { 'anxieux': 2 } },
+      { text: "Constamment, je n'ai plus d'énergie sociale", points: { 'fatigue': 3 } },
+      { text: "Oui, je me sens seul(e) même entouré(e)", points: { 'deracine': 2 } },
+      { text: "Oui, pour garder le contrôle de mon environnement", points: { 'controlant': 2 } },
+      { text: "Absolument, le monde est trop stimulant pour moi", points: { 'hypersensible': 3 } },
+      { text: "Oui, c'est là que je me sens le plus moi-même", points: { 'refoule': 2 } },
+      { text: "Oui, sinon j'ai peur d'exploser sur quelqu'un", points: { 'volcan': 2 } }
+    ]
+  },
+  {
+    question: "Es-tu plutôt dans l'analyse ou dans l'action quand ça ne va pas ?",
+    options: [
+      { text: "Analyse excessive, je tourne en rond dans ma tête", points: { 'anxieux': 3 } },
+      { text: "Ni l'un ni l'autre, je suis paralysé(e)", points: { 'fatigue': 3 } },
+      { text: "J'analyse mais je ne sais plus quoi faire", points: { 'deracine': 2 } },
+      { text: "Action immédiate pour reprendre le contrôle", points: { 'controlant': 3 } },
+      { text: "J'analyse tout en ressentant intensément", points: { 'hypersensible': 2 } },
+      { text: "J'évite d'analyser ET d'agir, je fuis", points: { 'refoule': 3 } },
+      { text: "Action impulsive, souvent regrettée après", points: { 'volcan': 3 } }
     ]
   }
 ];
