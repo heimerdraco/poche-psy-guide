@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Circle, Calendar, Heart, Lock, Sparkles } from "lucide-react";
+import { CheckCircle, Circle, Calendar, Heart, Lock, Sparkles, Play } from "lucide-react";
 import { supabaseService } from "@/lib/supabase";
 import EnhancedButton from "./EnhancedButton";
+import { getProfileData } from "@/lib/profilesData";
 
 interface EmotionalJourneyProps {
   profile: string;
@@ -15,14 +16,17 @@ interface EmotionalJourneyProps {
 const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
   const [currentDay, setCurrentDay] = useState(1);
   const [completedActivities, setCompletedActivities] = useState<string[]>([]);
-  const [journeyData, setJourneyData] = useState<any>(null);
   const [selectedDay, setSelectedDay] = useState(1);
+
+  const profileData = getProfileData(profile);
+  const isPremium = trialDays > 0 || localStorage.getItem('unlimitedAccess') === 'true';
+  const isLockedDay = (dayNumber: number) => dayNumber > 3 && !isPremium;
 
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
     if (trialStart) {
       const daysPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24));
-      setCurrentDay(Math.min(daysPassed + 1, 10));
+      setCurrentDay(Math.min(daysPassed + 1, 7));
     }
 
     const savedActivities = localStorage.getItem('completedActivities');
@@ -41,9 +45,6 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
     }
   };
 
-  const isPremium = trialDays > 0 || localStorage.getItem('unlimitedAccess') === 'true';
-  const isLockedDay = (dayNumber: number) => dayNumber > 3 && !isPremium;
-
   const handleUpgrade = () => {
     const upgradeEvent = new CustomEvent('openSubscription');
     window.dispatchEvent(upgradeEvent);
@@ -53,86 +54,66 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
     setSelectedDay(dayNumber);
   };
 
-  const activities = [
-    {
-      day: 1,
-      title: "Comprendre ton profil",
-      description: "Découvre les nuances de ton profil émotionnel",
-      type: "reflection",
-      duration: "10 min"
-    },
-    {
-      day: 2,
-      title: "Première technique de soulagement",
-      description: "Apprends une méthode adaptée à tes besoins",
-      type: "exercise",
-      duration: "15 min"
-    },
-    {
-      day: 3,
-      title: "Mise en pratique",
-      description: "Intègre ta nouvelle technique dans ton quotidien",
-      type: "practice",
-      duration: "20 min"
-    },
-    {
-      day: 4,
-      title: "Approfondissement",
-      description: "Explore des stratégies plus avancées",
-      type: "advanced",
-      duration: "25 min"
-    },
-    {
-      day: 5,
-      title: "Consolidation",
-      description: "Renforce tes nouveaux réflexes",
-      type: "consolidation",
-      duration: "20 min"
-    },
-    {
-      day: 6,
-      title: "Évaluation des progrès",
-      description: "Mesure ton évolution depuis le début",
-      type: "evaluation",
-      duration: "15 min"
-    },
-    {
-      day: 7,
-      title: "Préparation semaine 2",
-      description: "Prépare la suite de ton parcours",
-      type: "preparation",
-      duration: "30 min"
+  const handleActivityComplete = (dayNumber: number, activityIndex: number) => {
+    const activityId = `day-${dayNumber}-activity-${activityIndex}`;
+    if (!completedActivities.includes(activityId)) {
+      const newCompleted = [...completedActivities, activityId];
+      setCompletedActivities(newCompleted);
+      localStorage.setItem('completedActivities', JSON.stringify(newCompleted));
     }
-  ];
+  };
 
-  const selectedActivity = activities.find(activity => activity.day === selectedDay);
+  const getDayActivities = (dayNumber: number) => {
+    if (dayNumber <= 3 && profileData.activities[dayNumber - 1]) {
+      return profileData.activities[dayNumber - 1];
+    }
+    return [];
+  };
+
+  const isDayCompleted = (dayNumber: number) => {
+    const dayActivities = getDayActivities(dayNumber);
+    return dayActivities.every((_, index) => 
+      completedActivities.includes(`day-${dayNumber}-activity-${index}`)
+    );
+  };
+
+  // Génération des jours (affichage jusqu'à 7 jours)
+  const days = Array.from({ length: 7 }, (_, i) => i + 1);
 
   return (
     <div className="space-y-6 animate-slide-in-gentle">
+      {/* Profile identification */}
       <div className="text-center mb-6">
-        <Badge className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 mb-2">
+        <Badge className={`bg-gradient-to-r ${profileData.color} text-white mb-3 px-4 py-2`}>
           <Heart className="w-3 h-3 mr-1" />
           Jour {currentDay} de ton parcours
         </Badge>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2" style={{ fontFamily: 'Quicksand, sans-serif' }}>
-          Ton parcours personnalisé 🌱
-        </h2>
-        <p className="text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>
-          Profil détecté : <strong>{profile}</strong>
-        </p>
+        
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-purple-100 mb-4">
+          <h2 className="text-xl font-bold text-gray-800 mb-2" style={{ fontFamily: 'Quicksand, sans-serif' }}>
+            Vous êtes {profileData.name}
+          </h2>
+          <p className="text-gray-600 text-sm mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            {profileData.description}
+          </p>
+          <p className="text-gray-700 text-sm leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            {profileData.explanation}
+          </p>
+        </div>
       </div>
 
       {/* Days navigation */}
       <div className="flex gap-2 overflow-x-auto pb-2">
-        {activities.map((activity) => {
-          const isCompleted = completedActivities.includes(`day-${activity.day}`);
-          const isLocked = isLockedDay(activity.day);
-          const isSelected = activity.day === selectedDay;
+        {days.map((dayNumber) => {
+          const isCompleted = isDayCompleted(dayNumber);
+          const isLocked = isLockedDay(dayNumber);
+          const isSelected = dayNumber === selectedDay;
+          const hasActivities = getDayActivities(dayNumber).length > 0;
 
           return (
             <EnhancedButton
-              key={activity.day}
-              onClick={() => handleDayClick(activity.day)}
+              key={dayNumber}
+              onClick={() => handleDayClick(dayNumber)}
               soundType="click"
               animationType="scale"
               className={`min-w-[60px] h-12 rounded-xl transition-all duration-300 ${
@@ -142,13 +123,15 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
                     ? 'bg-green-100 text-green-700 hover:bg-green-200'
                     : isLocked
                       ? 'bg-gray-100 text-gray-400 opacity-50'
-                      : 'bg-white text-gray-700 hover:bg-purple-50 border border-purple-200'
+                      : hasActivities
+                        ? 'bg-white text-gray-700 hover:bg-purple-50 border border-purple-200'
+                        : 'bg-gray-50 text-gray-400 border border-gray-200'
               }`}
               disabled={isLocked}
             >
               <div className="text-center">
                 <div className="text-xs font-medium">Jour</div>
-                <div className="text-lg font-bold">{activity.day}</div>
+                <div className="text-lg font-bold">{dayNumber}</div>
                 {isCompleted && <CheckCircle className="w-3 h-3 mx-auto mt-1" />}
                 {isLocked && <Lock className="w-3 h-3 mx-auto mt-1" />}
               </div>
@@ -157,15 +140,16 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
         })}
       </div>
 
-      {/* Activity content or locked banner */}
+      {/* Content area */}
       {isLockedDay(selectedDay) ? (
-        <div className="relative">
+        // Locked content with blur background
+        <div className="relative min-h-[400px]">
           {/* Blurred background */}
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm rounded-lg z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 to-pink-50/30 backdrop-blur-md rounded-lg"></div>
           
-          {/* Locked banner */}
-          <div className="relative z-20 flex items-center justify-center min-h-[400px]">
-            <Card className="max-w-md mx-auto shadow-xl border-0 bg-white/90 backdrop-blur-sm">
+          {/* Lock banner */}
+          <div className="relative z-10 flex items-center justify-center min-h-[400px]">
+            <Card className="max-w-md mx-auto shadow-xl border-0 bg-white/95 backdrop-blur-sm">
               <CardContent className="p-8 text-center space-y-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-pink-100 rounded-full flex items-center justify-center mx-auto">
                   <Lock className="w-8 h-8 text-orange-500" />
@@ -176,7 +160,7 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
                     🔒 Vous avez atteint la limite gratuite de 3 jours
                   </h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Passez en mode Premium pour débloquer l'intégralité de votre parcours personnalisé.
+                    Passez en Premium pour débloquer la suite de votre parcours personnalisé.
                   </p>
                 </div>
 
@@ -193,48 +177,80 @@ const EmotionalJourney = ({ profile, trialDays }: EmotionalJourneyProps) => {
             </Card>
           </div>
         </div>
-      ) : selectedActivity ? (
-        <Card className="shadow-lg border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  completedActivities.includes(`day-${selectedActivity.day}`)
-                    ? 'bg-green-100 text-green-600'
-                    : 'bg-purple-100 text-purple-600'
-                }`}>
-                  {completedActivities.includes(`day-${selectedActivity.day}`) ? (
-                    <CheckCircle className="w-5 h-5" />
-                  ) : (
-                    <Circle className="w-5 h-5" />
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800">
-                    {selectedActivity.title}
-                  </h3>
-                  <p className="text-sm text-gray-600">{selectedActivity.description}</p>
-                </div>
-              </div>
-              <Badge variant="outline" className="text-xs">
-                {selectedActivity.duration}
-              </Badge>
-            </div>
+      ) : (
+        // Activities for unlocked days
+        <div className="space-y-4">
+          {getDayActivities(selectedDay).length > 0 ? (
+            getDayActivities(selectedDay).map((activity, index) => {
+              const activityId = `day-${selectedDay}-activity-${index}`;
+              const isCompleted = completedActivities.includes(activityId);
 
-            <EnhancedButton
-              className={`w-full transition-all duration-300 ${
-                completedActivities.includes(`day-${selectedActivity.day}`)
-                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                  : 'bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg hover:shadow-xl'
-              }`}
-              soundType={completedActivities.includes(`day-${selectedActivity.day}`) ? "calm" : "success"}
-              animationType={completedActivities.includes(`day-${selectedActivity.day}`) ? "scale" : "glow"}
-            >
-              {completedActivities.includes(`day-${selectedActivity.day}`) ? '✅ Activité terminée' : '🌟 Commencer l\'activité'}
-            </EnhancedButton>
-          </CardContent>
-        </Card>
-      ) : null}
+              return (
+                <Card key={index} className={`shadow-lg border-2 transition-all duration-300 ${
+                  isCompleted 
+                    ? 'border-green-200 bg-green-50/50' 
+                    : `border-purple-200 bg-gradient-to-r ${profileData.color.replace('from-', 'from-').replace('to-', 'to-')}/10`
+                }`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          isCompleted
+                            ? 'bg-green-100 text-green-600'
+                            : `bg-gradient-to-r ${profileData.color} text-white`
+                        }`}>
+                          {isCompleted ? (
+                            <CheckCircle className="w-5 h-5" />
+                          ) : (
+                            <Play className="w-4 h-4 ml-0.5" />
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-800">
+                            {activity.title}
+                          </h3>
+                          <p className="text-sm text-gray-600">{activity.description}</p>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {activity.duration}
+                      </Badge>
+                    </div>
+
+                    <EnhancedButton
+                      onClick={() => handleActivityComplete(selectedDay, index)}
+                      className={`w-full transition-all duration-300 ${
+                        isCompleted
+                          ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                          : `bg-gradient-to-r ${profileData.color} hover:shadow-lg text-white`
+                      }`}
+                      soundType={isCompleted ? "calm" : "success"}
+                      animationType={isCompleted ? "scale" : "glow"}
+                    >
+                      {isCompleted ? '✅ Activité terminée' : '🌟 Commencer l\'activité'}
+                    </EnhancedButton>
+                  </CardContent>
+                </Card>
+              );
+            })
+          ) : (
+            <Card className="shadow-lg border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
+              <CardContent className="p-6 text-center">
+                <Calendar className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  Jour {selectedDay}
+                </h3>
+                <p className="text-gray-600">
+                  {selectedDay > 3 
+                    ? "Contenu premium à débloquer"
+                    : "Activités bientôt disponibles"
+                  }
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
 
       {/* Trial status */}
       {trialDays > 0 && (
