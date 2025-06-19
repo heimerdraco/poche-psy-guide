@@ -23,7 +23,6 @@ import ActivityCompletionCelebration from "@/components/ActivityCompletionCelebr
 import Mascot from "@/components/Mascot";
 import EnhancedButton from "@/components/EnhancedButton";
 import DisclaimerModal from "@/components/DisclaimerModal";
-import CompanionCenteredHome from "@/components/CompanionCenteredHome";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -48,6 +47,7 @@ const Index = () => {
       setTrialDays(remainingDays);
       setIsTrialExpired(remainingDays === 0);
       
+      // Déterminer la phase émotionnelle selon les jours
       if (daysPassed <= 1) setCurrentPhase('calm');
       else if (daysPassed <= 2) setCurrentPhase('hopeful');
       else setCurrentPhase('warm');
@@ -57,6 +57,7 @@ const Index = () => {
       setIsTrialExpired(false);
     }
 
+    // Listen for upgrade events from locked activities
     const handleUpgradeEvent = () => {
       setShowSubscription(true);
     };
@@ -78,9 +79,9 @@ const Index = () => {
     }
     
     setShowQuestionnaire(false);
-    setCurrentSection('home');
+    setCurrentSection('journey');
     
-    console.log('Profil défini, affichage du compagnon centré');
+    console.log('Profil défini et redirection vers journey');
   };
 
   const handleUpgrade = () => {
@@ -88,6 +89,7 @@ const Index = () => {
   };
 
   const handleStartQuestionnaire = () => {
+    // Vérifier si le disclaimer a été accepté
     const disclaimerAccepted = localStorage.getItem('arboriaDisclaimerAccepted');
     
     if (!disclaimerAccepted) {
@@ -112,17 +114,28 @@ const Index = () => {
     return <TrialExpiredScreen onUpgrade={handleUpgrade} />;
   }
 
-  // Show onboarding for users without profile
+  const quotes = [
+    "Prendre soin de soi n'est pas de l'égoïsme, c'est de l'amour-propre 🌿",
+    "Chaque petit pas compte sur le chemin de la guérison 🌱",
+    "Tu es plus fort(e) que tu ne le penses 🌳",
+    "Aujourd'hui, sois doux/douce avec toi-même 🍃",
+    "Tes émotions sont valides et méritent d'être entendues 💚"
+  ];
+
+  const todayQuote = quotes[new Date().getDate() % quotes.length];
+
   if (!userProfile) {
     return (
       <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
         <AnimatedNatureBackground />
         
+        {/* MASCOTTE TOUJOURS VISIBLE */}
         <Mascot phase={currentPhase} isInteracting={currentSection !== 'home'} />
         
         <div className="container mx-auto px-4 py-8 max-w-md relative z-10">
           <div className="text-center mb-12 animate-slide-in-gentle">
             <div className="inline-flex items-center gap-3 mb-6">
+              {/* Logo circulaire amélioré */}
               <div className="w-16 h-16 bg-gradient-to-br from-sage-200/90 to-forest-200/90 rounded-full p-2 animate-pulse-gentle shadow-xl backdrop-blur-sm border-2 border-white/50">
                 <img 
                   src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
@@ -202,66 +215,154 @@ const Index = () => {
     );
   }
 
-  // Interface principale avec compagnon centré après profilage
   return (
-    <div className="min-h-screen">
-      {currentSection === 'home' && (
-        <CompanionCenteredHome
-          userProfile={userProfile}
-          trialDays={trialDays}
-          currentPhase={currentPhase}
-          onShowSubscription={() => setShowSubscription(true)}
-          onNavigateToJourney={() => setCurrentSection('journey')}
-          onNavigateToMessages={() => setCurrentSection('messages')}
-        />
-      )}
+    <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
+      <AnimatedNatureBackground />
+      
+      {/* MASCOTTE TOUJOURS VISIBLE */}
+      <Mascot phase={currentPhase} isInteracting={currentSection !== 'home'} />
+      
+      <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
+        <header className="flex justify-between items-center mb-6 animate-slide-in-gentle">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-sage-200 to-forest-200 rounded-full p-1 animate-pulse-gentle shadow-md">
+              <img 
+                src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
+                alt="Arboria Logo"
+                className="w-full h-full object-contain drop-shadow-lg rounded-full"
+              />
+            </div>
+            <h1 className="text-xl font-bold text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
+              Arboria
+            </h1>
+          </div>
+          <div className="flex items-center gap-2">
+            {trialDays > 0 ? (
+              <Badge variant="outline" className="border-sage-400 text-forest-700 bg-sage-50 animate-pulse-gentle" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                Jour {4 - trialDays}/3 gratuit
+              </Badge>
+            ) : (
+              <EnhancedButton 
+                onClick={() => setShowSubscription(true)}
+                size="sm"
+                soundType="calm"
+                className="bg-gradient-to-r from-sage-400 to-forest-400 hover:from-sage-500 hover:to-forest-500 text-cream-50 border-0 rounded-full"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
+              >
+                🌿 Arboria+
+              </EnhancedButton>
+            )}
+          </div>
+        </header>
 
-      {currentSection === 'journey' && userProfile && (
-        <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
-          <AnimatedNatureBackground />
-          <Mascot phase={currentPhase} isInteracting={true} />
-          
-          <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
-            <div className="space-y-6 animate-slide-in-gentle">
-              <EmotionalJourney profile={userProfile} trialDays={trialDays} />
-              <ContinuedJourney profile={userProfile} trialDays={trialDays} />
+        {currentSection === 'home' && (
+          <div className="space-y-6 animate-slide-in-gentle">
+            {/* Affichage du profil détecté */}
+            <Card className="shadow-lg border-0 bg-cream-50/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border border-sage-200">
+              <CardContent className="p-6">
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
+                  <User className="w-5 h-5 text-sage-600 animate-twinkle" />
+                  Votre profil émotionnel
+                </h2>
+                <div className="bg-gradient-to-r from-sage-50 to-forest-50 p-4 rounded-xl">
+                  <Badge className="bg-gradient-to-r from-sage-300 to-forest-300 text-forest-800 mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                    {userProfile}
+                  </Badge>
+                  <p className="text-sm text-forest-700 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                    Votre parcours personnalisé est maintenant disponible ! Il s'adapte à vos besoins émotionnels spécifiques.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Widget d'humeur du jour */}
+            <DailyMoodWidget />
+
+            <Card className="shadow-lg border-0 bg-cream-50/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border border-sage-200">
+              <CardContent className="p-6">
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
+                  <Calendar className="w-5 h-5 text-sage-600 animate-twinkle" />
+                  Pensée du jour
+                </h2>
+                <blockquote className="text-base text-forest-700 italic leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                  {todayQuote}
+                </blockquote>
+              </CardContent>
+            </Card>
+
+            {/* Daily Features */}
+            <div className="space-y-4">
+              <div className="animate-slide-in-gentle" style={{ animationDelay: '0.2s' }}>
+                <DailyQuote />
+              </div>
+              <div className="animate-slide-in-gentle" style={{ animationDelay: '0.4s' }}>
+                <MoodTracker />
+              </div>
+              <div className="animate-slide-in-gentle" style={{ animationDelay: '0.6s' }}>
+                <QuickThought />
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              <EnhancedButton
+                onClick={() => setCurrentSection('journey')}
+                soundType="click"
+                animationType="bounce"
+                className="w-full bg-gradient-to-r from-sage-400 to-forest-400 hover:from-sage-500 hover:to-forest-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '0.8s' }}
+              >
+                <Book className="w-6 h-6 mr-2" />
+                🌳 Mon parcours de croissance
+              </EnhancedButton>
+              
+              <EnhancedButton
+                onClick={() => navigate(`/chat/${userProfile}`)}
+                soundType="calm"
+                animationType="scale"
+                className="w-full bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '0.9s' }}
+              >
+                <MessageCircle className="w-6 h-6 mr-2" />
+                💬 Chat Thérapeutique
+              </EnhancedButton>
+              
+              <EnhancedButton
+                onClick={() => setCurrentSection('messages')}
+                soundType="calm"
+                animationType="scale"
+                className="w-full bg-gradient-to-r from-sage-400 to-forest-400 hover:from-sage-500 hover:to-forest-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '1s' }}
+              >
+                <MessageCircle className="w-6 h-6 mr-2" />
+                💌 Messages bienveillants
+              </EnhancedButton>
+              
+              <EnhancedButton
+                onClick={() => setShowSubscription(true)}
+                soundType="success"
+                animationType="glow"
+                className="w-full bg-gradient-to-r from-forest-400 to-sage-400 hover:from-forest-500 hover:to-sage-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '1.2s' }}
+              >
+                <Sparkles className="w-6 h-6 mr-2" />
+                🌿 Activer Arboria+
+              </EnhancedButton>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {currentSection === 'profile' && (
-        <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
-          <AnimatedNatureBackground />
-          <Mascot phase={currentPhase} isInteracting={true} />
-          <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
-            <ProfileDisplay onOpenQuestionnaire={() => setShowQuestionnaire(true)} />
+        {currentSection === 'journey' && userProfile && (
+          <div className="space-y-6 animate-slide-in-gentle">
+            <EmotionalJourney profile={userProfile} trialDays={trialDays} />
+            <ContinuedJourney profile={userProfile} trialDays={trialDays} />
           </div>
-        </div>
-      )}
+        )}
 
-      {currentSection === 'journal' && (
-        <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
-          <AnimatedNatureBackground />
-          <Mascot phase={currentPhase} isInteracting={true} />
-          <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
-            <JournalingSection />
-          </div>
-        </div>
-      )}
+        {currentSection === 'profile' && <ProfileDisplay onOpenQuestionnaire={() => setShowQuestionnaire(true)} />}
+        {currentSection === 'journal' && <JournalingSection />}
+        {currentSection === 'messages' && <MessagesSection />}
 
-      {currentSection === 'messages' && (
-        <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
-          <AnimatedNatureBackground />
-          <Mascot phase={currentPhase} isInteracting={true} />
-          <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
-            <MessagesSection />
-          </div>
-        </div>
-      )}
-
-      {/* Bottom Navigation - seulement visible quand pas sur l'accueil compagnon */}
-      {currentSection !== 'home' && (
+        {/* Bottom Navigation */}
         <nav className="fixed bottom-0 left-0 right-0 bg-cream-50/90 backdrop-blur-sm border-t border-sage-200 px-4 py-2 z-50">
           <div className="flex justify-center max-w-md mx-auto">
             <div className="flex gap-1">
@@ -299,20 +400,20 @@ const Index = () => {
             </div>
           </div>
         </nav>
-      )}
 
-      <div className="pb-16"></div>
+        <div className="pb-16"></div>
 
-      <SubscriptionModal 
-        isOpen={showSubscription}
-        onClose={() => setShowSubscription(false)}
-      />
+        <SubscriptionModal 
+          isOpen={showSubscription}
+          onClose={() => setShowSubscription(false)}
+        />
 
-      <ActivityCompletionCelebration 
-        isVisible={showCelebration}
-        onClose={() => setShowCelebration(false)}
-        activityTitle={completedActivity}
-      />
+        <ActivityCompletionCelebration 
+          isVisible={showCelebration}
+          onClose={() => setShowCelebration(false)}
+          activityTitle={completedActivity}
+        />
+      </div>
     </div>
   );
 };

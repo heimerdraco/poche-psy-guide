@@ -39,7 +39,6 @@ const Chat = ({ profile }: ChatProps) => {
   const [sending, setSending] = useState(false);
   const [newMessageCount, setNewMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const channelRef = useRef<any>(null);
 
   const profileData = getProfileData(profile);
   const deviceId = localStorage.getItem('device_id');
@@ -49,25 +48,9 @@ const Chat = ({ profile }: ChatProps) => {
   };
 
   useEffect(() => {
-    // Ne pas continuer si le profil n'est pas défini
-    if (!profile || profile === 'undefined') {
-      console.log('Profile is undefined, skipping chat initialization');
-      return;
-    }
-
-    console.log('Initializing chat for profile:', profile);
     loadUserPseudonym();
     loadMessages();
     setupRealtimeSubscription();
-
-    // Cleanup function
-    return () => {
-      console.log('Cleaning up chat subscription for profile:', profile);
-      if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
-        channelRef.current = null;
-      }
-    };
   }, [profile]);
 
   useEffect(() => {
@@ -75,13 +58,11 @@ const Chat = ({ profile }: ChatProps) => {
   }, [messages]);
 
   const loadUserPseudonym = async () => {
-    if (!profile || profile === 'undefined') return;
     const pseudonym = await chatService.getUserPseudonym(profile);
     setUserPseudonym(pseudonym);
   };
 
   const loadMessages = async () => {
-    if (!profile || profile === 'undefined') return;
     setLoading(true);
     const chatMessages = await chatService.getMessages(profile);
     setMessages(chatMessages);
@@ -89,22 +70,8 @@ const Chat = ({ profile }: ChatProps) => {
   };
 
   const setupRealtimeSubscription = () => {
-    if (!profile || profile === 'undefined') {
-      console.log('Cannot setup subscription: profile is undefined');
-      return;
-    }
-
-    // Nettoyer l'ancien canal s'il existe
-    if (channelRef.current) {
-      console.log('Removing existing channel');
-      supabase.removeChannel(channelRef.current);
-      channelRef.current = null;
-    }
-
-    console.log('Setting up realtime subscription for profile:', profile);
-    
     const channel = supabase
-      .channel(`chat-messages-${profile}`)
+      .channel('chat-messages')
       .on(
         'postgres_changes',
         {
@@ -114,7 +81,6 @@ const Chat = ({ profile }: ChatProps) => {
           filter: `profile=eq.${profile}`
         },
         (payload) => {
-          console.log('Received new message:', payload);
           const newMessage = payload.new as ChatMessage;
           setMessages(prev => [...prev, newMessage]);
           
@@ -125,11 +91,11 @@ const Chat = ({ profile }: ChatProps) => {
           }
         }
       )
-      .subscribe((status) => {
-        console.log('Subscription status:', status);
-      });
+      .subscribe();
 
-    channelRef.current = channel;
+    return () => {
+      supabase.removeChannel(channel);
+    };
   };
 
   // Réinitialiser le compteur quand l'utilisateur scrolle vers le bas
@@ -150,7 +116,6 @@ const Chat = ({ profile }: ChatProps) => {
   }, []);
 
   const handleChangePseudonym = async () => {
-    if (!profile || profile === 'undefined') return;
     const newPseudonym = await chatService.changePseudonym(profile);
     setUserPseudonym(newPseudonym);
     toast({
@@ -160,7 +125,7 @@ const Chat = ({ profile }: ChatProps) => {
   };
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim() || sending || !profile || profile === 'undefined') return;
+    if (!newMessage.trim() || sending) return;
 
     setSending(true);
 
@@ -207,21 +172,6 @@ const Chat = ({ profile }: ChatProps) => {
       minute: '2-digit'
     });
   };
-
-  // Si le profil n'est pas défini, afficher un message d'erreur
-  if (!profile || profile === 'undefined') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Erreur de profil</h2>
-          <p className="text-gray-600 mb-6">Le profil utilisateur n'est pas défini. Veuillez retourner à l'accueil pour configurer votre profil.</p>
-          <Button onClick={() => navigate('/')} className="w-full">
-            Retour à l'accueil
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <ChatAccessGuard profile={profile}>
@@ -418,4 +368,3 @@ const Chat = ({ profile }: ChatProps) => {
 };
 
 export default Chat;
-
