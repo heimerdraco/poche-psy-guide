@@ -12,11 +12,13 @@ interface Question {
   answers: {
     text: string;
     points: {
-      burnout?: number;
-      anxiety?: number;
-      sadness?: number;
-      anger?: number;
-      balance?: number;
+      epuise?: number;
+      anxieux?: number;
+      triste?: number;
+      estime?: number;
+      confus?: number;
+      seul?: number;
+      trauma?: number;
     };
   }[];
 }
@@ -26,55 +28,112 @@ const questions: Question[] = [
     id: 1,
     text: "Comment te sens-tu généralement le matin au réveil ?",
     answers: [
-      { text: "Énergique et motivé(e)", points: { balance: 3 } },
-      { text: "Un peu fatigué(e) mais ça va", points: { balance: 1 } },
-      { text: "Épuisé(e) avant même de commencer", points: { burnout: 2 } },
-      { text: "Anxieux/se pour la journée à venir", points: { anxiety: 2 } },
-      { text: "Triste sans raison apparente", points: { sadness: 2 } }
+      { text: "Épuisé(e) avant même de commencer la journée", points: { epuise: 3 } },
+      { text: "Anxieux/se pour ce qui m'attend", points: { anxieux: 3 } },
+      { text: "Triste sans vraiment savoir pourquoi", points: { triste: 2 } },
+      { text: "Motivé(e) mais pas sûr(e) de mes capacités", points: { estime: 2 } },
+      { text: "Plutôt bien, prêt(e) à affronter la journée", points: {} }
     ]
   },
   {
     id: 2,
-    text: "Face aux défis du quotidien, tu te sens plutôt :",
+    text: "Face à un défi ou une difficulté, ta première réaction est :",
     answers: [
-      { text: "Confiant(e) et capable", points: { balance: 3 } },
-      { text: "Un peu stressé(e) mais je gère", points: { anxiety: 1 } },
-      { text: "Complètement dépassé(e)", points: { burnout: 3 } },
-      { text: "En colère contre les circonstances", points: { anger: 2 } },
-      { text: "Résigné(e) et découragé(e)", points: { sadness: 3 } }
+      { text: "Je me sens dépassé(e), je n'ai plus d'énergie", points: { epuise: 3 } },
+      { text: "Je panique, je ne sais pas par où commencer", points: { anxieux: 3 } },
+      { text: "Je me décourage avant même d'essayer", points: { triste: 2 } },
+      { text: "Je doute de pouvoir y arriver", points: { estime: 3 } },
+      { text: "Je me sens perdu(e), confus(e)", points: { confus: 3 } }
     ]
   },
   {
     id: 3,
-    text: "Quand tu penses à ton avenir :",
+    text: "Dans tes relations avec les autres :",
     answers: [
-      { text: "Tu es optimiste et plein(e) d'espoir", points: { balance: 3 } },
-      { text: "Tu as quelques inquiétudes mais ça va", points: { anxiety: 1 } },
-      { text: "Tu as peur de ne pas y arriver", points: { anxiety: 3 } },
-      { text: "Tu ne vois pas comment ça peut s'améliorer", points: { sadness: 3 } },
-      { text: "Tu es en colère contre la situation", points: { anger: 2 } }
+      { text: "Je n'ai plus l'énergie de maintenir mes relations", points: { epuise: 2 } },
+      { text: "J'évite les contacts par peur du jugement", points: { anxieux: 2 } },
+      { text: "Je me sens incompris(e) et isolé(e)", points: { seul: 3 } },
+      { text: "Je pense que je ne mérite pas l'attention des autres", points: { estime: 3 } },
+      { text: "Les relations me semblent compliquées à gérer", points: { confus: 2 } }
     ]
   },
   {
     id: 4,
-    text: "Dans tes relations avec les autres :",
+    text: "Quand tu penses à ton avenir :",
     answers: [
-      { text: "Tu es épanoui(e) et à l'aise", points: { balance: 3 } },
-      { text: "Tu peux être un peu timide parfois", points: { anxiety: 1 } },
-      { text: "Tu te sens souvent incompris(e)", points: { sadness: 2 } },
-      { text: "Tu t'isoles de plus en plus", points: { burnout: 2 } },
-      { text: "Tu t'emportes facilement", points: { anger: 3 } }
+      { text: "Je me sens trop fatigué(e) pour faire des projets", points: { epuise: 2 } },
+      { text: "J'ai peur de ce qui pourrait arriver", points: { anxieux: 3 } },
+      { text: "Je ne vois pas comment les choses peuvent s'améliorer", points: { triste: 3 } },
+      { text: "Je ne pense pas avoir les capacités pour réussir", points: { estime: 2 } },
+      { text: "Je ne sais pas vraiment ce que je veux", points: { confus: 3 } }
     ]
   },
   {
     id: 5,
-    text: "Ton niveau d'énergie actuellement :",
+    text: "Concernant ton sommeil et ton énergie :",
     answers: [
-      { text: "Excellent, je suis en forme", points: { balance: 3 } },
-      { text: "Correct, je tiens le coup", points: { balance: 1 } },
-      { text: "Très bas, je suis épuisé(e)", points: { burnout: 3 } },
-      { text: "Variable selon mon stress", points: { anxiety: 2 } },
-      { text: "Je n'ai envie de rien faire", points: { sadness: 2 } }
+      { text: "Je suis constamment épuisé(e), même après avoir dormi", points: { epuise: 3 } },
+      { text: "J'ai du mal à m'endormir, mon esprit ne s'arrête pas", points: { anxieux: 2 } },
+      { text: "Je dors trop ou pas assez, sans vraiment de rythme", points: { triste: 2 } },
+      { text: "Mon sommeil est correct mais je me sens vide", points: { seul: 2 } },
+      { text: "Ça va, je gère mes nuits et mes journées", points: {} }
+    ]
+  },
+  {
+    id: 6,
+    text: "Face à tes émotions difficiles :",
+    answers: [
+      { text: "J'aimerais les comprendre mais je n'ai plus la force", points: { epuise: 2 } },
+      { text: "Elles me submergent et me paralysent", points: { anxieux: 3 } },
+      { text: "Elles me font me sentir encore plus seul(e)", points: { seul: 3 } },
+      { text: "Je les refoule pour ne pas les affronter", points: { trauma: 2 } },
+      { text: "J'arrive à les accueillir sans trop de difficulté", points: {} }
+    ]
+  },
+  {
+    id: 7,
+    text: "Si tu devais décrire ton état mental actuel :",
+    answers: [
+      { text: "Brouillard constant, difficultés à me concentrer", points: { confus: 3 } },
+      { text: "Hypervigilance, toujours sur le qui-vive", points: { anxieux: 2 } },
+      { text: "Vide émotionnel, comme anesthésié(e)", points: { triste: 3 } },
+      { text: "Ruminations constantes sur le passé", points: { trauma: 3 } },
+      { text: "Globalement stable avec quelques hauts et bas", points: {} }
+    ]
+  },
+  {
+    id: 8,
+    text: "Concernant ta confiance en toi :",
+    answers: [
+      { text: "Elle a complètement disparu, je doute de tout", points: { estime: 3 } },
+      { text: "J'ai peur de décevoir constamment", points: { anxieux: 2 } },
+      { text: "Je me sens nul(le) et sans valeur", points: { estime: 2, triste: 1 } },
+      { text: "Elle fluctue selon les situations", points: { confus: 1 } },
+      { text: "Elle est plutôt solide en général", points: {} }
+    ]
+  },
+  {
+    id: 9,
+    text: "Par rapport à un événement difficile de ta vie :",
+    answers: [
+      { text: "J'y pense souvent et ça me hante encore", points: { trauma: 3 } },
+      { text: "Ça me rend anxieux/se d'en reparler", points: { anxieux: 2, trauma: 1 } },
+      { text: "J'ai l'impression de ne jamais m'en remettre", points: { triste: 2, trauma: 1 } },
+      { text: "Je préfère faire comme si ça n'existait pas", points: { trauma: 2 } },
+      { text: "J'ai réussi à l'accepter et à avancer", points: {} }
+    ]
+  },
+  {
+    id: 10,
+    text: "Actuellement, ce dont tu as le plus besoin c'est :",
+    answers: [
+      { text: "De repos et de récupérer mon énergie", points: { epuise: 3 } },
+      { text: "D'apprendre à gérer mon stress et mes peurs", points: { anxieux: 3 } },
+      { text: "De retrouver goût à la vie et la motivation", points: { triste: 3 } },
+      { text: "De reconstruire ma confiance en moi", points: { estime: 3 } },
+      { text: "De clarifier mes pensées et mes objectifs", points: { confus: 3 } },
+      { text: "De créer des liens authentiques avec les autres", points: { seul: 3 } },
+      { text: "De faire la paix avec mon passé", points: { trauma: 3 } }
     ]
   }
 ];
@@ -89,11 +148,13 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [scores, setScores] = useState({
-    burnout: 0,
-    anxiety: 0,
-    sadness: 0,
-    anger: 0,
-    balance: 0
+    epuise: 0,
+    anxieux: 0,
+    triste: 0,
+    estime: 0,
+    confus: 0,
+    seul: 0,
+    trauma: 0
   });
 
   const handleAnswer = async (answerIndex: number) => {
@@ -120,33 +181,20 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Questionnaire terminé
+      // Questionnaire terminé - calculer le profil dominant
       const maxScore = Math.max(...Object.values(newScores));
-      const dominantProfile = Object.entries(newScores).find(([_, score]) => score === maxScore)?.[0] || 'balance';
+      const dominantProfile = Object.entries(newScores).find(([_, score]) => score === maxScore)?.[0] || 'epuise';
       
-      let profileText = '';
-      switch (dominantProfile) {
-        case 'burnout':
-          profileText = 'Tu sembles vivre un épuisement émotionnel. Il est important de prendre du temps pour toi.';
-          break;
-        case 'anxiety':
-          profileText = 'Tu ressens de l\'anxiété. Des techniques de relaxation pourraient t\'aider.';
-          break;
-        case 'sadness':
-          profileText = 'Tu traverses une période de tristesse. Il est normal de se sentir ainsi parfois.';
-          break;
-        case 'anger':
-          profileText = 'Tu ressens de la colère. Apprendre à la canaliser peut être bénéfique.';
-          break;
-        default:
-          profileText = 'Tu sembles être dans un bon équilibre émotionnel. Continue ainsi !';
-      }
+      console.log('Scores finaux:', newScores);
+      console.log('Profil dominant:', dominantProfile);
       
-      // Save profile to Supabase
-      await supabaseService.saveUser(profileText, new Date().toISOString());
+      // Save profile to Supabase and localStorage
+      await supabaseService.saveUser(dominantProfile, new Date().toISOString());
+      localStorage.setItem('psyProfile', dominantProfile);
+      localStorage.setItem('trialStart', Date.now().toString());
       
-      localStorage.setItem('psyProfile', profileText);
-      onComplete(profileText);
+      // Complete questionnaire
+      onComplete(dominantProfile);
       onClose();
     }
   };

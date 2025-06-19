@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -54,32 +53,28 @@ const Index = () => {
   }, [userProfile]);
 
   const handleProfileComplete = (profile: string) => {
-    // Map questionnaire profiles to component profiles
-    const profileMap: Record<string, string> = {
-      'Épuisement mental': 'epuise',
-      'Anxiété / blocage': 'anxieux',
-      'Tristesse / vide': 'triste',
-      'Estime cassée': 'estime',
-      'Confusion intérieure': 'confus',
-      'Solitude / déconnexion': 'seul',
-      'Trauma / événement marquant': 'trauma'
-    };
+    console.log('Profil reçu:', profile);
     
-    const mappedProfile = profileMap[profile] || 'epuise';
-    setUserProfile(mappedProfile);
-    localStorage.setItem('psyProfile', mappedProfile);
+    // Le profil est déjà le bon format (epuise, anxieux, etc.)
+    setUserProfile(profile);
+    localStorage.setItem('psyProfile', profile);
+    
     if (!localStorage.getItem('trialStart')) {
       localStorage.setItem('trialStart', Date.now().toString());
     }
+    
     setShowQuestionnaire(false);
+    // Rediriger automatiquement vers le parcours émotionnel
     setCurrentSection('journey');
+    
+    console.log('Profil défini et redirection vers journey');
   };
 
   const handleUpgrade = () => {
     setShowSubscription(true);
   };
 
-  // Afficher l'écran de démarrage au premier lancement
+  // Show splash screen on first launch
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
