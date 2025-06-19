@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      activities: {
+        Row: {
+          activity_format: string
+          content: Json
+          created_at: string
+          day_max: number | null
+          day_min: number | null
+          description: string
+          id: string
+          is_premium: boolean | null
+          target_profiles: string[]
+          title: string
+          type: string
+        }
+        Insert: {
+          activity_format: string
+          content?: Json
+          created_at?: string
+          day_max?: number | null
+          day_min?: number | null
+          description: string
+          id?: string
+          is_premium?: boolean | null
+          target_profiles?: string[]
+          title: string
+          type: string
+        }
+        Update: {
+          activity_format?: string
+          content?: Json
+          created_at?: string
+          day_max?: number | null
+          day_min?: number | null
+          description?: string
+          id?: string
+          is_premium?: boolean | null
+          target_profiles?: string[]
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
       anonymous_messages: {
         Row: {
           created_at: string
@@ -60,6 +102,104 @@ export type Database = {
           message?: string
           profile?: string
           pseudonym?: string
+        }
+        Relationships: []
+      }
+      completed_activities: {
+        Row: {
+          activity_id: string
+          completed_at: string
+          device_id: string
+          id: string
+          notes: string | null
+        }
+        Insert: {
+          activity_id: string
+          completed_at?: string
+          device_id: string
+          id?: string
+          notes?: string | null
+        }
+        Update: {
+          activity_id?: string
+          completed_at?: string
+          device_id?: string
+          id?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "completed_activities_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_journal: {
+        Row: {
+          audio_url: string | null
+          created_at: string
+          date: string
+          device_id: string
+          id: string
+          mood_rating: number | null
+          mood_text: string | null
+          photo_url: string | null
+          written_note: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          created_at?: string
+          date?: string
+          device_id: string
+          id?: string
+          mood_rating?: number | null
+          mood_text?: string | null
+          photo_url?: string | null
+          written_note?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          created_at?: string
+          date?: string
+          device_id?: string
+          id?: string
+          mood_rating?: number | null
+          mood_text?: string | null
+          photo_url?: string | null
+          written_note?: string | null
+        }
+        Relationships: []
+      }
+      emotional_profiles: {
+        Row: {
+          causes: string
+          color_theme: string
+          created_at: string
+          description: string
+          id: string
+          name: string
+          objectives: string
+        }
+        Insert: {
+          causes: string
+          color_theme?: string
+          created_at?: string
+          description: string
+          id: string
+          name: string
+          objectives: string
+        }
+        Update: {
+          causes?: string
+          color_theme?: string
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          objectives?: string
         }
         Relationships: []
       }
@@ -221,6 +361,33 @@ export type Database = {
           id?: string
           progress?: number
           theme_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_permissions: {
+        Row: {
+          camera_granted: boolean | null
+          device_id: string
+          files_granted: boolean | null
+          id: string
+          microphone_granted: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          camera_granted?: boolean | null
+          device_id: string
+          files_granted?: boolean | null
+          id?: string
+          microphone_granted?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          camera_granted?: boolean | null
+          device_id?: string
+          files_granted?: boolean | null
+          id?: string
+          microphone_granted?: boolean | null
           updated_at?: string
         }
         Relationships: []

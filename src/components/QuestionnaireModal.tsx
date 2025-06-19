@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -24,101 +25,61 @@ const questions: Question[] = [
   {
     question: "Face à une situation stressante, comment réagissez-vous ?",
     options: [
-      { text: "Je deviens très émotif(ve) et ai du mal à me calmer.", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Je m'inquiète énormément et anticipe le pire.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Je me mets une pression énorme pour tout contrôler parfaitement.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Je prends du recul et analyse la situation calmement.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Je ressens les émotions des autres et essaie de les aider.", points: { 'Empathique Absorbant': 3 } }
+      { text: "Je deviens très anxieux(se) et anticipe le pire.", points: { 'anxieux': 3 } },
+      { text: "Je me sens épuisé(e) et n'ai plus d'énergie pour réagir.", points: { 'fatigue': 3 } },
+      { text: "Je me sens perdu(e) et désorienté(e).", points: { 'deracine': 3 } },
+      { text: "J'essaie de tout contrôler pour éviter l'imprévu.", points: { 'controlant': 3 } },
+      { text: "Je suis submergé(e) par mes émotions.", points: { 'hypersensible': 3 } },
+      { text: "Je garde tout pour moi et évite d'en parler.", points: { 'refoule': 3 } },
+      { text: "J'accumule la frustration jusqu'à exploser.", points: { 'volcan': 3 } }
+    ]
+  },
+  {
+    question: "Quelle est votre plus grande difficulté au quotidien ?",
+    options: [
+      { text: "Les pensées négatives qui tournent en boucle.", points: { 'anxieux': 3 } },
+      { text: "Le manque d'énergie chronique.", points: { 'fatigue': 3 } },
+      { text: "Le sentiment d'isolement et de solitude.", points: { 'deracine': 3 } },
+      { text: "L'incapacité à lâcher prise.", points: { 'controlant': 3 } },
+      { text: "La difficulté à gérer mes émotions intenses.", points: { 'hypersensible': 3 } },
+      { text: "L'impossibilité d'exprimer ce que je ressens.", points: { 'refoule': 3 } },
+      { text: "Les colères soudaines et imprévisibles.", points: { 'volcan': 3 } }
+    ]
+  },
+  {
+    question: "Comment vous comportez-vous en société ?",
+    options: [
+      { text: "J'évite les situations sociales par peur du jugement.", points: { 'anxieux': 3 } },
+      { text: "Je participe peu car je n'ai pas l'énergie.", points: { 'fatigue': 3 } },
+      { text: "Je me sens souvent à l'écart du groupe.", points: { 'deracine': 3 } },
+      { text: "J'organise et planifie tout pour que ça se passe bien.", points: { 'controlant': 3 } },
+      { text: "Je ressens intensément l'ambiance et les émotions des autres.", points: { 'hypersensible': 3 } },
+      { text: "Je souris et fait bonne figure même si ça ne va pas.", points: { 'refoule': 3 } },
+      { text: "J'ai parfois des réactions disproportionnées.", points: { 'volcan': 3 } }
+    ]
+  },
+  {
+    question: "Qu'est-ce qui vous aide le mieux à vous sentir mieux ?",
+    options: [
+      { text: "Des exercices de respiration et relaxation.", points: { 'anxieux': 3 } },
+      { text: "Du repos et des moments de récupération.", points: { 'fatigue': 3 } },
+      { text: "Retrouver du lien avec mes proches.", points: { 'deracine': 3 } },
+      { text: "Avoir un plan clair et organisé.", points: { 'controlant': 3 } },
+      { text: "Un environnement calme et apaisant.", points: { 'hypersensible': 3 } },
+      { text: "Écrire ou m'exprimer artistiquement.", points: { 'refoule': 3 } },
+      { text: "Faire du sport ou une activité physique intense.", points: { 'volcan': 3 } }
     ]
   },
   {
     question: "Quelle est votre plus grande peur ?",
     options: [
-      { text: "Être rejeté(e) ou incompris(e).", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Que quelque chose de terrible arrive à mes proches.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Ne pas être à la hauteur de mes propres attentes.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Être envahi(e) par le bruit et l'agitation du monde extérieur.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Ne pas pouvoir soulager la souffrance des autres.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Dans une conversation, vous avez tendance à...",
-    options: [
-      { text: "Être très expressif(ve) et passionné(e).", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Anticiper les réactions et ajuster mes propos en conséquence.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Préparer mentalement ce que je vais dire pour être clair(e) et précis(e).", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Écouter attentivement et observer les réactions avant de parler.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Ressentir l'état émotionnel de mon interlocuteur et adapter mon discours.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Comment rechargez-vous vos batteries après une longue journée ?",
-    options: [
-      { text: "En exprimant mes émotions à quelqu'un de confiance.", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "En planifiant et organisant ma semaine pour me rassurer.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "En me concentrant sur une tâche précise pour me sentir utile.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "En passant du temps seul(e) dans un endroit calme.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "En aidant ou en écoutant les problèmes des autres.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Qu'est-ce qui vous met le plus mal à l'aise ?",
-    options: [
-      { text: "Les critiques ou les remarques négatives.", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "L'incertitude et le manque de contrôle.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "L'imperfection et le travail bâclé.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Les conversations superficielles et le bavardage inutile.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Être témoin de l'injustice ou de la souffrance.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Quelle est votre plus grande qualité ?",
-    options: [
-      { text: "Ma grande sensibilité et mon intuition.", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Ma capacité à anticiper les problèmes et à trouver des solutions.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Mon sens du détail et mon perfectionnisme.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Ma capacité à écouter et à comprendre les autres.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Mon empathie et ma compassion.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Comment réagissez-vous face à un conflit ?",
-    options: [
-      { text: "Je suis facilement submergé(e) par mes émotions et ai du mal à rester objectif(ve).", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Je m'inquiète des conséquences et essaie d'éviter l'affrontement direct.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Je cherche à analyser la situation de manière logique et à trouver une solution juste.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Je préfère me retirer et observer la situation de loin.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Je ressens les émotions des autres personnes impliquées et essaie de trouver un terrain d'entente.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Quel est votre plus grand défi ?",
-    options: [
-      { text: "Gérer mes émotions et ne pas me laisser submerger.", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Lâcher prise et accepter l'incertitude.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Être moins exigeant(e) envers moi-même et les autres.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "M'ouvrir aux autres et partager mes pensées.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Me protéger de la souffrance des autres sans me couper du monde.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Dans votre temps libre, vous aimez...",
-    options: [
-      { text: "Exprimer ma créativité à travers l'art, la musique ou l'écriture.", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Planifier des activités et organiser mon environnement.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Me consacrer à des projets qui demandent de la précision et de la rigueur.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Lire, réfléchir ou passer du temps dans la nature.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Aider les autres, faire du bénévolat ou écouter leurs histoires.", points: { 'Empathique Absorbant': 3 } }
-    ]
-  },
-  {
-    question: "Quelle est votre vision du bonheur ?",
-    options: [
-      { text: "Vivre des expériences intenses et partager des moments émotionnels forts.", points: { 'Hypersensible Émotionnel': 3 } },
-      { text: "Avoir une vie stable, sécurisée et prévisible.", points: { 'Anxieux Généralisé': 3 } },
-      { text: "Atteindre mes objectifs et me sentir compétent(e) dans ce que je fais.", points: { 'Perfectionniste Stressé': 3 } },
-      { text: "Être en paix avec moi-même et en harmonie avec le monde qui m'entoure.", points: { 'Introverti Réfléchi': 3 } },
-      { text: "Contribuer au bien-être des autres et faire une différence dans le monde.", points: { 'Empathique Absorbant': 3 } }
+      { text: "Que quelque chose de terrible arrive.", points: { 'anxieux': 3 } },
+      { text: "Ne plus jamais retrouver mon énergie.", points: { 'fatigue': 3 } },
+      { text: "Rester seul(e) pour toujours.", points: { 'deracine': 3 } },
+      { text: "Perdre le contrôle de ma vie.", points: { 'controlant': 3 } },
+      { text: "Être submergé(e) par mes émotions.", points: { 'hypersensible': 3 } },
+      { text: "Ne jamais pouvoir dire ce que je pense vraiment.", points: { 'refoule': 3 } },
+      { text: "Faire du mal à quelqu'un dans un moment de colère.", points: { 'volcan': 3 } }
     ]
   }
 ];
@@ -127,11 +88,13 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [scores, setScores] = useState<{ [key: string]: number }>({
-    'Hypersensible Émotionnel': 0,
-    'Anxieux Généralisé': 0,
-    'Perfectionniste Stressé': 0,
-    'Introverti Réfléchi': 0,
-    'Empathique Absorbant': 0
+    'anxieux': 0,
+    'fatigue': 0,
+    'deracine': 0,
+    'controlant': 0,
+    'hypersensible': 0,
+    'refoule': 0,
+    'volcan': 0
   });
   const [loading, setLoading] = useState(false);
 
