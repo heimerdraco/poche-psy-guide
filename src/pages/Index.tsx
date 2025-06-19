@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +10,7 @@ import ExercisesSection from "@/components/ExercisesSection";
 import SubscriptionModal from "@/components/SubscriptionModal";
 import MessagesSection from "@/components/MessagesSection";
 import EmotionalJourney from "@/components/EmotionalJourney";
+import DeveloperMode from "@/components/DeveloperMode";
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
@@ -18,16 +18,60 @@ const Index = () => {
   const [showSubscription, setShowSubscription] = useState(false);
   const [trialDays, setTrialDays] = useState(3);
   const [currentSection, setCurrentSection] = useState('home');
+  const [devMode, setDevMode] = useState(localStorage.getItem('devMode') === 'true');
+  const [logoTapCount, setLogoTapCount] = useState(0);
 
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
-    if (trialStart) {
+    const unlimitedAccess = localStorage.getItem('unlimitedAccess') === 'true';
+    
+    if (unlimitedAccess) {
+      setTrialDays(99); // Unlimited for dev mode
+    } else if (trialStart) {
       const daysPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24));
       setTrialDays(Math.max(0, 3 - daysPassed));
     } else if (userProfile) {
       localStorage.setItem('trialStart', Date.now().toString());
     }
   }, [userProfile]);
+
+  const handleLogoTap = () => {
+    setLogoTapCount(prev => {
+      const newCount = prev + 1;
+      if (newCount >= 5) {
+        setDevMode(true);
+        localStorage.setItem('devMode', 'true');
+        setLogoTapCount(0);
+        return 0;
+      }
+      return newCount;
+    });
+
+    // Reset counter after 3 seconds of inactivity
+    setTimeout(() => {
+      setLogoTapCount(0);
+    }, 3000);
+  };
+
+  const toggleDevMode = () => {
+    const newDevMode = !devMode;
+    setDevMode(newDevMode);
+    if (newDevMode) {
+      localStorage.setItem('devMode', 'true');
+    } else {
+      localStorage.removeItem('devMode');
+      localStorage.removeItem('unlimitedAccess');
+    }
+  };
+
+  const handleDevProfileSelect = (profile: string) => {
+    setUserProfile(profile);
+    localStorage.setItem('psyProfile', profile);
+    if (!localStorage.getItem('trialStart')) {
+      localStorage.setItem('trialStart', Date.now().toString());
+    }
+    setCurrentSection('journey');
+  };
 
   const quotes = [
     "Prendre soin de soi n'est pas de l'égoïsme, c'est de l'amour-propre 💙",
@@ -54,16 +98,28 @@ const Index = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50" style={{
         background: 'linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fdf2f8 100%)'
       }}>
+        <DeveloperMode 
+          isActive={devMode}
+          onToggle={toggleDevMode}
+          onProfileSelect={handleDevProfileSelect}
+          currentProfile={userProfile}
+        />
+        
         <div className="container mx-auto px-4 py-8 max-w-md">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center">
+              <div 
+                className="w-12 h-12 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
+                onClick={handleLogoTap}
+              >
                 <Heart className="w-6 h-6 text-purple-600" />
+                {devMode && <span className="absolute -top-1 -right-1 text-xs">⚙️</span>}
               </div>
               <h1 className="text-3xl font-bold text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
                 Psy de poche
               </h1>
             </div>
+            
             <p className="text-lg text-gray-600 mb-8 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
               Ton mini-psychologue personnel. Un espace doux pour prendre soin de tes émotions 🌸
             </p>
@@ -128,20 +184,35 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50" style={{
       background: 'linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #fdf2f8 100%)'
     }}>
+      <DeveloperMode 
+        isActive={devMode}
+        onToggle={toggleDevMode}
+        onProfileSelect={handleDevProfileSelect}
+        currentProfile={userProfile}
+      />
+      
       <div className="container mx-auto px-4 py-4 max-w-md">
         <header className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center">
+            <div 
+              className="w-8 h-8 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-105 relative"
+              onClick={handleLogoTap}
+            >
               <Heart className="w-4 h-4 text-purple-600" />
+              {devMode && <span className="absolute -top-1 -right-1 text-xs">⚙️</span>}
             </div>
             <h1 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
               Psy de poche
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            {trialDays > 0 ? (
+            {trialDays > 0 && trialDays < 90 ? (
               <Badge variant="outline" className="border-green-400 text-green-700 bg-green-50">
                 Jour {4 - trialDays}/3 gratuit
+              </Badge>
+            ) : trialDays >= 90 ? (
+              <Badge className="bg-red-100 text-red-800">
+                🔓 Dev Mode
               </Badge>
             ) : (
               <Button 
