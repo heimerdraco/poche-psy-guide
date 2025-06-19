@@ -1,14 +1,12 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Clock, CheckCircle, Lock, Sun, Sunset, Moon } from "lucide-react";
+import { Clock, Sun, Sunset, Moon } from "lucide-react";
 import { activitiesService, type DailyActivities } from "@/lib/activitiesService";
 import { getProfileData } from "@/lib/profilesData";
 import { useToast } from "@/hooks/use-toast";
-import EnhancedButton from "./EnhancedButton";
-import ActivityModal from "./ActivityModal";
+import ActivityDetailModal from "./ActivityDetailModal";
+import ActivityCard from "./ActivityCard";
 
 interface DailyActivitiesSectionProps {
   profile: string;
@@ -26,7 +24,6 @@ const DailyActivitiesSection = ({ profile, dayNumber, isTrialExpired }: DailyAct
   const [completedActivities, setCompletedActivities] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [selectedActivity, setSelectedActivity] = useState<any>(null);
-  const [activitiesAdded, setActivitiesAdded] = useState(false);
 
   const profileData = getProfileData(profile);
 
@@ -39,12 +36,6 @@ const DailyActivitiesSection = ({ profile, dayNumber, isTrialExpired }: DailyAct
     try {
       console.log('Chargement activités pour profil:', profile);
       
-      // Ajouter les activités supplémentaires si pas encore fait
-      if (!activitiesAdded) {
-        await activitiesService.addMoreActivities();
-        setActivitiesAdded(true);
-      }
-
       const dailyActivities = await activitiesService.getDailyActivities(profile, dayNumber);
       console.log('Activités récupérées:', dailyActivities);
       setActivities(dailyActivities);
@@ -113,75 +104,12 @@ const DailyActivitiesSection = ({ profile, dayNumber, isTrialExpired }: DailyAct
     return isTrialExpired && dayNumber > 3;
   };
 
-  const renderActivity = (activity: any, timeType: string) => {
-    if (!activity) {
-      return (
-        <Card className="opacity-50">
-          <CardContent className="p-4 text-center">
-            <p className="text-gray-500">Aucune activité disponible</p>
-          </CardContent>
-        </Card>
-      );
-    }
-
-    const isCompleted = completedActivities.has(activity.id);
-    const isLocked = isActivityLocked(activity);
-
-    return (
-      <Card className={`transition-all duration-200 ${
-        isCompleted ? 'border-green-300 bg-green-50' : 
-        isLocked ? 'opacity-60 border-gray-200' : 
-        'hover:shadow-md border-emerald-200'
-      }`}>
-        <CardContent className="p-4">
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center gap-2">
-              {getTimeIcon(timeType)}
-              <Badge variant="outline" className="text-xs">
-                {getTimeLabel(timeType)}
-              </Badge>
-            </div>
-            {isCompleted && <CheckCircle className="w-5 h-5 text-green-600" />}
-            {isLocked && <Lock className="w-5 h-5 text-gray-400" />}
-          </div>
-          
-          <h4 className="font-semibold mb-2 text-gray-800">{activity.title}</h4>
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">{activity.description}</p>
-          
-          <div className="flex items-center justify-between">
-            <Badge className={`bg-gradient-to-r ${profileData.color} text-white text-xs`}>
-              {activity.activity_format === 'explanatory' ? '📖 Guide' :
-               activity.activity_format === 'audio' ? '🎧 Audio' : '📝 Journal'}
-            </Badge>
-            
-            <EnhancedButton
-              onClick={() => {
-                if (isLocked) {
-                  toast({
-                    title: "Contenu Premium",
-                    description: "Passez à Arboria+ pour débloquer cette activité.",
-                    variant: "destructive",
-                  });
-                } else {
-                  setSelectedActivity(activity);
-                }
-              }}
-              disabled={isCompleted}
-              size="sm"
-              soundType="click"
-              animationType="scale"
-              className={
-                isCompleted ? 'bg-green-500 text-white' :
-                isLocked ? 'bg-gray-300 text-gray-600' :
-                `bg-gradient-to-r ${profileData.color} text-white hover:opacity-90`
-              }
-            >
-              {isCompleted ? 'Terminé' : isLocked ? 'Premium' : 'Commencer'}
-            </EnhancedButton>
-          </div>
-        </CardContent>
-      </Card>
-    );
+  const handleLockedClick = () => {
+    toast({
+      title: "Contenu Premium",
+      description: "Passez à Arboria+ pour débloquer cette activité.",
+      variant: "destructive",
+    });
   };
 
   if (loading) {
@@ -193,7 +121,7 @@ const DailyActivitiesSection = ({ profile, dayNumber, isTrialExpired }: DailyAct
         <CardContent>
           <div className="space-y-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-20 bg-gray-200 rounded"></div>
+              <div key={i} className="h-32 bg-gray-200 rounded"></div>
             ))}
           </div>
         </CardContent>
@@ -216,18 +144,51 @@ const DailyActivitiesSection = ({ profile, dayNumber, isTrialExpired }: DailyAct
           )}
         </CardHeader>
         <CardContent className="space-y-4">
-          {renderActivity(activities.morning, 'morning')}
-          {renderActivity(activities.afternoon, 'afternoon')}
-          {renderActivity(activities.evening, 'evening')}
+          <ActivityCard
+            activity={activities.morning}
+            timeType="morning"
+            timeIcon={getTimeIcon('morning')}
+            timeLabel={getTimeLabel('morning')}
+            isCompleted={activities.morning ? completedActivities.has(activities.morning.id) : false}
+            isLocked={activities.morning ? isActivityLocked(activities.morning) : false}
+            profileColor={profileData.color}
+            onActivityClick={setSelectedActivity}
+            onLockedClick={handleLockedClick}
+          />
+          
+          <ActivityCard
+            activity={activities.afternoon}
+            timeType="afternoon"
+            timeIcon={getTimeIcon('afternoon')}
+            timeLabel={getTimeLabel('afternoon')}
+            isCompleted={activities.afternoon ? completedActivities.has(activities.afternoon.id) : false}
+            isLocked={activities.afternoon ? isActivityLocked(activities.afternoon) : false}
+            profileColor={profileData.color}
+            onActivityClick={setSelectedActivity}
+            onLockedClick={handleLockedClick}
+          />
+          
+          <ActivityCard
+            activity={activities.evening}
+            timeType="evening"
+            timeIcon={getTimeIcon('evening')}
+            timeLabel={getTimeLabel('evening')}
+            isCompleted={activities.evening ? completedActivities.has(activities.evening.id) : false}
+            isLocked={activities.evening ? isActivityLocked(activities.evening) : false}
+            profileColor={profileData.color}
+            onActivityClick={setSelectedActivity}
+            onLockedClick={handleLockedClick}
+          />
         </CardContent>
       </Card>
 
-      <ActivityModal
+      <ActivityDetailModal
         activity={selectedActivity}
         isOpen={!!selectedActivity}
         onClose={() => setSelectedActivity(null)}
         onComplete={handleActivityComplete}
         profileColor={profileData.color}
+        isCompleted={selectedActivity ? completedActivities.has(selectedActivity.id) : false}
       />
     </>
   );

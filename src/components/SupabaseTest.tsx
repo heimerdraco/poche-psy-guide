@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Database, RefreshCw, User, MessageSquare, BookOpen, Clock } from "lucide-react";
 import { supabaseService } from "@/lib/supabase";
+import ActivityExporter from "./ActivityExporter";
 
 const SupabaseTest = () => {
   const [data, setData] = useState<any>(null);
@@ -205,6 +205,8 @@ const SupabaseTest = () => {
           </Card>
         </div>
       )}
+
+      <ActivityExporter />
     </div>
   );
 };
