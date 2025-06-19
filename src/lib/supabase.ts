@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 // Générer un device_id unique
@@ -101,19 +102,9 @@ export const supabaseService = {
   async saveJourneyProgress(phase: string, dayNumber: number, completedActivities: string[]) {
     const deviceId = getDeviceId();
     
-    // Utiliser une requête SQL brute pour éviter les problèmes de types TypeScript
-    const { data, error } = await supabase.rpc('upsert_journey_progress', {
-      p_device_id: deviceId,
-      p_current_phase: phase,
-      p_day_number: dayNumber,
-      p_completed_activities: completedActivities
-    });
-    
-    if (error) {
-      console.error('Erreur sauvegarde progression:', error);
-      // Fallback: essayer avec une insertion directe
-      return await supabase
-        .from('journey_progress' as any)
+    try {
+      const { data, error } = await supabase
+        .from('journey_progress')
         .upsert({
           device_id: deviceId,
           current_phase: phase,
@@ -123,28 +114,25 @@ export const supabaseService = {
         }, {
           onConflict: 'device_id'
         });
+      
+      if (error) {
+        console.error('Erreur sauvegarde progression:', error);
+      }
+      
+      return { data, error };
+    } catch (error) {
+      console.error('Erreur sauvegarde progression:', error);
+      return { data: null, error };
     }
-    
-    return { data, error };
   },
 
   // Sauvegarder les explorations thématiques
   async saveThemeProgress(themeId: string, progress: number, completed: boolean) {
     const deviceId = getDeviceId();
     
-    // Utiliser une requête SQL brute pour éviter les problèmes de types TypeScript
-    const { data, error } = await supabase.rpc('upsert_theme_progress', {
-      p_device_id: deviceId,
-      p_theme_id: themeId,
-      p_progress: progress,
-      p_completed: completed
-    });
-    
-    if (error) {
-      console.error('Erreur sauvegarde thème:', error);
-      // Fallback: essayer avec une insertion directe
-      return await supabase
-        .from('theme_progress' as any)
+    try {
+      const { data, error } = await supabase
+        .from('theme_progress')
         .upsert({
           device_id: deviceId,
           theme_id: themeId,
@@ -154,9 +142,16 @@ export const supabaseService = {
         }, {
           onConflict: 'device_id, theme_id'
         });
+      
+      if (error) {
+        console.error('Erreur sauvegarde thème:', error);
+      }
+      
+      return { data, error };
+    } catch (error) {
+      console.error('Erreur sauvegarde thème:', error);
+      return { data: null, error };
     }
-    
-    return { data, error };
   },
 
   // Récupérer toutes les données d'un utilisateur
@@ -171,13 +166,13 @@ export const supabaseService = {
       supabase.from('reminder_settings').select('*').eq('device_id', deviceId)
     ]);
 
-    // Récupérer les données des nouvelles tables avec des requêtes SQL brutes pour éviter les erreurs TypeScript
+    // Récupérer les données des nouvelles tables
     let journeyProgress = null;
     let themeProgress = [];
 
     try {
       const journeyResult = await supabase
-        .from('journey_progress' as any)
+        .from('journey_progress')
         .select('*')
         .eq('device_id', deviceId);
       journeyProgress = journeyResult.data?.[0] || null;
@@ -187,7 +182,7 @@ export const supabaseService = {
 
     try {
       const themeResult = await supabase
-        .from('theme_progress' as any)
+        .from('theme_progress')
         .select('*')
         .eq('device_id', deviceId);
       themeProgress = themeResult.data || [];

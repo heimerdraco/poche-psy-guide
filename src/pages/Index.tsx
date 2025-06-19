@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,6 @@ const Index = () => {
   const handleProfileComplete = (profile: string) => {
     console.log('Profil reçu:', profile);
     
-    // Le profil est déjà le bon format (epuise, anxieux, etc.)
     setUserProfile(profile);
     localStorage.setItem('psyProfile', profile);
     
@@ -64,7 +64,7 @@ const Index = () => {
     }
     
     setShowQuestionnaire(false);
-    // Rediriger automatiquement vers le parcours émotionnel
+    // Rediriger automatiquement vers le parcours émotionnel après détection du profil
     setCurrentSection('journey');
     
     console.log('Profil défini et redirection vers journey');
@@ -131,7 +131,7 @@ const Index = () => {
                       <Book className="w-8 h-8 text-blue-600" />
                     </div>
                     <h3 className="font-semibold text-xl mb-2 text-gray-800">Parcours personnalisé</h3>
-                    <p className="text-gray-600 text-sm">10 jours d'accompagnement doux adapté à tes besoins</p>
+                    <p className="text-gray-600 text-sm">Un parcours d'1 an adapté à tes besoins émotionnels</p>
                   </div>
                   
                   <div className="text-center">
@@ -208,6 +208,24 @@ const Index = () => {
 
         {currentSection === 'home' && (
           <div className="space-y-6 animate-slide-in-gentle">
+            {/* Affichage du profil détecté */}
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-6">
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
+                  <User className="w-5 h-5 text-purple-600 animate-twinkle" />
+                  Ton profil émotionnel
+                </h2>
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl">
+                  <Badge className="bg-gradient-to-r from-purple-200 to-pink-200 text-purple-800 mb-2">
+                    {userProfile}
+                  </Badge>
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    Ton parcours personnalisé est maintenant disponible ! Il s'adapte à tes besoins émotionnels spécifiques.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
@@ -242,7 +260,7 @@ const Index = () => {
                 style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '0.8s' }}
               >
                 <Book className="w-6 h-6 mr-2" />
-                📚 Explorer mon parcours émotionnel
+                🌟 Mon cheminement personnel
               </EnhancedButton>
               
               <EnhancedButton
@@ -287,7 +305,7 @@ const Index = () => {
             <div className="flex gap-1">
               {[
                 { key: 'home', label: '🏠', icon: Heart },
-                { key: 'journey', label: '📚', icon: Book },
+                { key: 'journey', label: '🌟', icon: Book },
                 { key: 'messages', label: '💌', icon: MessageCircle },
                 { key: 'journal', label: '📝', icon: Edit },
                 { key: 'settings', label: '⚙️', icon: User, isRoute: true },

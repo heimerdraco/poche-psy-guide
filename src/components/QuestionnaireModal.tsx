@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -188,13 +187,26 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
       console.log('Scores finaux:', newScores);
       console.log('Profil dominant:', dominantProfile);
       
+      // Mapper les profils vers les noms complets
+      const profileMapping = {
+        epuise: 'Épuisement mental',
+        anxieux: 'Anxiété / blocage',
+        triste: 'Tristesse / vide',
+        estime: 'Estime cassée',
+        confus: 'Confusion intérieure',
+        seul: 'Solitude / déconnexion',
+        trauma: 'Trauma / événement marquant'
+      };
+      
+      const fullProfileName = profileMapping[dominantProfile as keyof typeof profileMapping];
+      
       // Save profile to Supabase and localStorage
-      await supabaseService.saveUser(dominantProfile, new Date().toISOString());
-      localStorage.setItem('psyProfile', dominantProfile);
+      await supabaseService.saveUser(fullProfileName, new Date().toISOString());
+      localStorage.setItem('psyProfile', fullProfileName);
       localStorage.setItem('trialStart', Date.now().toString());
       
       // Complete questionnaire
-      onComplete(dominantProfile);
+      onComplete(fullProfileName);
       onClose();
     }
   };
