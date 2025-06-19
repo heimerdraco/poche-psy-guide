@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,6 +26,7 @@ const Index = () => {
   const [currentSection, setCurrentSection] = useState('home');
   const [devMode, setDevMode] = useState(localStorage.getItem('devMode') === 'true');
   const [logoTapCount, setLogoTapCount] = useState(0);
+  const [isTrialExpired, setIsTrialExpired] = useState(false);
 
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
@@ -32,11 +34,16 @@ const Index = () => {
     
     if (unlimitedAccess) {
       setTrialDays(99); // Unlimited for dev mode
+      setIsTrialExpired(false);
     } else if (trialStart) {
       const daysPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24));
-      setTrialDays(Math.max(0, 3 - daysPassed));
+      const remainingDays = Math.max(0, 3 - daysPassed);
+      setTrialDays(remainingDays);
+      setIsTrialExpired(remainingDays === 0);
     } else if (userProfile) {
       localStorage.setItem('trialStart', Date.now().toString());
+      setTrialDays(3);
+      setIsTrialExpired(false);
     }
   }, [userProfile]);
 
@@ -70,13 +77,56 @@ const Index = () => {
   };
 
   const handleDevProfileSelect = (profile: string) => {
-    setUserProfile(profile);
-    localStorage.setItem('psyProfile', profile);
+    // Map questionnaire profiles to component profiles
+    const profileMap: Record<string, string> = {
+      'epuisement': 'epuise',
+      'anxiete': 'anxieux',
+      'tristesse': 'triste',
+      'estime': 'estime',
+      'confusion': 'confus',
+      'solitude': 'seul',
+      'trauma': 'trauma'
+    };
+    
+    const mappedProfile = profileMap[profile] || profile;
+    setUserProfile(mappedProfile);
+    localStorage.setItem('psyProfile', mappedProfile);
     if (!localStorage.getItem('trialStart')) {
       localStorage.setItem('trialStart', Date.now().toString());
     }
     setCurrentSection('journey');
   };
+
+  const handleProfileComplete = (profile: string) => {
+    // Map questionnaire profiles to component profiles
+    const profileMap: Record<string, string> = {
+      'Épuisement mental': 'epuise',
+      'Anxiété / blocage': 'anxieux',
+      'Tristesse / vide': 'triste',
+      'Estime cassée': 'estime',
+      'Confusion intérieure': 'confus',
+      'Solitude / déconnexion': 'seul',
+      'Trauma / événement marquant': 'trauma'
+    };
+    
+    const mappedProfile = profileMap[profile] || 'epuise';
+    setUserProfile(mappedProfile);
+    localStorage.setItem('psyProfile', mappedProfile);
+    if (!localStorage.getItem('trialStart')) {
+      localStorage.setItem('trialStart', Date.now().toString());
+    }
+    setShowQuestionnaire(false);
+    setCurrentSection('journey');
+  };
+
+  const handleUpgrade = () => {
+    setShowSubscription(true);
+  };
+
+  // Show trial expired screen if trial is over and not in dev mode
+  if (isTrialExpired && !devMode) {
+    return <TrialExpiredScreen onUpgrade={handleUpgrade} />;
+  }
 
   const quotes = [
     "Prendre soin de soi n'est pas de l'égoïsme, c'est de l'amour-propre 💙",
@@ -87,16 +137,6 @@ const Index = () => {
   ];
 
   const todayQuote = quotes[new Date().getDate() % quotes.length];
-
-  const handleProfileComplete = (profile: string) => {
-    setUserProfile(profile);
-    localStorage.setItem('psyProfile', profile);
-    if (!localStorage.getItem('trialStart')) {
-      localStorage.setItem('trialStart', Date.now().toString());
-    }
-    setShowQuestionnaire(false);
-    setCurrentSection('journey');
-  };
 
   if (!userProfile) {
     return (

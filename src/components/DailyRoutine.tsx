@@ -22,7 +22,21 @@ const DailyRoutine = ({ profile, dayNumber, isPremium }: DailyRoutineProps) => {
       { action: "Bois un verre d'eau lentement", affirmation: "Je prends soin de mon corps", emoji: "💧" },
       { action: "Regarde par la fenêtre 2 minutes", affirmation: "La nature me ressource", emoji: "🌿" },
       { action: "Étire tes épaules doucement", affirmation: "Mon corps se détend naturellement", emoji: "🤗" },
-      // ... continuer jusqu'à 20 jours
+      { action: "Écris 3 mots pour décrire ton état", affirmation: "Je peux nommer ce que je ressens", emoji: "✍️" },
+      { action: "Fais une micro-sieste de 10 minutes", affirmation: "Le repos est productif", emoji: "😴" },
+      { action: "Mange quelque chose que tu aimes", affirmation: "Je mérite de la douceur", emoji: "🍎" },
+      { action: "Écoute une chanson apaisante", affirmation: "La musique nourrit mon âme", emoji: "🎵" },
+      { action: "Dis 'non' à une demande non-urgente", affirmation: "Mes limites me protègent", emoji: "🛡️" },
+      { action: "Prends un bain ou une douche chaude", affirmation: "L'eau purifie mes tensions", emoji: "🛁" },
+      { action: "Écris une chose pour laquelle tu es reconnaissant(e)", affirmation: "La gratitude me nourrit", emoji: "🙏" },
+      { action: "Fais 5 minutes de marche lente", affirmation: "Chaque mouvement me fait du bien", emoji: "🚶" },
+      { action: "Regarde des photos qui te font sourire", affirmation: "Les souvenirs heureux me rechargent", emoji: "📸" },
+      { action: "Bois une tisane ou une boisson chaude", affirmation: "La chaleur apaise mon être", emoji: "☕" },
+      { action: "Fais le tri dans une petite zone", affirmation: "L'ordre extérieur calme l'intérieur", emoji: "🧹" },
+      { action: "Appelle ou écris à quelqu'un de bienveillant", affirmation: "Je mérite du soutien", emoji: "📞" },
+      { action: "Fais une liste de 3 choses simples pour demain", affirmation: "Je peux planifier sans stress", emoji: "📝" },
+      { action: "Prends 10 minutes pour ne rien faire", affirmation: "L'inaction est aussi précieuse", emoji: "🧘" },
+      { action: "Félicite-toi pour ces 20 jours", affirmation: "J'ai accompli quelque chose de beau", emoji: "🎉" },
     ],
     anxieux: [
       { action: "Nomme 3 choses que tu vois autour de toi", affirmation: "Je suis ancré(e) dans l'instant présent", emoji: "👀" },
@@ -30,26 +44,41 @@ const DailyRoutine = ({ profile, dayNumber, isPremium }: DailyRoutineProps) => {
       { action: "Pose tes pieds bien au sol", affirmation: "Je suis en sécurité ici et maintenant", emoji: "🦶" },
       { action: "Masse doucement tes tempes", affirmation: "La tension se relâche naturellement", emoji: "💆" },
       { action: "Écoute les sons autour de toi", affirmation: "Je peux observer sans juger", emoji: "👂" },
-      // ... continuer jusqu'à 20 jours
+      { action: "Écris tes inquiétudes sur papier", affirmation: "Mes peurs perdent leur pouvoir quand je les nomme", emoji: "📄" },
+      { action: "Fais 5 respirations abdominales", affirmation: "Mon souffle me ramène au calme", emoji: "🫁" },
+      { action: "Visualise un endroit où tu te sens bien", affirmation: "Mon esprit peut créer la sérénité", emoji: "🏝️" },
+      { action: "Serre quelque chose de doux contre toi", affirmation: "Le réconfort est à ma portée", emoji: "🧸" },
+      { action: "Répète 'Ça va passer' 5 fois", affirmation: "Les émotions sont temporaires", emoji: "🔄" },
+      { action: "Fais du coloriage ou du dessin libre", affirmation: "La créativité apaise mon mental", emoji: "🎨" },
+      { action: "Prends une douche ou lave-toi le visage", affirmation: "L'eau emporte mes tensions", emoji: "💦" },
+      { action: "Écoute un podcast ou une histoire", affirmation: "D'autres voix calment la mienne", emoji: "🎧" },
+      { action: "Fais une to-do list très simple", affirmation: "Je peux organiser sans m'accabler", emoji: "✅" },
+      { action: "Regarde des vidéos d'animaux mignons", affirmation: "La douceur existe dans le monde", emoji: "🐱" },
+      { action: "Pratique la technique 5-4-3-2-1", affirmation: "Mes sens me reconnectent au présent", emoji: "🔢" },
+      { action: "Écris 3 choses positives sur toi", affirmation: "Je peux être bienveillant(e) envers moi", emoji: "💝" },
+      { action: "Fais des étirements doux", affirmation: "Mon corps sait comment se détendre", emoji: "🤸" },
+      { action: "Regarde le ciel ou les nuages", affirmation: "L'immensité me donne de la perspective", emoji: "☁️" },
+      { action: "Célèbre ton courage d'avoir continué", affirmation: "J'ai fait preuve d'une grande force", emoji: "🏆" },
     ],
-    depassé: [
-      { action: "Écris une chose à faire demain, pas aujourd'hui", affirmation: "Je peux reporter sans culpabilité", emoji: "📝" },
-      { action: "Ferme les yeux 30 secondes", affirmation: "Je mérite une pause", emoji: "😌" },
-      { action: "Range une seule chose sur ton bureau", affirmation: "L'ordre extérieur apaise l'ordre intérieur", emoji: "🗂️" },
-      { action: "Dis non à une petite demande aujourd'hui", affirmation: "Mes limites sont respectables", emoji: "🛡️" },
-      { action: "Priorise : garde seulement 3 tâches", affirmation: "Moins, c'est plus efficace", emoji: "🎯" },
-      // ... continuer jusqu'à 20 jours
+    // Ajout des autres profils...
+    triste: [
+      { action: "Autorise-toi à ressentir cette tristesse", affirmation: "Mes émotions sont valides", emoji: "💙" },
+      { action: "Écoute une musique qui te parle", affirmation: "La musique comprend mon cœur", emoji: "🎶" },
+      { action: "Écris une lettre à ta tristesse", affirmation: "Je peux dialoguer avec mes émotions", emoji: "✉️" },
+      { action: "Regarde un film ou une série réconfortante", affirmation: "Le divertissement peut être thérapeutique", emoji: "🎬" },
+      { action: "Prépare-toi quelque chose de bon", affirmation: "Je mérite d'être nourri(e)", emoji: "🍲" },
     ]
   };
 
   const currentRoutine = routinesByProfile[profile as keyof typeof routinesByProfile] || routinesByProfile.epuise;
-  const todayRoutine = currentRoutine[Math.min(dayNumber - 1, currentRoutine.length - 1)];
+  const todayRoutine = currentRoutine[Math.min(dayNumber - 1, currentRoutine.length - 1)] || currentRoutine[0];
 
   useEffect(() => {
     const saved = localStorage.getItem('completedRoutineDays');
     if (saved) {
-      setCompletedDays(JSON.parse(saved));
-      setTodayCompleted(JSON.parse(saved).includes(dayNumber));
+      const parsed = JSON.parse(saved);
+      setCompletedDays(parsed);
+      setTodayCompleted(parsed.includes(dayNumber));
     }
   }, [dayNumber]);
 

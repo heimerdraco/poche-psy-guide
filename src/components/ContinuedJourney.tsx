@@ -24,6 +24,7 @@ const ContinuedJourney = ({ profile, trialDays }: ContinuedJourneyProps) => {
       const daysPassed = Math.floor((Date.now() - parseInt(trialStart)) / (1000 * 60 * 60 * 24));
       setDaysElapsed(daysPassed);
       
+      // Simuler la fin du parcours initial après 10 jours OU si marqué comme complété
       if (completedInitial || daysPassed >= 10) {
         if (daysPassed <= 30) {
           setJourneyPhase('routine');
@@ -46,9 +47,14 @@ const ContinuedJourney = ({ profile, trialDays }: ContinuedJourneyProps) => {
           <h3 className="font-semibold text-xl mb-2 text-gray-800">
             Termine d'abord ton parcours initial
           </h3>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 text-sm mb-4">
             Complète tes 10 premiers jours pour débloquer la suite de ton accompagnement 🌸
           </p>
+          <div className="bg-blue-50 p-3 rounded-lg">
+            <p className="text-xs text-blue-700">
+              💡 Conseil : Pour débloquer rapidement en test, active le mode développeur en tapant 5 fois sur le logo ❤️
+            </p>
+          </div>
         </CardContent>
       </Card>
     );
@@ -72,7 +78,7 @@ const ContinuedJourney = ({ profile, trialDays }: ContinuedJourneyProps) => {
       {journeyPhase === 'routine' && (
         <DailyRoutine 
           profile={profile} 
-          dayNumber={daysElapsed - 10} 
+          dayNumber={Math.max(1, daysElapsed - 10)} 
           isPremium={isPremium}
         />
       )}
