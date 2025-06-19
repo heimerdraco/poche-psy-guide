@@ -2,11 +2,31 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Scale, Shield, FileText } from "lucide-react";
+import { ArrowLeft, Scale, Shield, FileText, Camera, Mic, Trash2, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 
 const Legal = () => {
   const navigate = useNavigate();
+
+  const handleDeleteData = () => {
+    // Supprimer toutes les données locales
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Afficher une confirmation
+    alert("Toutes vos données ont été supprimées de cet appareil.");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-25 to-pink-50 p-4">
@@ -55,6 +75,57 @@ const Legal = () => {
                   <p className="font-medium text-gray-700">Hébergement</p>
                   <p className="text-gray-600">Supabase, Inc.</p>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Permissions et Confidentialité */}
+          <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Eye className="w-5 h-5 text-purple-600" />
+                Confidentialité & Permissions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-sm text-gray-700 space-y-4">
+                <div>
+                  <p className="font-medium mb-2 flex items-center gap-2">
+                    <Camera className="w-4 h-4" />
+                    Appareil photo et galerie
+                  </p>
+                  <p className="text-gray-600 text-xs leading-relaxed">
+                    L'application peut demander l'accès à votre appareil photo et galerie uniquement 
+                    pour les activités qui le nécessitent. Aucune photo n'est stockée, analysée ou partagée.
+                  </p>
+                  <p className="text-xs text-blue-600 mt-1 font-mono">
+                    Permissions : android.permission.CAMERA, android.permission.READ_EXTERNAL_STORAGE
+                  </p>
+                </div>
+                
+                <div>
+                  <p className="font-medium mb-2 flex items-center gap-2">
+                    <Mic className="w-4 h-4" />
+                    Microphone
+                  </p>
+                  <p className="text-gray-600 text-xs leading-relaxed">
+                    L'accès au microphone est demandé uniquement pour les activités audio. 
+                    Aucun enregistrement n'est conservé, analysé ou transmis.
+                  </p>
+                  <p className="text-xs text-blue-600 mt-1 font-mono">
+                    Permission : android.permission.RECORD_AUDIO
+                  </p>
+                </div>
+              </div>
+              
+              <Separator />
+              
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-xs text-green-800 leading-relaxed">
+                  <strong>Engagement de confidentialité :</strong> Aucune donnée personnelle, audio ou image 
+                  n'est stockée, analysée ou utilisée à des fins commerciales. Toutes les informations 
+                  restent sur l'appareil de l'utilisateur.
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -114,8 +185,8 @@ const Legal = () => {
                 <div>
                   <p className="font-medium mb-1">Stockage des données</p>
                   <p className="text-gray-600">
-                    Vos données sont stockées localement sur votre appareil et sauvegardées de manière 
-                    chiffrée via Supabase, Inc.
+                    Vos données sont stockées localement sur votre appareil. Aucune donnée personnelle 
+                    n'est transmise à des serveurs externes sans votre consentement explicite.
                   </p>
                 </div>
                 
@@ -123,12 +194,49 @@ const Legal = () => {
                   <p className="font-medium mb-1">Partage</p>
                   <p className="text-gray-600">Aucune donnée n'est partagée avec des tiers.</p>
                 </div>
+
+                <div>
+                  <p className="font-medium mb-1">Types de données collectées</p>
+                  <ul className="text-gray-600 text-xs list-disc list-inside space-y-1">
+                    <li>Réponses aux questionnaires de profil émotionnel</li>
+                    <li>Progression dans les activités</li>
+                    <li>Préférences d'utilisation</li>
+                  </ul>
+                </div>
               </div>
               
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="text-xs text-green-800 leading-relaxed">
-                  Vous pouvez à tout moment télécharger ou supprimer vos données depuis les paramètres de l'application.
-                </p>
+              <Separator />
+              
+              <div className="space-y-3">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="text-xs text-green-800 leading-relaxed">
+                    Vous pouvez à tout moment supprimer vos données depuis cette page.
+                  </p>
+                </div>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" className="w-full flex items-center gap-2">
+                      <Trash2 className="w-4 h-4" />
+                      Supprimer mes données
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Supprimer vos données</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Cette action supprimera définitivement toutes vos données stockées sur cet appareil, 
+                        y compris votre profil, votre progression et vos préférences. Cette action est irréversible.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Annuler</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDeleteData} className="bg-red-600 hover:bg-red-700">
+                        Supprimer définitivement
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </CardContent>
           </Card>
