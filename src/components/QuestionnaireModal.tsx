@@ -4,113 +4,118 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Question {
   id: number;
   text: string;
-  options: { value: string; label: string; points: Record<string, number> }[];
+  type: 'multiple' | 'open';
+  options?: { value: string; label: string; points: Record<string, number> }[];
 }
 
 const questions: Question[] = [
   {
     id: 1,
-    text: "Comment réagissez-vous généralement face au stress ?",
+    text: "Comment te sens-tu en ce moment dans ta vie ? 🌙",
+    type: 'multiple',
     options: [
-      { value: "overthink", label: "Je réfléchis beaucoup et analyse tout", points: { analytique: 3, anxieux: 2 } },
-      { value: "avoid", label: "J'évite les situations stressantes", points: { evitant: 3, sensible: 1 } },
-      { value: "confront", label: "Je fais face directement", points: { combatif: 3, resilient: 2 } },
-      { value: "seek_help", label: "Je cherche du soutien", points: { social: 3, empathique: 2 } }
+      { value: "exhausted", label: "Épuisé(e), à bout de souffle", points: { epuisement: 3 } },
+      { value: "anxious", label: "Anxieux/se, bloqué(e)", points: { anxiete: 3 } },
+      { value: "sad", label: "Triste, vide à l'intérieur", points: { tristesse: 3 } },
+      { value: "low_esteem", label: "Pas assez bien, estime cassée", points: { estime: 3 } },
+      { value: "confused", label: "Perdu(e), confus(e)", points: { confusion: 3 } },
+      { value: "lonely", label: "Seul(e), isolé(e)", points: { solitude: 3 } },
+      { value: "traumatized", label: "Marqué(e) par un événement", points: { trauma: 3 } }
     ]
   },
   {
     id: 2,
-    text: "Quelle activité vous apporte le plus de bien-être ?",
+    text: "Qu'est-ce qui t'empêche le plus de dormir la nuit ? 🌚",
+    type: 'multiple',
     options: [
-      { value: "alone_time", label: "Du temps seul(e) pour réfléchir", points: { introverti: 3, analytique: 1 } },
-      { value: "social", label: "Passer du temps avec des proches", points: { social: 3, empathique: 2 } },
-      { value: "creative", label: "Activités créatives ou artistiques", points: { creatif: 3, sensible: 2 } },
-      { value: "physical", label: "Exercice physique ou sport", points: { resilient: 3, combatif: 1 } }
+      { value: "overthinking", label: "Mes pensées qui tournent en boucle", points: { anxiete: 2, confusion: 1 } },
+      { value: "responsibilities", label: "Tout ce que je dois faire demain", points: { epuisement: 2, anxiete: 1 } },
+      { value: "sadness", label: "Une tristesse profonde", points: { tristesse: 3 } },
+      { value: "self_doubt", label: "Mes doutes sur moi-même", points: { estime: 2, confusion: 1 } },
+      { value: "loneliness", label: "Le sentiment de solitude", points: { solitude: 3 } },
+      { value: "memories", label: "Des souvenirs douloureux", points: { trauma: 3 } }
     ]
   },
   {
     id: 3,
-    text: "Comment décririez-vous votre rapport aux émotions ?",
-    options: [
-      { value: "analyze", label: "J'aime comprendre et analyser mes émotions", points: { analytique: 3, introverti: 1 } },
-      { value: "feel_deeply", label: "Je ressens tout très intensément", points: { sensible: 3, empathique: 2 } },
-      { value: "control", label: "Je préfère garder le contrôle", points: { combatif: 2, resilient: 2 } },
-      { value: "overwhelmed", label: "Je me sens parfois dépassé(e)", points: { anxieux: 3, evitant: 1 } }
-    ]
+    text: "Décris en quelques mots ce que tu ressens le plus souvent 💭",
+    type: 'open'
   },
   {
     id: 4,
-    text: "Dans un groupe, vous êtes plutôt :",
+    text: "Quand tu te regardes dans le miroir, que te dis-tu ? 🪞",
+    type: 'multiple',
     options: [
-      { value: "leader", label: "Celui/celle qui prend les initiatives", points: { combatif: 3, social: 1 } },
-      { value: "mediator", label: "Le médiateur qui harmonise", points: { empathique: 3, social: 2 } },
-      { value: "observer", label: "L'observateur discret", points: { introverti: 3, analytique: 2 } },
-      { value: "creative_contributor", label: "Celui qui apporte des idées originales", points: { creatif: 3, sensible: 1 } }
+      { value: "tired", label: "Tu as l'air fatigué(e)", points: { epuisement: 2 } },
+      { value: "worried", label: "Tu as l'air inquiet/ète", points: { anxiete: 2 } },
+      { value: "sad_look", label: "Tu as l'air triste", points: { tristesse: 2 } },
+      { value: "not_enough", label: "Tu n'es pas assez bien", points: { estime: 3 } },
+      { value: "lost", label: "Qui es-tu vraiment ?", points: { confusion: 2 } },
+      { value: "alone", label: "Personne ne te comprend", points: { solitude: 2 } },
+      { value: "different", label: "Tu n'es plus le/la même", points: { trauma: 2 } }
     ]
   },
   {
     id: 5,
-    text: "Face à un échec, votre première réaction est :",
+    text: "Qu'est-ce qui te ferait le plus de bien en ce moment ? 🫂",
+    type: 'multiple',
     options: [
-      { value: "analyze_learn", label: "Analyser pour comprendre et apprendre", points: { analytique: 3, resilient: 2 } },
-      { value: "feel_disappointed", label: "Ressentir une profonde déception", points: { sensible: 3, anxieux: 1 } },
-      { value: "bounce_back", label: "Rebondir rapidement", points: { resilient: 3, combatif: 2 } },
-      { value: "withdraw", label: "Me retirer temporairement", points: { evitant: 3, introverti: 2 } }
+      { value: "rest", label: "Du repos, une vraie pause", points: { epuisement: 2 } },
+      { value: "peace", label: "De la sérénité, moins d'inquiétudes", points: { anxiete: 2 } },
+      { value: "joy", label: "Retrouver la joie de vivre", points: { tristesse: 2 } },
+      { value: "confidence", label: "Croire en moi à nouveau", points: { estime: 2 } },
+      { value: "clarity", label: "Y voir plus clair", points: { confusion: 2 } },
+      { value: "connection", label: "Me sentir moins seul(e)", points: { solitude: 2 } },
+      { value: "healing", label: "Guérir de mes blessures", points: { trauma: 2 } }
     ]
   },
   {
     id: 6,
-    text: "Votre environnement idéal pour vous ressourcer :",
-    options: [
-      { value: "nature", label: "En pleine nature, au calme", points: { introverti: 2, sensible: 2, resilient: 1 } },
-      { value: "home_cozy", label: "Chez moi, dans un espace cosy", points: { evitant: 2, creatif: 2 } },
-      { value: "social_gathering", label: "Entouré(e) de personnes bienveillantes", points: { social: 3, empathique: 2 } },
-      { value: "inspiring_place", label: "Dans un lieu inspirant (musée, café...)", points: { creatif: 3, analytique: 1 } }
-    ]
+    text: "Raconte-moi ce qui te pèse le plus actuellement 💙",
+    type: 'open'
   },
   {
     id: 7,
-    text: "Votre plus grande force est :",
+    text: "Comment réagis-tu face aux défis du quotidien ? ⚡",
+    type: 'multiple',
     options: [
-      { value: "empathy", label: "Ma capacité d'écoute et d'empathie", points: { empathique: 3, social: 2 } },
-      { value: "analysis", label: "Ma capacité d'analyse et de réflexion", points: { analytique: 3, introverti: 1 } },
-      { value: "creativity", label: "Ma créativité et mon imagination", points: { creatif: 3, sensible: 2 } },
-      { value: "resilience", label: "Ma résistance et ma détermination", points: { resilient: 3, combatif: 2 } }
+      { value: "overwhelmed", label: "Je me sens dépassé(e)", points: { epuisement: 2, anxiete: 1 } },
+      { value: "anxious_avoid", label: "J'évite, j'ai peur", points: { anxiete: 2 } },
+      { value: "give_up", label: "J'abandonne facilement", points: { tristesse: 2, estime: 1 } },
+      { value: "self_blame", label: "Je me blâme", points: { estime: 2 } },
+      { value: "paralyzed", label: "Je ne sais plus quoi faire", points: { confusion: 2 } },
+      { value: "withdraw", label: "Je m'isole", points: { solitude: 2 } },
+      { value: "triggered", label: "Ça réveille des douleurs", points: { trauma: 2 } }
     ]
   },
   {
     id: 8,
-    text: "Quand vous vous sentez anxieux/se :",
+    text: "Quel est ton plus grand besoin émotionnel ? 🌸",
+    type: 'multiple',
     options: [
-      { value: "think_solutions", label: "Je cherche des solutions rationnelles", points: { analytique: 3, combatif: 1 } },
-      { value: "need_comfort", label: "J'ai besoin de réconfort", points: { sensible: 3, empathique: 2 } },
-      { value: "isolate", label: "Je préfère m'isoler", points: { evitant: 3, anxieux: 2 } },
-      { value: "distract", label: "Je me distrais avec des activités", points: { resilient: 2, creatif: 2 } }
+      { value: "energy", label: "Retrouver mon énergie", points: { epuisement: 3 } },
+      { value: "calm", label: "Être en paix avec moi-même", points: { anxiete: 3 } },
+      { value: "happiness", label: "Ressentir du bonheur", points: { tristesse: 3 } },
+      { value: "self_love", label: "M'aimer comme je suis", points: { estime: 3 } },
+      { value: "direction", label: "Savoir où je vais", points: { confusion: 3 } },
+      { value: "belonging", label: "Appartenir quelque part", points: { solitude: 3 } },
+      { value: "peace", label: "Faire la paix avec mon passé", points: { trauma: 3 } }
     ]
   },
   {
     id: 9,
-    text: "Votre rapport au changement :",
-    options: [
-      { value: "embrace", label: "J'embrasse le changement avec enthousiasme", points: { resilient: 3, combatif: 2 } },
-      { value: "cautious", label: "Je suis prudent(e) mais m'adapte", points: { analytique: 2, social: 1 } },
-      { value: "anxious", label: "Le changement m'angoisse", points: { anxieux: 3, evitant: 2 } },
-      { value: "creative_opportunity", label: "Je vois une opportunité créative", points: { creatif: 3, empathique: 1 } }
-    ]
+    text: "Qu'est-ce qui t'a amené(e) ici aujourd'hui ? 🤲",
+    type: 'open'
   },
   {
     id: 10,
-    text: "Votre vision du bonheur :",
-    options: [
-      { value: "inner_peace", label: "La paix intérieure et l'harmonie", points: { introverti: 2, sensible: 2, empathique: 1 } },
-      { value: "meaningful_connections", label: "Des relations profondes et authentiques", points: { empathique: 3, social: 3 } },
-      { value: "personal_growth", label: "L'épanouissement et la croissance personnelle", points: { analytique: 2, resilient: 2, creatif: 2 } },
-      { value: "freedom", label: "La liberté et l'indépendance", points: { combatif: 2, resilient: 2, creatif: 1 } }
-    ]
+    text: "Si tu pouvais te dire une chose bienveillante, que serait-ce ? 💜",
+    type: 'open'
   }
 ];
 
@@ -123,34 +128,35 @@ interface QuestionnaireModalProps {
 const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalProps) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [openAnswers, setOpenAnswers] = useState<Record<number, string>>({});
   const [scores, setScores] = useState<Record<string, number>>({
-    analytique: 0,
-    sensible: 0,
-    combatif: 0,
-    resilient: 0,
-    empathique: 0,
-    creatif: 0,
-    social: 0,
-    anxieux: 0,
-    evitant: 0,
-    introverti: 0
+    epuisement: 0,
+    anxiete: 0,
+    tristesse: 0,
+    estime: 0,
+    confusion: 0,
+    solitude: 0,
+    trauma: 0
   });
 
-  const handleAnswer = (questionId: number, optionValue: string) => {
+  const handleMultipleAnswer = (questionId: number, optionValue: string) => {
     const question = questions.find(q => q.id === questionId);
-    const option = question?.options.find(opt => opt.value === optionValue);
+    const option = question?.options?.find(opt => opt.value === optionValue);
     
     if (option) {
       const newAnswers = { ...answers, [questionId]: optionValue };
       setAnswers(newAnswers);
       
-      // Update scores
       const newScores = { ...scores };
       Object.entries(option.points).forEach(([trait, points]) => {
         newScores[trait] = (newScores[trait] || 0) + points;
       });
       setScores(newScores);
     }
+  };
+
+  const handleOpenAnswer = (questionId: number, value: string) => {
+    setOpenAnswers({ ...openAnswers, [questionId]: value });
   };
 
   const handleNext = () => {
@@ -163,81 +169,109 @@ const QuestionnaireModal = ({ isOpen, onClose, onComplete }: QuestionnaireModalP
 
   const calculateProfile = () => {
     const profiles = {
-      "L'Analytique": ['analytique', 'introverti'],
-      "Le Sensible": ['sensible', 'empathique'],
-      "Le Combatif": ['combatif', 'resilient'],
-      "Le Résilient": ['resilient', 'combatif'],
-      "L'Empathique": ['empathique', 'social'],
-      "Le Créatif": ['creatif', 'sensible'],
-      "L'Évitant": ['evitant', 'anxieux']
+      "Épuisement mental": 'epuisement',
+      "Anxiété / blocage": 'anxiete',
+      "Tristesse / vide": 'tristesse',
+      "Estime cassée": 'estime',
+      "Confusion intérieure": 'confusion',
+      "Solitude / isolement affectif": 'solitude',
+      "Trauma / événement marquant": 'trauma'
     };
 
     let maxScore = 0;
-    let dominantProfile = "L'Analytique";
+    let dominantProfile = "Épuisement mental";
 
-    Object.entries(profiles).forEach(([profileName, traits]) => {
-      const score = traits.reduce((sum, trait) => sum + (scores[trait] || 0), 0);
+    Object.entries(profiles).forEach(([profileName, trait]) => {
+      const score = scores[trait] || 0;
       if (score > maxScore) {
         maxScore = score;
         dominantProfile = profileName;
       }
     });
 
+    // Sauvegarder les réponses
+    localStorage.setItem('questionnaireAnswers', JSON.stringify({ answers, openAnswers }));
     onComplete(dominantProfile);
   };
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const question = questions[currentQuestion];
+  const canProceed = question.type === 'multiple' 
+    ? answers[question.id] 
+    : openAnswers[question.id]?.trim();
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-gradient-to-br from-purple-50 to-pink-50 border-0 rounded-3xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center mb-4">
-            Évaluation psychologique personnalisée
+          <DialogTitle className="text-xl font-bold text-center mb-4 text-gray-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
+            Questionnaire émotionnel 🌸
           </DialogTitle>
           <div className="space-y-2">
             <div className="flex justify-between text-sm text-gray-600">
               <span>Question {currentQuestion + 1} sur {questions.length}</span>
-              <span>{Math.round(progress)}% complété</span>
+              <span>{Math.round(progress)}% ✨</span>
             </div>
-            <Progress value={progress} className="w-full" />
+            <Progress value={progress} className="w-full h-2 bg-purple-100" />
           </div>
         </DialogHeader>
 
         <div className="space-y-6">
-          <Card>
+          <Card className="border-0 bg-white/70 backdrop-blur-sm shadow-lg">
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold mb-6">{question.text}</h3>
-              <div className="space-y-3">
-                {question.options.map((option) => (
-                  <Button
-                    key={option.value}
-                    variant={answers[question.id] === option.value ? "default" : "outline"}
-                    className="w-full text-left justify-start h-auto p-4 whitespace-normal"
-                    onClick={() => handleAnswer(question.id, option.value)}
-                  >
-                    {option.label}
-                  </Button>
-                ))}
-              </div>
+              <h3 className="text-lg font-semibold mb-6 text-gray-800 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                {question.text}
+              </h3>
+              
+              {question.type === 'multiple' && question.options && (
+                <div className="space-y-3">
+                  {question.options.map((option) => (
+                    <Button
+                      key={option.value}
+                      variant={answers[question.id] === option.value ? "default" : "outline"}
+                      className={`w-full text-left justify-start h-auto p-4 whitespace-normal rounded-2xl border-2 ${
+                        answers[question.id] === option.value
+                          ? 'bg-gradient-to-r from-purple-300 to-pink-300 text-gray-800 border-purple-300'
+                          : 'border-purple-200 hover:border-purple-300 hover:bg-purple-50 text-gray-700'
+                      }`}
+                      onClick={() => handleMultipleAnswer(question.id, option.value)}
+                      style={{ fontFamily: 'Nunito, sans-serif' }}
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </div>
+              )}
+              
+              {question.type === 'open' && (
+                <Textarea
+                  value={openAnswers[question.id] || ''}
+                  onChange={(e) => handleOpenAnswer(question.id, e.target.value)}
+                  placeholder="Prends le temps de t'exprimer librement... 💭"
+                  className="min-h-[120px] border-2 border-purple-200 rounded-2xl focus:border-purple-400 bg-white/70"
+                  style={{ fontFamily: 'Nunito, sans-serif' }}
+                />
+              )}
             </CardContent>
           </Card>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-3">
             <Button
               variant="outline"
               onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
               disabled={currentQuestion === 0}
+              className="flex-1 rounded-2xl border-2 border-gray-300 hover:border-gray-400"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
-              Précédent
+              ← Précédent
             </Button>
             <Button
               onClick={handleNext}
-              disabled={!answers[question.id]}
-              className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
+              disabled={!canProceed}
+              className="flex-1 bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white rounded-2xl border-0 shadow-lg"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
-              {currentQuestion === questions.length - 1 ? "Voir mon profil" : "Suivant"}
+              {currentQuestion === questions.length - 1 ? "Découvrir mon profil ✨" : "Suivant →"}
             </Button>
           </div>
         </div>
