@@ -6,6 +6,7 @@ export interface EmotionalProfile {
   causes: string;
   objectives: string;
   color: string;
+  explanation?: string;
 }
 
 export const getProfileData = (profileId: string): EmotionalProfile => {
@@ -16,7 +17,8 @@ export const getProfileData = (profileId: string): EmotionalProfile => {
       description: 'Vit dans l\'anticipation négative, sujet au stress chronique',
       causes: 'Environnement professionnel toxique, charge mentale',
       objectives: 'Réduire les pensées parasites, recréer un sentiment de sécurité',
-      color: 'from-orange-400 to-red-400'
+      color: 'from-orange-400 to-red-400',
+      explanation: 'Votre profil révèle une tendance à anticiper le négatif. Ensemble, nous allons apprendre à calmer votre esprit.'
     },
     'fatigue': {
       id: 'fatigue',
@@ -24,7 +26,8 @@ export const getProfileData = (profileId: string): EmotionalProfile => {
       description: 'Épuisé émotionnellement et physiquement, perte de motivation',
       causes: 'Burnout, surcharge familiale',
       objectives: 'Rétablir l\'énergie, retrouver un équilibre corps-esprit',
-      color: 'from-gray-400 to-blue-400'
+      color: 'from-gray-400 to-blue-400',
+      explanation: 'Votre énergie est au plus bas. Nous allons vous aider à retrouver votre vitalité pas à pas.'
     },
     'deracine': {
       id: 'deracine',
@@ -32,7 +35,8 @@ export const getProfileData = (profileId: string): EmotionalProfile => {
       description: 'Perte de repères, isolement émotionnel',
       causes: 'Ruptures, déménagements, deuil',
       objectives: 'Reconstruire son socle, recréer du lien',
-      color: 'from-green-400 to-teal-400'
+      color: 'from-green-400 to-teal-400',
+      explanation: 'Vous traversez une période de transition. Nous allons vous accompagner pour retrouver vos repères.'
     },
     'controlant': {
       id: 'controlant',
@@ -40,7 +44,8 @@ export const getProfileData = (profileId: string): EmotionalProfile => {
       description: 'Besoin de tout maîtriser, difficulté à lâcher prise',
       causes: 'Traumatismes, peur de l\'échec',
       objectives: 'Réapprendre à faire confiance, pratiquer le lâcher-prise',
-      color: 'from-purple-400 to-indigo-400'
+      color: 'from-purple-400 to-indigo-400',
+      explanation: 'Votre besoin de contrôle vous protège mais vous épuise. Apprenons ensemble à lâcher prise.'
     },
     'hypersensible': {
       id: 'hypersensible',
@@ -48,7 +53,8 @@ export const getProfileData = (profileId: string): EmotionalProfile => {
       description: 'Vécu émotionnel intense, difficultés à poser des limites',
       causes: 'Surstimulation, vécu d\'injustice',
       objectives: 'Apaiser les émotions, renforcer les barrières psychologiques',
-      color: 'from-pink-400 to-rose-400'
+      color: 'from-pink-400 to-rose-400',
+      explanation: 'Votre sensibilité est un don précieux. Nous allons apprendre à la protéger et la canaliser.'
     },
     'refoule': {
       id: 'refoule',
@@ -56,7 +62,8 @@ export const getProfileData = (profileId: string): EmotionalProfile => {
       description: 'Difficulté à exprimer ses ressentis, émotions mises de côté',
       causes: 'Éducation rigide, traumatismes enfouis',
       objectives: 'Favoriser l\'expression, débloquer la parole intérieure',
-      color: 'from-indigo-400 to-blue-400'
+      color: 'from-indigo-400 to-blue-400',
+      explanation: 'Vos émotions cherchent à s\'exprimer. Nous allons créer un espace sécurisé pour qu\'elles puissent se libérer.'
     },
     'volcan': {
       id: 'volcan',
@@ -64,7 +71,8 @@ export const getProfileData = (profileId: string): EmotionalProfile => {
       description: 'Accumule les émotions, jusqu\'à l\'explosion (colère, crises)',
       causes: 'Frustrations, pressions sociales',
       objectives: 'Canaliser l\'émotion, comprendre ses déclencheurs',
-      color: 'from-red-400 to-orange-400'
+      color: 'from-red-400 to-orange-400',
+      explanation: 'Vos émotions s\'accumulent comme la lave. Apprenons à les exprimer avant qu\'elles n\'explosent.'
     }
   };
 

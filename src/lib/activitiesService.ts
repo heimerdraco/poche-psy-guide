@@ -47,11 +47,11 @@ export const activitiesService = {
 
       return {
         morning: morningActivities.length > 0 ? 
-          morningActivities[Math.floor(Math.random() * morningActivities.length)] : null,
+          morningActivities[Math.floor(Math.random() * morningActivities.length)] as Activity : null,
         afternoon: afternoonActivities.length > 0 ? 
-          afternoonActivities[Math.floor(Math.random() * afternoonActivities.length)] : null,
+          afternoonActivities[Math.floor(Math.random() * afternoonActivities.length)] as Activity : null,
         evening: eveningActivities.length > 0 ? 
-          eveningActivities[Math.floor(Math.random() * eveningActivities.length)] : null
+          eveningActivities[Math.floor(Math.random() * eveningActivities.length)] as Activity : null
       };
     } catch (error) {
       console.error('Erreur service activités:', error);
