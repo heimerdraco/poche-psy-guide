@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -111,12 +110,15 @@ const Index = () => {
     return (
       <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
         <AnimatedNatureBackground />
-        <Mascot phase={currentPhase} />
+        
+        {/* MASCOTTE TOUJOURS VISIBLE */}
+        <Mascot phase={currentPhase} isInteracting={currentSection !== 'home'} />
         
         <div className="container mx-auto px-4 py-8 max-w-md relative z-10">
           <div className="text-center mb-12 animate-slide-in-gentle">
             <div className="inline-flex items-center gap-3 mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-sage-200 to-forest-200 rounded-full p-2 animate-pulse-gentle shadow-lg">
+              {/* Logo circulaire amélioré */}
+              <div className="w-16 h-16 bg-gradient-to-br from-sage-200/90 to-forest-200/90 rounded-full p-2 animate-pulse-gentle shadow-xl backdrop-blur-sm border-2 border-white/50">
                 <img 
                   src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
                   alt="Arboria Logo"
@@ -193,6 +195,8 @@ const Index = () => {
   return (
     <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
       <AnimatedNatureBackground />
+      
+      {/* MASCOTTE TOUJOURS VISIBLE */}
       <Mascot phase={currentPhase} isInteracting={currentSection !== 'home'} />
       
       <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
