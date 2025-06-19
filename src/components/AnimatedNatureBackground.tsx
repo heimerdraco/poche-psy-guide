@@ -74,7 +74,7 @@ const AnimatedNatureBackground = () => {
       
       {/* Growing roots animation at bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-32 overflow-hidden">
-        <svg className="w-full h-full" viewBox="0 0 1200 200" className="animate-fade-in">
+        <svg className="w-full h-full animate-fade-in" viewBox="0 0 1200 200">
           <path
             d="M0,200 Q150,150 300,160 T600,140 T900,150 T1200,160 L1200,200 Z"
             fill="url(#rootGradient)"
