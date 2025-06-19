@@ -16,8 +16,10 @@ import DailyQuote from "@/components/DailyQuote";
 import MoodTracker from "@/components/MoodTracker";
 import QuickThought from "@/components/QuickThought";
 import ContinuedJourney from "@/components/ContinuedJourney";
-import SplashScreen from "@/components/SplashScreen";
-import AnimatedBackground from "@/components/AnimatedBackground";
+import EnhancedSplashScreen from "@/components/EnhancedSplashScreen";
+import AnimatedNatureBackground from "@/components/AnimatedNatureBackground";
+import DailyMoodWidget from "@/components/DailyMoodWidget";
+import ActivityCompletionCelebration from "@/components/ActivityCompletionCelebration";
 import Mascot from "@/components/Mascot";
 import EnhancedButton from "@/components/EnhancedButton";
 
@@ -31,6 +33,8 @@ const Index = () => {
   const [isTrialExpired, setIsTrialExpired] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [currentPhase, setCurrentPhase] = useState<'calm' | 'hopeful' | 'warm'>('calm');
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [completedActivity, setCompletedActivity] = useState('');
 
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
@@ -82,9 +86,9 @@ const Index = () => {
     setShowSubscription(true);
   };
 
-  // Show splash screen on first launch
+  // Show enhanced splash screen on first launch
   if (showSplash) {
-    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+    return <EnhancedSplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
   // Show trial expired screen if trial is over
@@ -104,8 +108,8 @@ const Index = () => {
 
   if (!userProfile) {
     return (
-      <div className="min-h-screen relative">
-        <AnimatedBackground phase={currentPhase} intensity="subtle" />
+      <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
+        <AnimatedNatureBackground />
         <Mascot phase={currentPhase} />
         
         <div className="container mx-auto px-4 py-8 max-w-md relative z-10">
@@ -115,50 +119,50 @@ const Index = () => {
                 <img 
                   src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
                   alt="Arboria Logo"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain drop-shadow-lg"
                 />
               </div>
-              <h1 className="text-3xl font-bold text-emerald-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
+              <h1 className="text-3xl font-bold text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
                 Arboria
               </h1>
             </div>
             
-            <p className="text-lg text-emerald-700 mb-8 leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
+            <p className="text-lg text-forest-700 mb-8 leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
               Votre compagnon de bien-être émotionnel. Un espace d'enracinement pour cultiver votre équilibre intérieur 🌿
             </p>
             
-            <Card className="mb-8 shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+            <Card className="mb-8 shadow-lg border-0 bg-cream-50/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border border-sage-200">
               <CardContent className="p-8">
                 <div className="space-y-6">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float">
-                      <User className="w-8 h-8 text-emerald-600" />
+                    <div className="w-16 h-16 bg-gradient-to-br from-sage-100 to-forest-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float">
+                      <User className="w-8 h-8 text-forest-600" />
                     </div>
-                    <h3 className="font-semibold text-xl mb-2 text-emerald-800">Découvrez votre profil émotionnel</h3>
-                    <p className="text-emerald-600 text-sm">Un questionnaire bienveillant pour mieux vous comprendre</p>
+                    <h3 className="font-semibold text-xl mb-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>Découvrez votre profil émotionnel</h3>
+                    <p className="text-forest-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Un questionnaire bienveillant pour mieux vous comprendre</p>
                   </div>
                   
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-teal-100 to-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '1s' }}>
-                      <Book className="w-8 h-8 text-teal-600" />
+                    <div className="w-16 h-16 bg-gradient-to-br from-forest-100 to-sage-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '1s' }}>
+                      <Book className="w-8 h-8 text-sage-600" />
                     </div>
-                    <h3 className="font-semibold text-xl mb-2 text-emerald-800">Parcours personnalisé</h3>
-                    <p className="text-emerald-600 text-sm">Un parcours d'1 an adapté à vos besoins émotionnels</p>
+                    <h3 className="font-semibold text-xl mb-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>Parcours personnalisé</h3>
+                    <p className="text-forest-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Un parcours d'1 an adapté à vos besoins émotionnels</p>
                   </div>
                   
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '2s' }}>
-                      <MessageCircle className="w-8 h-8 text-green-600" />
+                    <div className="w-16 h-16 bg-gradient-to-br from-sage-100 to-forest-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '2s' }}>
+                      <MessageCircle className="w-8 h-8 text-forest-600" />
                     </div>
-                    <h3 className="font-semibold text-xl mb-2 text-emerald-800">Accompagnement quotidien</h3>
-                    <p className="text-emerald-600 text-sm">3 activités par jour pour cultiver votre bien-être</p>
+                    <h3 className="font-semibold text-xl mb-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>Accompagnement quotidien</h3>
+                    <p className="text-forest-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>3 activités par jour pour cultiver votre bien-être</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <div className="mb-8">
-              <Badge variant="secondary" className="text-base px-6 py-3 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700 border-0 animate-pulse-gentle">
+              <Badge variant="secondary" className="text-base px-6 py-3 bg-gradient-to-r from-sage-100 to-forest-100 text-forest-700 border-0 animate-pulse-gentle" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 🌱 3 jours gratuits puis Arboria+ à 3,99€/mois
               </Badge>
             </div>
@@ -168,7 +172,7 @@ const Index = () => {
               size="lg"
               soundType="success"
               animationType="glow"
-              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl border-0"
+              className="w-full bg-gradient-to-r from-sage-500 to-forest-500 hover:from-sage-600 hover:to-forest-600 text-cream-50 px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl border-0"
               style={{ fontFamily: 'Nunito, sans-serif' }}
             >
               🌿 Découvrir mon profil émotionnel
@@ -186,8 +190,8 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen relative">
-      <AnimatedBackground phase={currentPhase} intensity="medium" />
+    <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
+      <AnimatedNatureBackground />
       <Mascot phase={currentPhase} isInteracting={currentSection !== 'home'} />
       
       <div className="container mx-auto px-4 py-4 max-w-md relative z-10">
@@ -197,16 +201,16 @@ const Index = () => {
               <img 
                 src="/lovable-uploads/71692815-441c-473e-8dca-dc19e4da3570.png" 
                 alt="Arboria Logo"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain drop-shadow-lg"
               />
             </div>
-            <h1 className="text-xl font-bold text-emerald-800" style={{ fontFamily: 'Quicksand, sans-serif' }}>
+            <h1 className="text-xl font-bold text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
               Arboria
             </h1>
           </div>
           <div className="flex items-center gap-2">
             {trialDays > 0 ? (
-              <Badge variant="outline" className="border-emerald-400 text-emerald-700 bg-emerald-50 animate-pulse-gentle">
+              <Badge variant="outline" className="border-sage-400 text-forest-700 bg-sage-50 animate-pulse-gentle" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 Jour {4 - trialDays}/3 gratuit
               </Badge>
             ) : (
@@ -214,7 +218,8 @@ const Index = () => {
                 onClick={() => setShowSubscription(true)}
                 size="sm"
                 soundType="calm"
-                className="bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-500 hover:to-teal-500 text-white border-0 rounded-full"
+                className="bg-gradient-to-r from-sage-400 to-forest-400 hover:from-sage-500 hover:to-forest-500 text-cream-50 border-0 rounded-full"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
               >
                 🌿 Arboria+
               </EnhancedButton>
@@ -225,30 +230,33 @@ const Index = () => {
         {currentSection === 'home' && (
           <div className="space-y-6 animate-slide-in-gentle">
             {/* Affichage du profil détecté */}
-            <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+            <Card className="shadow-lg border-0 bg-cream-50/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border border-sage-200">
               <CardContent className="p-6">
-                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-emerald-800">
-                  <User className="w-5 h-5 text-emerald-600 animate-twinkle" />
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
+                  <User className="w-5 h-5 text-sage-600 animate-twinkle" />
                   Votre profil émotionnel
                 </h2>
-                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-4 rounded-xl">
-                  <Badge className="bg-gradient-to-r from-emerald-300 to-teal-300 text-emerald-800 mb-2">
+                <div className="bg-gradient-to-r from-sage-50 to-forest-50 p-4 rounded-xl">
+                  <Badge className="bg-gradient-to-r from-sage-300 to-forest-300 text-forest-800 mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
                     {userProfile}
                   </Badge>
-                  <p className="text-sm text-emerald-700 leading-relaxed">
+                  <p className="text-sm text-forest-700 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
                     Votre parcours personnalisé est maintenant disponible ! Il s'adapte à vos besoins émotionnels spécifiques.
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+            {/* Widget d'humeur du jour */}
+            <DailyMoodWidget />
+
+            <Card className="shadow-lg border-0 bg-cream-50/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border border-sage-200">
               <CardContent className="p-6">
-                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-emerald-800">
-                  <Calendar className="w-5 h-5 text-emerald-600 animate-twinkle" />
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
+                  <Calendar className="w-5 h-5 text-sage-600 animate-twinkle" />
                   Pensée du jour
                 </h2>
-                <blockquote className="text-base text-emerald-700 italic leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                <blockquote className="text-base text-forest-700 italic leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
                   {todayQuote}
                 </blockquote>
               </CardContent>
@@ -272,7 +280,7 @@ const Index = () => {
                 onClick={() => setCurrentSection('journey')}
                 soundType="click"
                 animationType="bounce"
-                className="w-full bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-500 hover:to-teal-500 text-white py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                className="w-full bg-gradient-to-r from-sage-400 to-forest-400 hover:from-sage-500 hover:to-forest-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
                 style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '0.8s' }}
               >
                 <Book className="w-6 h-6 mr-2" />
@@ -283,7 +291,7 @@ const Index = () => {
                 onClick={() => navigate(`/chat/${userProfile}`)}
                 soundType="calm"
                 animationType="scale"
-                className="w-full bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                className="w-full bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
                 style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '0.9s' }}
               >
                 <MessageCircle className="w-6 h-6 mr-2" />
@@ -294,7 +302,7 @@ const Index = () => {
                 onClick={() => setCurrentSection('messages')}
                 soundType="calm"
                 animationType="scale"
-                className="w-full bg-gradient-to-r from-teal-400 to-green-400 hover:from-teal-500 hover:to-green-500 text-white py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                className="w-full bg-gradient-to-r from-sage-400 to-forest-400 hover:from-sage-500 hover:to-forest-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
                 style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '1s' }}
               >
                 <MessageCircle className="w-6 h-6 mr-2" />
@@ -305,7 +313,7 @@ const Index = () => {
                 onClick={() => setShowSubscription(true)}
                 soundType="success"
                 animationType="glow"
-                className="w-full bg-gradient-to-r from-green-400 to-emerald-400 hover:from-green-500 hover:to-emerald-500 text-white py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
+                className="w-full bg-gradient-to-r from-forest-400 to-sage-400 hover:from-forest-500 hover:to-sage-500 text-cream-50 py-6 text-lg rounded-2xl border-0 shadow-lg animate-slide-in-gentle"
                 style={{ fontFamily: 'Nunito, sans-serif', animationDelay: '1.2s' }}
               >
                 <Sparkles className="w-6 h-6 mr-2" />
@@ -327,7 +335,7 @@ const Index = () => {
         {currentSection === 'messages' && <MessagesSection />}
 
         {/* Bottom Navigation */}
-        <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-emerald-100 px-4 py-2 z-50">
+        <nav className="fixed bottom-0 left-0 right-0 bg-cream-50/90 backdrop-blur-sm border-t border-sage-200 px-4 py-2 z-50">
           <div className="flex justify-center max-w-md mx-auto">
             <div className="flex gap-1">
               {[
@@ -352,10 +360,11 @@ const Index = () => {
                   animationType="scale"
                   className={`flex flex-col items-center gap-1 h-12 px-3 rounded-xl transition-all duration-200 ${
                     currentSection === key 
-                      ? 'bg-gradient-to-r from-emerald-400 to-teal-400 text-white' 
-                      : 'text-emerald-600 hover:bg-emerald-50'
+                      ? 'bg-gradient-to-r from-sage-400 to-forest-400 text-cream-50' 
+                      : 'text-forest-600 hover:bg-sage-50'
                   }`}
                   size="sm"
+                  style={{ fontFamily: 'Nunito, sans-serif' }}
                 >
                   <span className="text-lg">{label}</span>
                 </EnhancedButton>
@@ -369,6 +378,12 @@ const Index = () => {
         <SubscriptionModal 
           isOpen={showSubscription}
           onClose={() => setShowSubscription(false)}
+        />
+
+        <ActivityCompletionCelebration 
+          isVisible={showCelebration}
+          onClose={() => setShowCelebration(false)}
+          activityTitle={completedActivity}
         />
       </div>
     </div>
