@@ -260,12 +260,12 @@ const Index = () => {
                 { key: 'journey', label: '📚', icon: Book },
                 { key: 'messages', label: '💌', icon: MessageCircle },
                 { key: 'journal', label: '📝', icon: Edit },
-                { key: 'profile', label: '👤', icon: User },
-              ].map(({ key, label, icon: Icon }) => (
+                { key: 'settings', label: '⚙️', icon: User, isRoute: true },
+              ].map(({ key, label, icon: Icon, isRoute }) => (
                 <Button
                   key={key}
                   variant={currentSection === key ? "default" : "ghost"}
-                  onClick={() => setCurrentSection(key)}
+                  onClick={() => isRoute ? navigate('/settings') : setCurrentSection(key)}
                   className={`flex flex-col items-center gap-1 h-12 px-3 rounded-xl ${
                     currentSection === key 
                       ? 'bg-gradient-to-r from-purple-300 to-pink-300 text-gray-800' 
