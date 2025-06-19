@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { supabaseService } from "@/lib/supabase";
 import { useNavigate } from "react-router-dom";
 
 interface JournalEntry {
-  id?: number;
+  id: string;
   device_id: string;
   content: string;
   mood: string;
