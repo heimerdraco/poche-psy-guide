@@ -12,6 +12,9 @@ import MessagesSection from "@/components/MessagesSection";
 import EmotionalJourney from "@/components/EmotionalJourney";
 import DeveloperMode from "@/components/DeveloperMode";
 import TrialExpiredScreen from "@/components/TrialExpiredScreen";
+import DailyQuote from "@/components/DailyQuote";
+import MoodTracker from "@/components/MoodTracker";
+import QuickThought from "@/components/QuickThought";
 
 const Index = () => {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
@@ -240,6 +243,13 @@ const Index = () => {
                 </blockquote>
               </CardContent>
             </Card>
+
+            {/* New Daily Features */}
+            <div className="space-y-4">
+              <DailyQuote />
+              <MoodTracker />
+              <QuickThought />
+            </div>
 
             <div className="grid gap-4">
               <Button
