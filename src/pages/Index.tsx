@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -51,6 +50,16 @@ const Index = () => {
       setTrialDays(3);
       setIsTrialExpired(false);
     }
+
+    // Listen for upgrade events from locked activities
+    const handleUpgradeEvent = () => {
+      setShowSubscription(true);
+    };
+
+    window.addEventListener('openSubscription', handleUpgradeEvent);
+    return () => {
+      window.removeEventListener('openSubscription', handleUpgradeEvent);
+    };
   }, [userProfile]);
 
   const handleProfileComplete = (profile: string) => {
