@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Scale, Shield, FileText, Camera, Mic, Trash2, Eye } from "lucide-react";
+import { ArrowLeft, Scale, Shield, FileText, Camera, Trash2, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { 
   AlertDialog, 
@@ -102,27 +102,13 @@ const Legal = () => {
                     Permissions : android.permission.CAMERA, android.permission.READ_EXTERNAL_STORAGE
                   </p>
                 </div>
-                
-                <div>
-                  <p className="font-medium mb-2 flex items-center gap-2">
-                    <Mic className="w-4 h-4" />
-                    Microphone
-                  </p>
-                  <p className="text-gray-600 text-xs leading-relaxed">
-                    L'accès au microphone est demandé uniquement pour les activités audio. 
-                    Aucun enregistrement n'est conservé, analysé ou transmis.
-                  </p>
-                  <p className="text-xs text-blue-600 mt-1 font-mono">
-                    Permission : android.permission.RECORD_AUDIO
-                  </p>
-                </div>
               </div>
               
               <Separator />
               
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <p className="text-xs text-green-800 leading-relaxed">
-                  <strong>Engagement de confidentialité :</strong> Aucune donnée personnelle, audio ou image 
+                  <strong>Engagement de confidentialité :</strong> Aucune donnée personnelle ou image 
                   n'est stockée, analysée ou utilisée à des fins commerciales. Toutes les informations 
                   restent sur l'appareil de l'utilisateur.
                 </p>

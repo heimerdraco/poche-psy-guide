@@ -16,7 +16,7 @@ const SubscriptionModal = ({ isOpen, onClose }: SubscriptionModalProps) => {
     "Messages bienveillants illimités",
     "Journal émotionnel avec graphiques",
     "Nouvelles techniques ajoutées chaque mois",
-    "Audio de méditation et relaxation",
+    "Guides de méditation et relaxation",
     "Sauvegarde cloud de ton parcours",
     "Support prioritaire avec bienveillance",
     "Aucune publicité, expérience pure"

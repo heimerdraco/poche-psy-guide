@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Camera, Mic, Image, Play } from "lucide-react";
+import { Camera, Image, Play } from "lucide-react";
 import { usePermissions } from "@/hooks/usePermissions";
 import PermissionDialog from "./PermissionDialog";
 
@@ -12,7 +12,6 @@ interface ActivityWithPermissionsProps {
     description: string;
     duration: string;
     requiresCamera?: boolean;
-    requiresMicrophone?: boolean;
     requiresStorage?: boolean;
   };
   onComplete: () => void;
@@ -21,7 +20,7 @@ interface ActivityWithPermissionsProps {
 
 const ActivityWithPermissions = ({ activity, onComplete, className }: ActivityWithPermissionsProps) => {
   const [isStarted, setIsStarted] = useState(false);
-  const { permissionDialog, requestCameraPermission, requestMicrophonePermission, requestStoragePermission, closePermissionDialog } = usePermissions();
+  const { permissionDialog, requestCameraPermission, requestStoragePermission, closePermissionDialog } = usePermissions();
 
   const handleStartActivity = () => {
     // Vérifier les permissions nécessaires
@@ -42,11 +41,6 @@ const ActivityWithPermissions = ({ activity, onComplete, className }: ActivityWi
       requestStoragePermission(() => {
         setIsStarted(true);
       });
-    } else if (activity.requiresMicrophone) {
-      // Activité audio
-      requestMicrophonePermission(() => {
-        setIsStarted(true);
-      });
     } else {
       // Pas de permission nécessaire
       setIsStarted(true);
@@ -56,7 +50,6 @@ const ActivityWithPermissions = ({ activity, onComplete, className }: ActivityWi
   const getPermissionIcons = () => {
     const icons = [];
     if (activity.requiresCamera) icons.push(<Camera key="camera" className="w-3 h-3" />);
-    if (activity.requiresMicrophone) icons.push(<Mic key="mic" className="w-3 h-3" />);
     if (activity.requiresStorage) icons.push(<Image key="storage" className="w-3 h-3" />);
     return icons;
   };
@@ -113,7 +106,7 @@ const ActivityWithPermissions = ({ activity, onComplete, className }: ActivityWi
             </div>
           </div>
 
-          {(activity.requiresCamera || activity.requiresMicrophone || activity.requiresStorage) && (
+          {(activity.requiresCamera || activity.requiresStorage) && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
               <p className="text-xs text-blue-800">
                 Cette activité nécessite des permissions spéciales pour fonctionner.

@@ -9,7 +9,6 @@ export interface JournalEntry {
   mood_rating?: number;
   mood_text?: string;
   written_note?: string;
-  audio_url?: string;
   photo_url?: string;
   created_at: string;
 }

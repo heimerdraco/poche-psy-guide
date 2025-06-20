@@ -9,7 +9,7 @@ import {
   AlertDialogHeader, 
   AlertDialogTitle 
 } from "@/components/ui/alert-dialog";
-import { Camera, Mic, Image, Shield } from "lucide-react";
+import { Camera, Image, Shield } from "lucide-react";
 import { PermissionDialogProps } from "@/hooks/usePermissions";
 
 const PermissionDialog = ({ isOpen, type, onAccept, onDecline }: PermissionDialogProps) => {
@@ -21,13 +21,6 @@ const PermissionDialog = ({ isOpen, type, onAccept, onDecline }: PermissionDialo
           title: "Accès à l'appareil photo",
           description: "Arboria a besoin d'accéder à votre appareil photo pour réaliser cette activité avec vous. Aucune donnée n'est partagée ni stockée sans votre consentement.",
           permissions: ["android.permission.CAMERA"]
-        };
-      case 'microphone':
-        return {
-          icon: <Mic className="w-8 h-8 text-purple-500" />,
-          title: "Accès au microphone",
-          description: "Arboria utilise votre micro uniquement pour cette activité. Aucun enregistrement n'est stocké, partagé ou analysé.",
-          permissions: ["android.permission.RECORD_AUDIO"]
         };
       case 'storage':
         return {
