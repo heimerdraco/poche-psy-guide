@@ -83,15 +83,17 @@ export const stableActivitiesService = {
         const cleanedActivity = { ...activity };
         
         // Si l'activité contient des références audio, les convertir en texte
-        if (cleanedActivity.content) {
-          if (cleanedActivity.content.audioText) {
-            cleanedActivity.content.textContent = cleanedActivity.content.audioText;
-            delete cleanedActivity.content.audioText;
+        if (cleanedActivity.content && typeof cleanedActivity.content === 'object' && cleanedActivity.content !== null) {
+          const content = cleanedActivity.content as any;
+          
+          if (content.audioText) {
+            content.textContent = content.audioText;
+            delete content.audioText;
           }
           
           // S'assurer qu'il y a toujours un contenu textuel
-          if (!cleanedActivity.content.textContent && !cleanedActivity.content.text) {
-            cleanedActivity.content.textContent = "Prenez un moment pour vous recentrer et réfléchir à votre journée.";
+          if (!content.textContent && !content.text) {
+            content.textContent = "Prenez un moment pour vous recentrer et réfléchir à votre journée.";
           }
         }
         
