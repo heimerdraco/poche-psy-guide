@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "./supabase";
 
@@ -25,7 +24,7 @@ export interface DayMemory {
 }
 
 export const planningService = {
-  // Générer un planning fixe de 365 jours pour un profil
+  // Générer un planning STABLE de 365 jours pour un profil (FIXE UNE FOIS POUR TOUTES)
   async generateYearlyPlan(profile: string): Promise<boolean> {
     try {
       const deviceId = getDeviceId();
@@ -39,7 +38,7 @@ export const planningService = {
         .single();
 
       if (existingPlan) {
-        console.log('Planning déjà existant pour ce profil');
+        console.log('Planning déjà existant pour ce profil - STABLE ET FIXE');
         return true;
       }
 
@@ -65,19 +64,23 @@ export const planningService = {
         evening: eveningActivities.length
       });
 
-      // Générer le planning de 365 jours
+      // GÉNÉRER PLANNING FIXE avec une seed basée sur le device_id + profile
+      // Cela garantit que le même utilisateur aura toujours les mêmes activités
+      const seed = this.createSeed(deviceId + profile);
+      const seededRandom = this.createSeededRandom(seed);
+
       const yearlyPlan = [];
       for (let day = 1; day <= 365; day++) {
         const plan: DayPlan = {
           day,
-          morning_activity_id: morningActivities[Math.floor(Math.random() * morningActivities.length)]?.id || '',
-          afternoon_activity_id: afternoonActivities[Math.floor(Math.random() * afternoonActivities.length)]?.id || '',
-          evening_activity_id: eveningActivities[Math.floor(Math.random() * eveningActivities.length)]?.id || ''
+          morning_activity_id: morningActivities[Math.floor(seededRandom() * morningActivities.length)]?.id || '',
+          afternoon_activity_id: afternoonActivities[Math.floor(seededRandom() * afternoonActivities.length)]?.id || '',
+          evening_activity_id: eveningActivities[Math.floor(seededRandom() * eveningActivities.length)]?.id || ''
         };
         yearlyPlan.push(plan);
       }
 
-      // Sauvegarder le planning principal
+      // Sauvegarder le planning principal (FIXE POUR TOUJOURS)
       const { error: planError } = await supabase
         .from('yearly_plans')
         .insert({
@@ -92,12 +95,32 @@ export const planningService = {
         return false;
       }
 
-      console.log('Planning de 365 jours généré avec succès');
+      console.log('Planning STABLE de 365 jours généré et FIXÉ pour toujours');
       return true;
     } catch (error) {
       console.error('Erreur génération planning:', error);
       return false;
     }
+  },
+
+  // Créer une seed numérique à partir d'une chaîne
+  createSeed(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
+  },
+
+  // Générateur de nombres pseudo-aléatoires avec seed (pour garantir reproductibilité)
+  createSeededRandom(seed: number) {
+    let currentSeed = seed;
+    return function() {
+      currentSeed = (currentSeed * 9301 + 49297) % 233280;
+      return currentSeed / 233280;
+    };
   },
 
   // Récupérer le planning d'un jour spécifique
@@ -117,7 +140,6 @@ export const planningService = {
         return null;
       }
 
-      // Properly cast the Json type to DayPlan[]
       const planData = data.plan_data as unknown as DayPlan[];
       return planData.find(day => day.day === dayNumber) || null;
     } catch (error) {
