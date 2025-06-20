@@ -1,7 +1,9 @@
 
 import { useState } from 'react';
-import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { Card, CardContent } from "@/components/ui/card";
+import { MessageCircle } from 'lucide-react';
 import { useFamiliarData } from '@/hooks/useFamiliarData';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 interface AnimatedFamiliarProps {
   profile: string;
@@ -9,19 +11,36 @@ interface AnimatedFamiliarProps {
 }
 
 const AnimatedFamiliar = ({ profile, className = '' }: AnimatedFamiliarProps) => {
-  const { familiar } = useFamiliarData(profile);
+  const { familiar, currentPhrase, showMessage, showRandomPhrase } = useFamiliarData(profile);
   const { playCalm } = useSoundEffects();
   const [isClicked, setIsClicked] = useState(false);
 
   const handleFamiliarClick = () => {
     setIsClicked(true);
     playCalm();
+    showRandomPhrase();
     
     setTimeout(() => setIsClicked(false), 600);
   };
 
   return (
     <div className={`relative flex justify-center ${className}`}>
+      {/* Bulle de message - Repositionnée au-dessus et centrée */}
+      {showMessage && currentPhrase && (
+        <Card className="absolute -top-20 left-1/2 transform -translate-x-1/2 w-64 bg-white/95 backdrop-blur-sm shadow-xl border-0 animate-scale-in z-50">
+          <CardContent className="p-3">
+            <div className="flex items-start gap-2">
+              <MessageCircle className="w-4 h-4 text-sage-600 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-forest-700 leading-relaxed text-center" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                {currentPhrase}
+              </p>
+            </div>
+            {/* Flèche pointant vers le familier - centrée */}
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-white"></div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Le familier - Plus vivant avec animations améliorées */}
       <div 
         className={`

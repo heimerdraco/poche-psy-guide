@@ -20,7 +20,7 @@ const FamiliarSection = ({ profile }: FamiliarSectionProps) => {
             <div className="text-8xl text-forest-600">🌳</div>
           </div>
           
-          {/* Contenu principal - Encore plus simplifié */}
+          {/* Contenu principal - Simplifié */}
           <div className="relative z-10 flex flex-col items-center space-y-6">
             {/* Titre de section plus concis */}
             <div className="text-center">
@@ -32,9 +32,21 @@ const FamiliarSection = ({ profile }: FamiliarSectionProps) => {
               </p>
             </div>
 
-            {/* Le familier animé au centre */}
+            {/* Le familier animé au centre - Plus d'espace */}
             <div className="flex justify-center py-6">
               <AnimatedFamiliar profile={profile} />
+            </div>
+
+            {/* Encouragement personnalisé simplifié */}
+            <div className="bg-gradient-to-r from-sage-100/50 to-forest-100/50 rounded-xl p-4 text-center border border-sage-200/50 max-w-xs">
+              <p className="text-sm text-forest-600 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                💫 Cliquez sur {profileData.name === 'Le Sensible Silencieux' ? 'Cendre' : 
+                                profileData.name === 'Le Cœur Fatigué' ? 'Moka' :
+                                profileData.name === 'Le Cœur Déraciné' ? 'Lume' :
+                                profileData.name === 'Le Cœur Contrôlant' ? 'Nox' :
+                                profileData.name === 'Le Cœur Hypersensible' ? 'Élior' :
+                                profileData.name === 'Le Cœur Volcanique' ? 'Tiko' : 'Brume'} pour des encouragements
+              </p>
             </div>
           </div>
         </div>
