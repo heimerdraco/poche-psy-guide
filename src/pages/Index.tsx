@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ import QuickThought from "@/components/QuickThought";
 import ContinuedJourney from "@/components/ContinuedJourney";
 import SplashScreen from "@/components/SplashScreen";
 import AnimatedNatureBackground from "@/components/AnimatedNatureBackground";
-import DailyMoodWidget from "@/components/DailyMoodWidget";
 import ActivityCompletionCelebration from "@/components/ActivityCompletionCelebration";
 import Mascot from "@/components/Mascot";
 import EnhancedButton from "@/components/EnhancedButton";
@@ -251,9 +249,6 @@ const Index = () => {
           <div className="space-y-6 animate-slide-in-gentle">
             {/* Section Familier - Remplace les anciennes sections */}
             <FamiliarSection profile={userProfile} />
-
-            {/* Widget d'humeur du jour */}
-            <DailyMoodWidget />
 
             {/* Daily Features - Simplifié */}
             <div className="space-y-4">
