@@ -42,7 +42,6 @@ const ActivityCard = ({
   const getFormatIcon = (format: string) => {
     switch (format) {
       case 'notebook': return '📝';
-      case 'audio': return '🎧';
       case 'explanatory': return '📖';
       default: return '📋';
     }
@@ -51,7 +50,6 @@ const ActivityCard = ({
   const getFormatLabel = (format: string) => {
     switch (format) {
       case 'notebook': return 'Journal';
-      case 'audio': return 'Audio';
       case 'explanatory': return 'Guide';
       default: return format;
     }
@@ -102,7 +100,7 @@ const ActivityCard = ({
               {getFormatLabel(activity.activity_format)}
             </Badge>
             
-            {content.duration && (
+            {content?.duration && (
               <Badge variant="outline" className="text-xs flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {content.duration}

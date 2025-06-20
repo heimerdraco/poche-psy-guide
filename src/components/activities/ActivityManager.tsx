@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import ExplanatoryActivity from './ExplanatoryActivity';
-import AudioActivity from './AudioActivity';
 import InteractiveActivity from './InteractiveActivity';
 
 interface Activity {
@@ -9,7 +8,7 @@ interface Activity {
   title: string;
   description: string;
   duration: string;
-  type: 'explanatory' | 'audio' | 'interactive';
+  type: 'explanatory' | 'interactive';
   content?: any;
 }
 
@@ -39,22 +38,6 @@ const ActivityManager = ({ activity, onComplete, onBack }: ActivityManagerProps)
               objective: activity.content?.objective,
               steps: activity.content?.steps,
               content: activity.content?.text || activity.description,
-              id: activity.id
-            }}
-            onComplete={handleActivityComplete}
-            onBack={onBack}
-          />
-        );
-
-      case 'audio':
-        return (
-          <AudioActivity
-            activity={{
-              title: activity.title,
-              description: activity.description,
-              textContent: activity.content?.textContent || activity.content?.audioText || "Prenez un moment pour respirer profondément et vous recentrer sur l'instant présent.", // Fallback textuel
-              visualUrl: activity.content?.visualUrl,
-              duration: activity.duration,
               id: activity.id
             }}
             onComplete={handleActivityComplete}

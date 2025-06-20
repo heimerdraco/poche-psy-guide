@@ -59,7 +59,6 @@ const ActivityDetailModal = ({
   const getFormatIcon = (format: string) => {
     switch (format) {
       case 'notebook': return '📝';
-      case 'audio': return '🎧';
       case 'explanatory': return '📖';
       default: return '📋';
     }
@@ -68,7 +67,6 @@ const ActivityDetailModal = ({
   const getFormatLabel = (format: string) => {
     switch (format) {
       case 'notebook': return 'Journal';
-      case 'audio': return 'Audio';
       case 'explanatory': return 'Guide';
       default: return format;
     }
@@ -90,7 +88,7 @@ const ActivityDetailModal = ({
             <Badge className={`bg-gradient-to-r ${profileColor} text-white`}>
               {getFormatLabel(activity.activity_format)}
             </Badge>
-            {content.duration && (
+            {content?.duration && (
               <Badge variant="outline" className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {content.duration}
@@ -105,7 +103,7 @@ const ActivityDetailModal = ({
           </div>
 
           {/* Objectif psychologique */}
-          {content.objective && (
+          {content?.objective && (
             <div className="space-y-2">
               <h3 className="flex items-center gap-2 font-semibold text-lg">
                 <Target className="w-5 h-5 text-blue-600" />
@@ -120,7 +118,7 @@ const ActivityDetailModal = ({
           <Separator />
 
           {/* Instructions étape par étape */}
-          {content.instructions && (
+          {content?.steps && (
             <div className="space-y-3">
               <h3 className="flex items-center gap-2 font-semibold text-lg">
                 <List className="w-5 h-5 text-green-600" />
@@ -128,15 +126,28 @@ const ActivityDetailModal = ({
               </h3>
               <div className="bg-green-50 p-4 rounded-lg">
                 <ol className="space-y-2">
-                  {content.instructions.map((instruction: string, index: number) => (
+                  {content.steps.map((step: string, index: number) => (
                     <li key={index} className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
                         {index + 1}
                       </span>
-                      <span className="text-gray-700">{instruction}</span>
+                      <span className="text-gray-700">{step}</span>
                     </li>
                   ))}
                 </ol>
+              </div>
+            </div>
+          )}
+
+          {/* Prompt pour les activités notebook */}
+          {content?.prompt && activity.activity_format === 'notebook' && (
+            <div className="space-y-3">
+              <h3 className="flex items-center gap-2 font-semibold text-lg">
+                <List className="w-5 h-5 text-green-600" />
+                Consigne d'écriture
+              </h3>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <p className="text-gray-700">{content.prompt}</p>
               </div>
             </div>
           )}
@@ -145,7 +156,7 @@ const ActivityDetailModal = ({
 
           {/* Temps estimé et matériel */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {content.duration && (
+            {content?.duration && (
               <div className="space-y-2">
                 <h4 className="flex items-center gap-2 font-medium">
                   <Clock className="w-4 h-4 text-orange-600" />
@@ -157,7 +168,7 @@ const ActivityDetailModal = ({
               </div>
             )}
 
-            {content.material && (
+            {content?.material && (
               <div className="space-y-2">
                 <h4 className="flex items-center gap-2 font-medium">
                   <Package className="w-4 h-4 text-purple-600" />
@@ -171,7 +182,7 @@ const ActivityDetailModal = ({
           </div>
 
           {/* Pourquoi cette activité aide */}
-          {content.why_helps && (
+          {content?.why_helps && (
             <>
               <Separator />
               <div className="space-y-2">
@@ -184,15 +195,6 @@ const ActivityDetailModal = ({
                 </p>
               </div>
             </>
-          )}
-
-          {/* Message pour audio manquant */}
-          {activity.activity_format === 'audio' && !content.theme && (
-            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg">
-              <p className="text-yellow-800 text-sm">
-                🎧 <strong>Audio disponible bientôt</strong> - En attendant, vous pouvez suivre les instructions écrites ci-dessus.
-              </p>
-            </div>
           )}
 
           {/* Boutons d'action */}

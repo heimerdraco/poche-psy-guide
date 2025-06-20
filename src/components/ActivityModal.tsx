@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Play, Pause, CheckCircle, BookOpen, Headphones, PenTool } from "lucide-react";
+import { CheckCircle, BookOpen, PenTool } from "lucide-react";
 import EnhancedButton from "./EnhancedButton";
 
 interface ActivityModalProps {
@@ -17,7 +17,6 @@ interface ActivityModalProps {
 const ActivityModal = ({ activity, isOpen, onClose, onComplete, profileColor }: ActivityModalProps) => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [notes, setNotes] = useState("");
-  const [isPlaying, setIsPlaying] = useState(false);
 
   if (!activity) return null;
 
@@ -53,44 +52,6 @@ const ActivityModal = ({ activity, isOpen, onClose, onComplete, profileColor }: 
                 ))}
               </div>
             )}
-          </div>
-        );
-
-      case 'audio':
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Headphones className="w-5 h-5 text-purple-600" />
-              <h3 className="font-semibold text-purple-800">Séance audio guidée</h3>
-            </div>
-            
-            <div className="bg-purple-50 p-6 rounded-lg text-center">
-              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
-                {isPlaying ? 
-                  <Pause className="w-8 h-8 text-white" /> : 
-                  <Play className="w-8 h-8 text-white" />
-                }
-              </div>
-              
-              <p className="text-gray-600 mb-4">
-                Durée: {Math.floor((activity.content?.duration || 600) / 60)} minutes
-              </p>
-              
-              <EnhancedButton
-                onClick={() => setIsPlaying(!isPlaying)}
-                className={`bg-gradient-to-r ${profileColor} text-white px-6 py-2`}
-                soundType="click"
-                animationType="scale"
-              >
-                {isPlaying ? 'Pause' : 'Commencer la séance'}
-              </EnhancedButton>
-              
-              {isPlaying && (
-                <div className="mt-4 text-sm text-purple-600">
-                  🎧 Installez-vous confortablement et suivez les instructions audio
-                </div>
-              )}
-            </div>
           </div>
         );
 

@@ -7,7 +7,7 @@ export interface Activity {
   title: string;
   description: string;
   type: 'morning' | 'afternoon' | 'evening';
-  activity_format: 'explanatory' | 'audio' | 'notebook';
+  activity_format: 'explanatory' | 'notebook';
   content: any;
   target_profiles: string[];
   day_min: number;
@@ -155,11 +155,21 @@ export const activitiesService = {
         day_max: 365
       },
       {
-        title: "Méditation progressive",
-        description: "Détente musculaire progressive pour relâcher les tensions",
+        title: "Relaxation progressive guidée",
+        description: "Technique de détente musculaire pour relâcher les tensions",
         type: "evening",
-        activity_format: "audio",
-        content: { duration: 900, theme: "progressive-relaxation" },
+        activity_format: "explanatory",
+        content: { 
+          steps: [
+            "Allongez-vous confortablement et fermez les yeux",
+            "Contractez vos pieds pendant 5 secondes, puis relâchez",
+            "Contractez vos mollets, puis relâchez en ressentant la détente",
+            "Remontez progressivement : cuisses, fesses, abdomen",
+            "Contractez vos poings, bras, épaules, puis relâchez tout",
+            "Terminez par le visage : front, yeux, mâchoires",
+            "Ressentez la détente totale de votre corps pendant 2 minutes"
+          ] 
+        },
         target_profiles: ["anxieux"],
         day_min: 25,
         day_max: 365
@@ -187,11 +197,21 @@ export const activitiesService = {
         day_max: 365
       },
       {
-        title: "Pause renaissance",
-        description: "Méditation pour retrouver sa vitalité",
+        title: "Pause revitalisante",
+        description: "Exercice de visualisation pour retrouver sa vitalité",
         type: "afternoon",
-        activity_format: "audio",
-        content: { duration: 480, theme: "vitality-restoration" },
+        activity_format: "explanatory",
+        content: { 
+          steps: [
+            "Asseyez-vous confortablement et fermez les yeux",
+            "Imaginez une lumière dorée qui vous entoure",
+            "Cette lumière entre par le sommet de votre crâne",
+            "Elle circule dans tout votre corps, rechargent chaque cellule",
+            "Ressentez l'énergie qui grandit en vous",
+            "Gardez cette sensation 3 minutes",
+            "Ouvrez les yeux en vous sentant revitalisé"
+          ] 
+        },
         target_profiles: ["fatigue"],
         day_min: 25,
         day_max: 365
@@ -219,11 +239,21 @@ export const activitiesService = {
         day_max: 365
       },
       {
-        title: "Méditation du foyer",
+        title: "Visualisation du foyer intérieur",
         description: "Créez un sentiment de chez-soi intérieur",
         type: "evening",
-        activity_format: "audio",
-        content: { duration: 720, theme: "inner-home" },
+        activity_format: "explanatory",
+        content: { 
+          steps: [
+            "Fermez les yeux et respirez profondément",
+            "Imaginez un lieu qui vous fait vous sentir chez vous",
+            "Ce peut être réel ou imaginaire",
+            "Visualisez chaque détail : couleurs, odeurs, sons",
+            "Ressentez la sécurité et la paix de ce lieu",
+            "Sachez que vous pouvez y revenir quand vous voulez",
+            "Ce lieu est en vous, il vous accompagne partout"
+          ] 
+        },
         target_profiles: ["deracine"],
         day_min: 25,
         day_max: 365
@@ -251,11 +281,21 @@ export const activitiesService = {
         day_max: 365
       },
       {
-        title: "Méditation de confiance",
+        title: "Pratique de confiance guidée",
         description: "Apprenez à faire confiance à la vie",
         type: "morning",
-        activity_format: "audio",
-        content: { duration: 600, theme: "trust-meditation" },
+        activity_format: "explanatory",
+        content: { 
+          steps: [
+            "Pensez à une situation qui vous inquiète",
+            "Respirez profondément et relâchez vos épaules",
+            "Répétez : 'Je fais confiance au processus de la vie'",
+            "Imaginez le meilleur scénario possible",
+            "Ressentez cette possibilité dans votre corps",
+            "Lâchez le besoin de contrôler le résultat",
+            "Gardez cette ouverture toute la journée"
+          ] 
+        },
         target_profiles: ["controlant"],
         day_min: 25,
         day_max: 365
@@ -273,7 +313,7 @@ export const activitiesService = {
 
       // Activités supplémentaires pour L'Hypersensible
       {
-        title: "Bouclier émotionnel",
+        title: "Bouclier énergétique",
         description: "Technique de protection énergétique",
         type: "morning",
         activity_format: "explanatory",
@@ -283,11 +323,21 @@ export const activitiesService = {
         day_max: 365
       },
       {
-        title: "Méditation de centrage",
+        title: "Centrage émotionnel guidé",
         description: "Retrouvez votre équilibre émotionnel",
         type: "afternoon",
-        activity_format: "audio",
-        content: { duration: 540, theme: "emotional-centering" },
+        activity_format: "explanatory",
+        content: { 
+          steps: [
+            "Posez vos pieds bien à plat sur le sol",
+            "Imaginez des racines qui partent de vos pieds",
+            "Ces racines s'enfoncent profondément dans la terre",
+            "Elles vous ancrent et vous stabilisent",
+            "Respirez la stabilité de la terre",
+            "Sentez-vous centré et équilibré",
+            "Gardez cette connexion à la terre"
+          ] 
+        },
         target_profiles: ["hypersensible"],
         day_min: 25,
         day_max: 365
@@ -315,11 +365,21 @@ export const activitiesService = {
         day_max: 365
       },
       {
-        title: "Méditation d'expression",
-        description: "Libérez votre parole intérieure",
+        title: "Libération de la parole intérieure",
+        description: "Exercice pour libérer votre expression",
         type: "afternoon",
-        activity_format: "audio",
-        content: { duration: 480, theme: "inner-voice" },
+        activity_format: "explanatory",
+        content: { 
+          steps: [
+            "Placez votre main sur votre gorge",
+            "Respirez profondément dans cette zone",
+            "Répétez : 'Ma voix a le droit d'exister'",
+            "Imaginez votre gorge qui s'ouvre",
+            "Parlez à voix haute vos pensées pendant 2 minutes",
+            "Ne censurez rien, laissez sortir",
+            "Ressentez la libération"
+          ] 
+        },
         target_profiles: ["refoule"],
         day_min: 25,
         day_max: 365
@@ -347,11 +407,21 @@ export const activitiesService = {
         day_max: 365
       },
       {
-        title: "Méditation de refroidissement",
-        description: "Calmez le feu intérieur avant l'explosion",
+        title: "Refroidissement guidé",
+        description: "Technique pour calmer le feu intérieur",
         type: "afternoon",
-        activity_format: "audio",
-        content: { duration: 360, theme: "cooling-down" },
+        activity_format: "explanatory",
+        content: { 
+          steps: [
+            "Imaginez que vous êtes près d'un lac paisible",
+            "L'eau est fraîche et apaisante",
+            "Plongez mentalement dans cette eau",
+            "Sentez la fraîcheur calmer votre colère",
+            "Respirez la paix de ce lieu",
+            "Emportez cette fraîcheur avec vous",
+            "Utilisez cette image quand la colère monte"
+          ] 
+        },
         target_profiles: ["volcan"],
         day_min: 25,
         day_max: 365

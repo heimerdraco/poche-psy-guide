@@ -7,7 +7,7 @@ export interface StableActivity {
   title: string;
   description: string;
   type: 'morning' | 'afternoon' | 'evening';
-  activity_format: 'explanatory' | 'audio' | 'notebook';
+  activity_format: 'explanatory' | 'notebook';
   content: any;
   target_profiles: string[];
   day_min: number;
@@ -55,7 +55,7 @@ export const stableActivitiesService = {
     }
   },
 
-  // Récupérer les activités depuis le planning avec nettoyage du contenu audio
+  // Récupérer les activités depuis le planning
   async fetchActivitiesFromPlan(dayPlan: DayPlan): Promise<StableDailyActivities> {
     try {
       const activityIds = [
@@ -78,21 +78,16 @@ export const stableActivitiesService = {
         return { morning: null, afternoon: null, evening: null };
       }
 
-      // Nettoyer et adapter les activités pour supprimer les références audio
+      // Nettoyer les activités pour s'assurer qu'elles sont cohérentes
       const cleanedActivities = activities.map(activity => {
         const cleanedActivity = { ...activity };
         
-        // Si l'activité contient des références audio, les convertir en texte
+        // S'assurer qu'il y a toujours un contenu textuel pour les activités
         if (cleanedActivity.content && typeof cleanedActivity.content === 'object' && cleanedActivity.content !== null) {
           const content = cleanedActivity.content as any;
           
-          if (content.audioText) {
-            content.textContent = content.audioText;
-            delete content.audioText;
-          }
-          
           // S'assurer qu'il y a toujours un contenu textuel
-          if (!content.textContent && !content.text) {
+          if (!content.textContent && !content.text && !content.steps && !content.prompt) {
             content.textContent = "Prenez un moment pour vous recentrer et réfléchir à votre journée.";
           }
         }
@@ -104,7 +99,7 @@ export const stableActivitiesService = {
       const afternoonActivity = cleanedActivities.find(a => a.id === dayPlan.afternoon_activity_id) as StableActivity || null;
       const eveningActivity = cleanedActivities.find(a => a.id === dayPlan.evening_activity_id) as StableActivity || null;
 
-      console.log('Activités nettoyées récupérées:', {
+      console.log('Activités récupérées:', {
         morning: morningActivity?.title || 'Aucune',
         afternoon: afternoonActivity?.title || 'Aucune',
         evening: eveningActivity?.title || 'Aucune'
