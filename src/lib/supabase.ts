@@ -68,8 +68,8 @@ export const supabaseService = {
     return { data, error };
   },
 
-  // Journaling
-  async saveJournalEntry(content: string, mood: string, day: number) {
+  // Journaling avec amélioration pour les activités
+  async saveJournalEntry(content: string, mood: string, day: number, activityId?: string) {
     const deviceId = getDeviceId();
     const { data, error } = await supabase
       .from('journaling')
@@ -78,6 +78,7 @@ export const supabaseService = {
         content: content,
         mood: mood,
         day: day,
+        activity_id: activityId, // Nouveau champ pour lier à une activité
         created_at: new Date().toISOString()
       });
     
@@ -103,8 +104,8 @@ export const supabaseService = {
     return { data, error };
   },
 
-  // Sauvegarder la progression du parcours
-  async saveJourneyProgress(phase: string, dayNumber: number, completedActivities: string[]) {
+  // Sauvegarder la progression du parcours avec amélioration premium
+  async saveJourneyProgress(phase: string, dayNumber: number, completedActivities: string[], isPremium: boolean = false) {
     const deviceId = getDeviceId();
     
     try {
@@ -115,6 +116,7 @@ export const supabaseService = {
           current_phase: phase,
           day_number: dayNumber,
           completed_activities: completedActivities,
+          is_premium: isPremium, // Nouveau champ premium
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'device_id'
@@ -192,6 +194,53 @@ export const supabaseService = {
     
     if (error) console.error('Erreur sauvegarde message chat:', error);
     return { data, error };
+  },
+
+  // Nouveau: Sauvegarder un message bienveillant pour le familier
+  async saveBenevolentMessage(message: string) {
+    const deviceId = getDeviceId();
+    const { data, error } = await supabase
+      .from('anonymous_messages')
+      .insert({
+        device_id: deviceId,
+        message: message,
+        type: 'benevolent',
+        created_at: new Date().toISOString()
+      });
+    
+    if (error) console.error('Erreur sauvegarde message bienveillant:', error);
+    return { data, error };
+  },
+
+  // Nouveau: Récupérer l'état premium d'un utilisateur
+  async getUserPremiumStatus() {
+    const deviceId = getDeviceId();
+    
+    const { data, error } = await supabase
+      .from('users')
+      .select('trial_start, profile, created_at')
+      .eq('device_id', deviceId)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Erreur récupération statut premium:', error);
+      return { isPremium: false, daysSinceStart: 0 };
+    }
+
+    if (!data) {
+      return { isPremium: false, daysSinceStart: 0 };
+    }
+
+    // Calculer les jours depuis le début
+    const startDate = new Date(data.trial_start || data.created_at);
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - startDate.getTime());
+    const daysSinceStart = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    // Premium après 3 jours (en supposant pas d'abonnement payant pour l'instant)
+    const isPremium = daysSinceStart > 3;
+
+    return { isPremium, daysSinceStart };
   },
 
   // Récupérer les données utilisateur avec date de création

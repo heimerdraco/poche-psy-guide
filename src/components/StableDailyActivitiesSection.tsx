@@ -36,6 +36,9 @@ const StableDailyActivitiesSection = ({
   const profileData = getProfileData(profile);
   const actualCurrentDay = planningService.getCurrentDay(profileCreatedAt);
 
+  // Calculer si c'est premium (après 3 jours)
+  const isPremiumDay = actualCurrentDay > 3;
+
   useEffect(() => {
     // Navigation intelligente vers le jour actuel
     setCurrentDay(actualCurrentDay);
@@ -142,7 +145,8 @@ const StableDailyActivitiesSection = ({
   };
 
   const isActivityLocked = () => {
-    return isTrialExpired || currentDay > actualCurrentDay;
+    // Activités verrouillées si c'est premium (après jour 3) ET si l'essai a expiré
+    return isPremiumDay && isTrialExpired;
   };
 
   const handleLockedClick = () => {
@@ -155,7 +159,7 @@ const StableDailyActivitiesSection = ({
     } else {
       toast({
         title: "Contenu Premium",
-        description: "Passez à Arboria+ pour débloquer cette activité.",
+        description: "Passez à Arboria+ pour continuer votre parcours après les 3 premiers jours d'essai gratuit.",
         variant: "destructive",
       });
     }
@@ -243,6 +247,11 @@ const StableDailyActivitiesSection = ({
             {isToday && (
               <div className="text-emerald-600 bg-emerald-50 p-2 rounded-lg">
                 🌟 Aujourd'hui • Vos activités vous attendent
+                {isPremiumDay && isTrialExpired && (
+                  <div className="mt-1 text-xs text-orange-600">
+                    🔒 Contenu Premium après les 3 premiers jours
+                  </div>
+                )}
               </div>
             )}
             {isFutureDay && (
@@ -264,6 +273,7 @@ const StableDailyActivitiesSection = ({
             profileColor={profileData.color}
             onActivityClick={setSelectedActivity}
             onLockedClick={handleLockedClick}
+            showPremiumBadge={isPremiumDay}
           />
           
           <ActivityCard
@@ -276,6 +286,7 @@ const StableDailyActivitiesSection = ({
             profileColor={profileData.color}
             onActivityClick={setSelectedActivity}
             onLockedClick={handleLockedClick}
+            showPremiumBadge={isPremiumDay}
           />
           
           <ActivityCard
@@ -288,6 +299,7 @@ const StableDailyActivitiesSection = ({
             profileColor={profileData.color}
             onActivityClick={setSelectedActivity}
             onLockedClick={handleLockedClick}
+            showPremiumBadge={isPremiumDay}
           />
         </CardContent>
       </Card>
