@@ -38,7 +38,8 @@ const ActivityManager = ({ activity, onComplete, onBack }: ActivityManagerProps)
               introduction: activity.content?.introduction,
               objective: activity.content?.objective,
               steps: activity.content?.steps,
-              content: activity.content?.text || activity.description
+              content: activity.content?.text || activity.description,
+              id: activity.id
             }}
             onComplete={handleActivityComplete}
             onBack={onBack}
@@ -51,9 +52,10 @@ const ActivityManager = ({ activity, onComplete, onBack }: ActivityManagerProps)
             activity={{
               title: activity.title,
               description: activity.description,
-              audioText: activity.content?.audioText,
+              textContent: activity.content?.textContent || activity.content?.audioText || "Prenez un moment pour respirer profondément et vous recentrer sur l'instant présent.", // Fallback textuel
               visualUrl: activity.content?.visualUrl,
-              duration: activity.duration
+              duration: activity.duration,
+              id: activity.id
             }}
             onComplete={handleActivityComplete}
             onBack={onBack}
@@ -81,7 +83,8 @@ const ActivityManager = ({ activity, onComplete, onBack }: ActivityManagerProps)
           <ExplanatoryActivity
             activity={{
               title: activity.title,
-              content: activity.description
+              content: activity.description,
+              id: activity.id
             }}
             onComplete={handleActivityComplete}
             onBack={onBack}

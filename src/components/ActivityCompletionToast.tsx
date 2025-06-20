@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Sparkles, Heart } from "lucide-react";
+import { playCompletionChime } from "@/components/ui/sound-effects";
 
 interface ActivityCompletionToastProps {
   isVisible: boolean;
@@ -19,6 +20,10 @@ const ActivityCompletionToast = ({
   useEffect(() => {
     if (isVisible) {
       setShouldRender(true);
+      
+      // Son léger de validation
+      playCompletionChime();
+      
       // Auto-fermeture après 4 secondes
       const timer = setTimeout(() => {
         onClose();
@@ -39,21 +44,21 @@ const ActivityCompletionToast = ({
 
   return (
     <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ${
-      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+      isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-4 scale-95'
     }`}>
-      <Card className="bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl border-0 min-w-[300px]">
+      <Card className="bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl border-0 min-w-[320px] animate-bounce-gentle">
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <div className="relative">
               <CheckCircle className="w-8 h-8 animate-scale-in" />
-              <div className="absolute inset-0 animate-ping">
-                <CheckCircle className="w-8 h-8 opacity-75" />
+              <div className="absolute inset-0 animate-ping opacity-75">
+                <CheckCircle className="w-8 h-8" />
               </div>
             </div>
             
             <div className="flex-1">
-              <h3 className="font-semibold text-lg">Activité terminée !</h3>
-              <p className="text-green-100 text-sm">"{activityTitle}"</p>
+              <h3 className="font-semibold text-lg">🎉 Bravo !</h3>
+              <p className="text-green-100 text-sm">Activité "{activityTitle}" complétée</p>
             </div>
             
             <div className="flex gap-1">

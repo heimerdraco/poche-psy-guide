@@ -1,6 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Nunito:wght@200;300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,6 +31,14 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 10.6% 64.9%;
   }
 
   .dark {
@@ -42,7 +49,7 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
-    --primary-foreground: 240 9% 17%;
+    --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
@@ -59,6 +66,14 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 94.1%;
+    --sidebar-primary-foreground: 240 5.9% 10%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 10.6% 64.9%;
   }
 }
 
@@ -68,211 +83,117 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Nunito', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Comfortaa', cursive;
   }
 }
 
-/* Couleurs personnalisées pour Arboria */
-:root {
-  --sage-50: #f6f7f4;
-  --sage-100: #e8ebe4;
-  --sage-200: #d1d7c9;
-  --sage-300: #b0bca4;
-  --sage-400: #8a9a7b;
-  --sage-500: #6c7c5d;
-  --sage-600: #556349;
-  --sage-700: #454f3c;
-  --sage-800: #3a4233;
-  --sage-900: #32382c;
-
-  --forest-50: #f3f6f3;
-  --forest-100: #e3ebe3;
-  --forest-200: #c8d6c8;
-  --forest-300: #a2b9a2;
-  --forest-400: #759575;
-  --forest-500: #587658;
-  --forest-600: #446044;
-  --forest-700: #384e38;
-  --forest-800: #2f3f2f;
-  --forest-900: #293529;
+/* Couleurs personnalisées pour les profils */
+@layer utilities {
+  .sage-50 { @apply bg-green-50; }
+  .sage-100 { @apply bg-green-100; }
+  .sage-200 { @apply bg-green-200; }
+  .sage-600 { @apply text-green-600; }
+  .forest-50 { @apply bg-emerald-50; }
+  .forest-600 { @apply text-emerald-600; }
+  .forest-700 { @apply text-emerald-700; }
+  .forest-800 { @apply text-emerald-800; }
 }
 
 /* Animations personnalisées */
-@keyframes pulse-gentle {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-@keyframes breathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes float-slow {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes twinkle {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-100%) skewX(-12deg);
-  }
-  100% {
-    transform: translateX(200%) skewX(-12deg);
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 @keyframes bounce-gentle {
-  0%, 100% {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes progress-bar {
+  0% { width: 100%; }
+  100% { width: 0%; }
+}
+
+@keyframes slide-in-gentle {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes wave {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(5deg);
-  }
-  75% {
-    transform: rotate(-5deg);
-  }
-}
-
-@keyframes fade-in-out {
-  0%, 100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes scale-in {
-  0% {
-    transform: scale(0.95);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes slide-in-right {
-  0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Classes d'animation */
-.animate-pulse-gentle {
-  animation: pulse-gentle 4s ease-in-out infinite;
-}
-
-.animate-breathe {
-  animation: breathe 3s ease-in-out infinite;
 }
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
 
-.animate-float-slow {
-  animation: float-slow 4s ease-in-out infinite;
-}
-
 .animate-twinkle {
   animation: twinkle 2s ease-in-out infinite;
 }
 
-.animate-shine {
-  animation: shine 2s ease-in-out infinite;
-}
-
 .animate-bounce-gentle {
-  animation: bounce-gentle 0.6s ease-in-out;
+  animation: bounce-gentle 0.6s ease-out;
 }
 
-.animate-wave {
-  animation: wave 2s ease-in-out infinite;
+.animate-progress-bar {
+  animation: progress-bar 4s linear forwards;
 }
 
-.animate-fade-in-out {
-  animation: fade-in-out 3s ease-in-out infinite;
+.animate-slide-in-gentle {
+  animation: slide-in-gentle 0.5s ease-out;
 }
 
 .animate-scale-in {
-  animation: scale-in 0.3s ease-out;
+  animation: scale 0.3s ease-out;
 }
 
-.animate-slide-in-right {
-  animation: slide-in-right 0.5s ease-out;
+@keyframes scale {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-/* Responsive design amélioré */
-@media (max-width: 768px) {
-  .max-w-2xl {
-    max-width: 95%;
-  }
-  
-  .p-8 {
-    padding: 1rem;
-  }
+/* Styles pour le Journal */
+.journal-entry {
+  transition: all 0.2s ease-in-out;
 }
 
-/* Styles pour les zones de texte avec lignes */
-.journal-textarea {
-  background-image: repeating-linear-gradient(transparent, transparent 24px, rgba(0,0,0,0.05) 24px, rgba(0,0,0,0.05) 25px);
-  font-family: 'Georgia', serif;
-  line-height: 1.6;
+.journal-entry:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Effets visuels pour le premium */
+/* Styles pour les activités premium */
 .premium-blur {
   filter: blur(3px);
+  opacity: 0.6;
   pointer-events: none;
 }
 
 .premium-overlay {
-  background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
-  border: 2px dashed #ffa500;
+  position: relative;
+}
+
+.premium-overlay::after {
+  content: '🔒 Premium requis';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
 }

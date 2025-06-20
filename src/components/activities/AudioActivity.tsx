@@ -11,7 +11,7 @@ interface AudioActivityProps {
   activity: {
     title: string;
     description?: string;
-    audioText?: string;
+    textContent?: string; // Remplace audioText
     visualUrl?: string;
     duration?: string;
     id?: string;
@@ -82,19 +82,22 @@ const AudioActivity = ({ activity, onComplete, onBack }: AudioActivityProps) => 
                 </div>
               )}
 
-              {/* Texte inspirant (remplace l'audio) */}
-              {activity.audioText && (
+              {/* Texte inspirant (remplace complètement l'audio) */}
+              {activity.textContent && (
                 <div className="mb-8 p-6 bg-purple-50 rounded-lg border border-purple-200">
-                  <p className="text-gray-700 leading-relaxed text-lg italic text-center">
-                    "{activity.audioText}"
-                  </p>
+                  <h3 className="font-semibold text-purple-800 mb-4 text-center">
+                    📖 Texte de méditation
+                  </h3>
+                  <div className="text-gray-700 leading-relaxed text-lg whitespace-pre-line text-center">
+                    {activity.textContent}
+                  </div>
                 </div>
               )}
 
               {/* Instructions */}
               <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-gray-700 text-center">
-                  🌸 Prenez quelques minutes pour vous installer confortablement et lire attentivement ce texte inspirant.
+                  🌸 Prenez quelques minutes pour vous installer confortablement et lire attentivement ce texte inspirant. Laissez les mots résonner en vous.
                 </p>
               </div>
 
@@ -127,6 +130,7 @@ const AudioActivity = ({ activity, onComplete, onBack }: AudioActivityProps) => 
                 <Button
                   onClick={handleComplete}
                   className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                  disabled={isCompleted}
                 >
                   {isCompleted ? (
                     <>
@@ -134,7 +138,7 @@ const AudioActivity = ({ activity, onComplete, onBack }: AudioActivityProps) => 
                       Terminé !
                     </>
                   ) : (
-                    'Terminer la méditation'
+                    'Terminer la réflection'
                   )}
                 </Button>
               </div>
