@@ -173,6 +173,63 @@ export type Database = {
         }
         Relationships: []
       }
+      day_memories: {
+        Row: {
+          afternoon_activity: Json | null
+          afternoon_completed: boolean
+          afternoon_notes: string | null
+          completed: boolean
+          created_at: string
+          date: string
+          day: number
+          device_id: string
+          evening_activity: Json | null
+          evening_completed: boolean
+          evening_notes: string | null
+          id: string
+          morning_activity: Json | null
+          morning_completed: boolean
+          morning_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          afternoon_activity?: Json | null
+          afternoon_completed?: boolean
+          afternoon_notes?: string | null
+          completed?: boolean
+          created_at?: string
+          date?: string
+          day: number
+          device_id: string
+          evening_activity?: Json | null
+          evening_completed?: boolean
+          evening_notes?: string | null
+          id?: string
+          morning_activity?: Json | null
+          morning_completed?: boolean
+          morning_notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          afternoon_activity?: Json | null
+          afternoon_completed?: boolean
+          afternoon_notes?: string | null
+          completed?: boolean
+          created_at?: string
+          date?: string
+          day?: number
+          device_id?: string
+          evening_activity?: Json | null
+          evening_completed?: boolean
+          evening_notes?: string | null
+          id?: string
+          morning_activity?: Json | null
+          morning_completed?: boolean
+          morning_notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       emotional_profiles: {
         Row: {
           causes: string
@@ -443,6 +500,30 @@ export type Database = {
           profile?: string | null
           trial_start?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      yearly_plans: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          plan_data: Json
+          profile: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          plan_data?: Json
+          profile: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          plan_data?: Json
+          profile?: string
         }
         Relationships: []
       }

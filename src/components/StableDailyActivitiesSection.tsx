@@ -233,6 +233,11 @@ const StableDailyActivitiesSection = ({
             {isPastDay && (
               <div className="text-gray-600 bg-gray-50 p-2 rounded-lg">
                 📚 Souvenir • {isDayCompleted ? '✅ Jour complété' : '⏸️ Jour incomplet'}
+                {dayMemory && (dayMemory.morning_notes || dayMemory.afternoon_notes || dayMemory.evening_notes) && (
+                  <div className="mt-1 text-xs text-gray-500">
+                    📝 Contient des notes personnelles
+                  </div>
+                )}
               </div>
             )}
             {isToday && (
@@ -259,8 +264,6 @@ const StableDailyActivitiesSection = ({
             profileColor={profileData.color}
             onActivityClick={setSelectedActivity}
             onLockedClick={handleLockedClick}
-            notes={dayMemory?.morning_notes}
-            isReadOnly={isPastDay || isFutureDay}
           />
           
           <ActivityCard
@@ -273,8 +276,6 @@ const StableDailyActivitiesSection = ({
             profileColor={profileData.color}
             onActivityClick={setSelectedActivity}
             onLockedClick={handleLockedClick}
-            notes={dayMemory?.afternoon_notes}
-            isReadOnly={isPastDay || isFutureDay}
           />
           
           <ActivityCard
@@ -287,8 +288,6 @@ const StableDailyActivitiesSection = ({
             profileColor={profileData.color}
             onActivityClick={setSelectedActivity}
             onLockedClick={handleLockedClick}
-            notes={dayMemory?.evening_notes}
-            isReadOnly={isPastDay || isFutureDay}
           />
         </CardContent>
       </Card>
@@ -300,14 +299,6 @@ const StableDailyActivitiesSection = ({
         onComplete={handleActivityComplete}
         profileColor={profileData.color}
         isCompleted={selectedActivity ? completedActivities.has(selectedActivity.id) : false}
-        isReadOnly={isPastDay || isFutureDay}
-        existingNotes={
-          selectedActivity && dayMemory ? (
-            selectedActivity.id === activities.morning?.id ? dayMemory.morning_notes :
-            selectedActivity.id === activities.afternoon?.id ? dayMemory.afternoon_notes :
-            selectedActivity.id === activities.evening?.id ? dayMemory.evening_notes : undefined
-          ) : undefined
-        }
       />
     </>
   );
