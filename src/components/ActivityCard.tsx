@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, CheckCircle, Lock } from "lucide-react";
+import { Clock, CheckCircle, Lock, Crown } from "lucide-react";
 import EnhancedButton from "./EnhancedButton";
 
 interface ActivityCardProps {
@@ -14,6 +14,7 @@ interface ActivityCardProps {
   profileColor: string;
   onActivityClick: (activity: any) => void;
   onLockedClick: () => void;
+  showPremiumBadge?: boolean;
 }
 
 const ActivityCard = ({
@@ -25,7 +26,8 @@ const ActivityCard = ({
   isLocked,
   profileColor,
   onActivityClick,
-  onLockedClick
+  onLockedClick,
+  showPremiumBadge = false
 }: ActivityCardProps) => {
   if (!activity) {
     return (
@@ -72,6 +74,12 @@ const ActivityCard = ({
             <Badge variant="outline" className="text-xs">
               {timeLabel}
             </Badge>
+            {showPremiumBadge && (
+              <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs">
+                <Crown className="w-3 h-3 mr-1" />
+                Premium
+              </Badge>
+            )}
           </div>
           <div className="flex items-center gap-2">
             {isCompleted && <CheckCircle className="w-5 h-5 text-green-600" />}

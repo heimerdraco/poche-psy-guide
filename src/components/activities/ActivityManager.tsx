@@ -51,7 +51,6 @@ const ActivityManager = ({ activity, onComplete, onBack }: ActivityManagerProps)
             activity={{
               title: activity.title,
               description: activity.description,
-              audioUrl: activity.content?.audioUrl,
               audioText: activity.content?.audioText,
               visualUrl: activity.content?.visualUrl,
               duration: activity.duration
