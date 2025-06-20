@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ import ActivityCompletionCelebration from "@/components/ActivityCompletionCelebr
 import Mascot from "@/components/Mascot";
 import EnhancedButton from "@/components/EnhancedButton";
 import DisclaimerModal from "@/components/DisclaimerModal";
+import FamiliarSection from "@/components/FamiliarSection";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -114,16 +116,6 @@ const Index = () => {
     return <TrialExpiredScreen onUpgrade={handleUpgrade} />;
   }
 
-  const quotes = [
-    "Prendre soin de soi n'est pas de l'égoïsme, c'est de l'amour-propre 🌿",
-    "Chaque petit pas compte sur le chemin de la guérison 🌱",
-    "Tu es plus fort(e) que tu ne le penses 🌳",
-    "Aujourd'hui, sois doux/douce avec toi-même 🍃",
-    "Tes émotions sont valides et méritent d'être entendues 💚"
-  ];
-
-  const todayQuote = quotes[new Date().getDate() % quotes.length];
-
   if (!userProfile) {
     return (
       <div className="min-h-screen relative bg-gradient-to-br from-sage-100 via-cream-50 to-forest-100">
@@ -175,7 +167,7 @@ const Index = () => {
                     <div className="w-16 h-16 bg-gradient-to-br from-sage-100 to-forest-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '2s' }}>
                       <MessageCircle className="w-8 h-8 text-forest-600" />
                     </div>
-                    <h3 className="font-semibold text-xl mb-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>Accompagnement quotidien</h3>
+                    <h3 className="font-semibold text-xl mb-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>Accompagnement quot</h3>
                     <p className="text-forest-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>3 activités par jour pour cultiver votre bien-être</p>
                   </div>
                 </div>
@@ -257,44 +249,14 @@ const Index = () => {
 
         {currentSection === 'home' && (
           <div className="space-y-6 animate-slide-in-gentle">
-            {/* Affichage du profil détecté */}
-            <Card className="shadow-lg border-0 bg-cream-50/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border border-sage-200">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
-                  <User className="w-5 h-5 text-sage-600 animate-twinkle" />
-                  Votre profil émotionnel
-                </h2>
-                <div className="bg-gradient-to-r from-sage-50 to-forest-50 p-4 rounded-xl">
-                  <Badge className="bg-gradient-to-r from-sage-300 to-forest-300 text-forest-800 mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                    {userProfile}
-                  </Badge>
-                  <p className="text-sm text-forest-700 leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                    Votre parcours personnalisé est maintenant disponible ! Il s'adapte à vos besoins émotionnels spécifiques.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Section Familier - Remplace les anciennes sections */}
+            <FamiliarSection profile={userProfile} />
 
             {/* Widget d'humeur du jour */}
             <DailyMoodWidget />
 
-            <Card className="shadow-lg border-0 bg-cream-50/90 backdrop-blur-sm hover:shadow-xl transition-all duration-300 border border-sage-200">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
-                  <Calendar className="w-5 h-5 text-sage-600 animate-twinkle" />
-                  Pensée du jour
-                </h2>
-                <blockquote className="text-base text-forest-700 italic leading-relaxed animate-fade-in" style={{ fontFamily: 'Nunito, sans-serif' }}>
-                  {todayQuote}
-                </blockquote>
-              </CardContent>
-            </Card>
-
-            {/* Daily Features */}
+            {/* Daily Features - Simplifié */}
             <div className="space-y-4">
-              <div className="animate-slide-in-gentle" style={{ animationDelay: '0.2s' }}>
-                <DailyQuote />
-              </div>
               <div className="animate-slide-in-gentle" style={{ animationDelay: '0.4s' }}>
                 <MoodTracker />
               </div>
