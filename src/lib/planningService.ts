@@ -117,7 +117,8 @@ export const planningService = {
         return null;
       }
 
-      const planData = data.plan_data as DayPlan[];
+      // Properly cast the Json type to DayPlan[]
+      const planData = data.plan_data as unknown as DayPlan[];
       return planData.find(day => day.day === dayNumber) || null;
     } catch (error) {
       console.error('Erreur récupération planning jour:', error);
