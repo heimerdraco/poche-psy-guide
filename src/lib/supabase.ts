@@ -194,6 +194,24 @@ export const supabaseService = {
     return { data, error };
   },
 
+  // Récupérer les données utilisateur avec date de création
+  async getUserWithCreationDate() {
+    const deviceId = getDeviceId();
+    
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('device_id', deviceId)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Erreur récupération utilisateur:', error);
+      return null;
+    }
+
+    return data;
+  },
+
   // Récupérer toutes les données d'un utilisateur (méthode étendue)
   async getUserData() {
     const deviceId = getDeviceId();
@@ -211,6 +229,8 @@ export const supabaseService = {
     let themeProgress = [];
     let userPseudonyms = [];
     let chatMessages = [];
+    let yearlyPlan = null;
+    let dayMemories = [];
 
     try {
       const journeyResult = await supabase
@@ -252,6 +272,26 @@ export const supabaseService = {
       console.error('Erreur récupération chat_messages:', error);
     }
 
+    try {
+      const planResult = await supabase
+        .from('yearly_plans')
+        .select('*')
+        .eq('device_id', deviceId);
+      yearlyPlan = planResult.data?.[0] || null;
+    } catch (error) {
+      console.error('Erreur récupération yearly_plans:', error);
+    }
+
+    try {
+      const memoriesResult = await supabase
+        .from('day_memories')
+        .select('*')
+        .eq('device_id', deviceId);
+      dayMemories = memoriesResult.data || [];
+    } catch (error) {
+      console.error('Erreur récupération day_memories:', error);
+    }
+
     return {
       user: users.data?.[0] || null,
       answers: answers.data || [],
@@ -261,7 +301,9 @@ export const supabaseService = {
       journeyProgress,
       themeProgress,
       userPseudonyms,
-      chatMessages
+      chatMessages,
+      yearlyPlan,
+      dayMemories
     };
   }
 };

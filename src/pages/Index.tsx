@@ -22,6 +22,9 @@ import ActivityCompletionCelebration from "@/components/ActivityCompletionCelebr
 import EnhancedButton from "@/components/EnhancedButton";
 import DisclaimerModal from "@/components/DisclaimerModal";
 import FamiliarSection from "@/components/FamiliarSection";
+import StableDailyActivitiesSection from "@/components/StableDailyActivitiesSection";
+import { supabaseService } from "@/lib/supabase";
+import { planningService } from "@/lib/planningService";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -36,6 +39,8 @@ const Index = () => {
   const [currentPhase, setCurrentPhase] = useState<'calm' | 'hopeful' | 'warm'>('calm');
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedActivity, setCompletedActivity] = useState('');
+  const [profileCreatedAt, setProfileCreatedAt] = useState<string>(new Date().toISOString());
+  const [currentDay, setCurrentDay] = useState(1);
 
   useEffect(() => {
     const trialStart = localStorage.getItem('trialStart');
@@ -56,6 +61,11 @@ const Index = () => {
       setIsTrialExpired(false);
     }
 
+    // Charger les données utilisateur pour obtenir la date de création
+    if (userProfile) {
+      loadUserCreationDate();
+    }
+
     // Listen for upgrade events from locked activities
     const handleUpgradeEvent = () => {
       setShowSubscription(true);
@@ -67,6 +77,20 @@ const Index = () => {
     };
   }, [userProfile]);
 
+  const loadUserCreationDate = async () => {
+    try {
+      const userData = await supabaseService.getUserWithCreationDate();
+      if (userData && userData.created_at) {
+        setProfileCreatedAt(userData.created_at);
+        const currentDayNumber = planningService.getCurrentDay(userData.created_at);
+        setCurrentDay(currentDayNumber);
+        console.log('Jour actuel calculé:', currentDayNumber);
+      }
+    } catch (error) {
+      console.error('Erreur chargement date création:', error);
+    }
+  };
+
   const handleProfileComplete = async (profile: string) => {
     console.log('Profil reçu:', profile);
     
@@ -77,8 +101,21 @@ const Index = () => {
       localStorage.setItem('trialStart', Date.now().toString());
     }
     
+    // Générer le planning annuel
+    try {
+      const success = await planningService.generateYearlyPlan(profile);
+      if (success) {
+        console.log('Planning annuel généré avec succès');
+      }
+    } catch (error) {
+      console.error('Erreur génération planning:', error);
+    }
+    
     setShowQuestionnaire(false);
     setCurrentSection('journey');
+    
+    // Recharger les données utilisateur
+    await loadUserCreationDate();
     
     console.log('Profil défini et redirection vers journey');
   };
@@ -160,7 +197,7 @@ const Index = () => {
                     <div className="w-16 h-16 bg-gradient-to-br from-sage-100 to-forest-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-float" style={{ animationDelay: '2s' }}>
                       <MessageCircle className="w-8 h-8 text-forest-600" />
                     </div>
-                    <h3 className="font-semibold text-xl mb-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>Accompagnement quot</h3>
+                    <h3 className="font-semibold text-xl mb-2 text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>Accompagnement quotidien</h3>
                     <p className="text-forest-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>3 activités par jour pour cultiver votre bien-être</p>
                   </div>
                 </div>
@@ -214,9 +251,12 @@ const Index = () => {
                 className="w-full h-full object-contain drop-shadow-lg rounded-full"
               />
             </div>
-            <h1 className="text-xl font-bold text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
-              Arboria
-            </h1>
+            <div>
+              <h1 className="text-xl font-bold text-forest-800" style={{ fontFamily: 'Comfortaa, cursive' }}>
+                Arboria
+              </h1>
+              <p className="text-xs text-forest-600">Jour {currentDay}/365</p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             {trialDays > 0 ? (
@@ -239,7 +279,7 @@ const Index = () => {
 
         {currentSection === 'home' && (
           <div className="space-y-6 animate-slide-in-gentle">
-            {/* Section Familier - Remplace les anciennes sections */}
+            {/* Section Familier */}
             <FamiliarSection profile={userProfile} />
 
             {/* Daily Features - Simplifié */}
@@ -302,7 +342,11 @@ const Index = () => {
 
         {currentSection === 'journey' && userProfile && (
           <div className="space-y-6 animate-slide-in-gentle">
-            <EmotionalJourney profile={userProfile} trialDays={trialDays} />
+            <StableDailyActivitiesSection 
+              profile={userProfile}
+              profileCreatedAt={profileCreatedAt}
+              isTrialExpired={isTrialExpired}
+            />
             <ContinuedJourney profile={userProfile} trialDays={trialDays} />
           </div>
         )}
