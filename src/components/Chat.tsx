@@ -39,6 +39,7 @@ const Chat = ({ profile }: ChatProps) => {
   const [sending, setSending] = useState(false);
   const [newMessageCount, setNewMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const channelRef = useRef<any>(null);
 
   const profileData = getProfileData(profile);
   const deviceId = localStorage.getItem('device_id');
@@ -50,8 +51,22 @@ const Chat = ({ profile }: ChatProps) => {
   useEffect(() => {
     loadUserPseudonym();
     loadMessages();
-    setupRealtimeSubscription();
   }, [profile]);
+
+  useEffect(() => {
+    // Setup realtime subscription only once
+    if (!channelRef.current) {
+      setupRealtimeSubscription();
+    }
+
+    // Cleanup function
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
+    };
+  }, [profile, deviceId]);
 
   useEffect(() => {
     scrollToBottom();
@@ -70,8 +85,15 @@ const Chat = ({ profile }: ChatProps) => {
   };
 
   const setupRealtimeSubscription = () => {
-    const channel = supabase
-      .channel('chat-messages')
+    // Clean up existing channel if any
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+    }
+
+    // Create new channel with unique name
+    const channelName = `chat-messages-${profile}-${Date.now()}`;
+    channelRef.current = supabase
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -92,10 +114,6 @@ const Chat = ({ profile }: ChatProps) => {
         }
       )
       .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   };
 
   // Réinitialiser le compteur quand l'utilisateur scrolle vers le bas
